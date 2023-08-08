@@ -78,6 +78,7 @@ const listProductSlice = createSlice({
       .addCase(getAllProduct.pending, (state) => {
         state.allProduct = [];
         state.loading = true;
+        state.getProducts = false;
       })
       .addCase(getAllProduct.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
@@ -104,7 +105,7 @@ const listProductSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
-        state.getProducts = false;
+        state.getProducts = true;
       })
       .addCase(updateProduct.rejected, (state, { error }) => {
         state.loading = false;
@@ -116,7 +117,7 @@ const listProductSlice = createSlice({
       })
       .addCase(changeState.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
-        state.getProducts = false;
+        state.getProducts = true;
       })
       .addCase(changeState.rejected, (state, { error }) => {
         state.loading = false;

@@ -35,9 +35,14 @@ message.config({
 registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
 function convertArray(arr) {
   if (arr == null || (arr === "") | (arr.length === 0)) {
-    return;
+    return "";
   }
   return arr.map((item) => Object.values(item)[0]);
+}
+function convertValue(value) {
+  if (value) {
+    return value;
+  } else return "";
 }
 function imageMap(images) {
   if (images == null) {
@@ -79,6 +84,12 @@ function imageUrls(images) {
     return;
   }
   return images.map((image) => imageServer + image);
+}
+function blobToFile(theBlob, fileName) {
+  return new File([theBlob], fileName, {
+    lastModified: new Date().getTime(),
+    type: theBlob.type,
+  });
 }
 function ProductForm({ product, categories, tags, manufacturer }) {
   const [categoryIDs, setCategoryIDs] = useState("");
@@ -144,7 +155,9 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     if (isValid) {
       const formData = new FormData();
       imageMap(imageFiles).forEach((file, index) => {
-        formData.append(`imageFiles`, file);
+        const newFile = blobToFile(file, file.name);
+        console.log(newFile);
+        formData.append(`imageFiles`, newFile);
       });
       let newTags;
       if (((tagIDs === "") | (tagIDs === null)) & isEdit) {
@@ -168,22 +181,21 @@ function ProductForm({ product, categories, tags, manufacturer }) {
       }
 
       const formValues = {
-        productID: product.productID,
         name: values.name,
         sku: values.sku,
         stock: values.stock,
         price: values.price,
         shortDescription: values.shortDescription,
         fullDescription: values.fullDescription,
-        arrival: values.arrival,
+        arrival: convertValue(values.arrival),
         categoryIDs: convertArray(newCategories),
         tagIDs: convertArray(newTags),
-        manufacturerID: values.manufacturer,
+        manufacturerID: convertValue(values.manufacturer),
       };
-      // console.log(formValues);
       Object.keys(formValues).forEach((key) => {
         formData.append(key, formValues[key]);
       });
+
       let response = null;
 
       if (isEdit) {

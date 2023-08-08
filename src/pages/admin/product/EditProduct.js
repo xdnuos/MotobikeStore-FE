@@ -15,13 +15,13 @@ function EditProduct() {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    const foundProduct = products?.find(
+    const foundProduct = products.find(
       (item) => item.productID === parseInt(productID)
     );
     setProduct(foundProduct);
   }, [products, productID]);
 
-  if (product === null) {
+  if ((product === null) | (products === null)) {
     return <SkeletonLoading />;
   }
   return (

@@ -62,20 +62,16 @@ function DashboardLayout() {
     (state) => state.products.productList.getProducts
   );
   useEffect(() => {
-    async function fetchData() {
-      await Promise.all([
-        dispatch(getAllProduct()),
-        dispatch(getAllCategories()),
-        dispatch(getAllTags()),
-        dispatch(getAllManufacturer()),
-      ]);
-    }
-    fetchData();
-  }, [dispatch]);
-
-  if (getProducts) {
     dispatch(getAllProduct());
-  }
+    dispatch(getAllCategories());
+    dispatch(getAllTags());
+    dispatch(getAllManufacturer());
+    if (getProducts) {
+      console.log("Get lai product");
+      dispatch(getAllProduct());
+    }
+  }, [dispatch, getProducts]);
+
   if (
     loadingProducts ||
     loadingCategories ||
@@ -85,6 +81,7 @@ function DashboardLayout() {
     console.log("Loading...................");
     return <SkeletonLoading />;
   }
+  console.log("Loading ok");
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />

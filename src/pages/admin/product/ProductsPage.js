@@ -422,7 +422,10 @@ function ProductsPage() {
         }}
       >
         {/* click to go to edit page get id product xong rồi chuyển qua trang /edit/{id} */}
-        <MenuItem component={RouterLink} to="/dashboard/products/edit">
+        <MenuItem
+          component={RouterLink}
+          to={`/dashboard/products/edit/${idRowProduct}`}
+        >
           <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
