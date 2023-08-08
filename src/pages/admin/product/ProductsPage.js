@@ -1,7 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { filter } from "lodash";
-import axios from "axios";
 import { Link as RouterLink, useOutletContext } from "react-router-dom";
 // @mui
 import {
@@ -34,9 +33,14 @@ import {
   ProductListHead,
   DeleteDialog,
 } from "../../../sections/@dashboard/products";
-
+import { useDispatch } from "react-redux";
+import {
+  changeState,
+  changeStateMulti,
+  getAllProduct,
+} from "src/redux/products/productList";
 // ----------------------------------------------------------------------
-
+const imageServer = process.env.REACT_APP_IMAGE_SERVER;
 const TABLE_HEAD = [
   { id: "name", label: "Product", alignRight: false },
   { id: "sku", label: "SKU", alignRight: false },
@@ -98,17 +102,18 @@ function ProductsPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [idRowProduct, setIdRowProduct] = useState(-1);
+  const [stateRowProduct, setStateRowProduct] = useState(false);
   //  lấy id của sản phẩm đã checked
   const [selected, setSelected] = useState([]);
+  const dispatch = useDispatch();
   const deleteProduct = async (id) => {
     if (idRowProduct !== -1) {
-      await axios.delete(`http://localhost:8080/dashboard/product/${id}`);
+      await dispatch(changeState(id));
+      await dispatch(getAllProduct());
       setOpen(null);
       setIdRowProduct(-1);
     } else if (selected.length !== 0) {
-      await axios.delete(
-        `http://localhost:8080/dashboard/products/${selected}`
-      );
+      await dispatch(changeStateMulti(id));
       setSelected([]);
     }
     // loadProducts();
@@ -123,8 +128,9 @@ function ProductsPage() {
     setOpenDialog(false);
   };
 
-  const handleOpenMenu = (event, id) => {
+  const handleOpenMenu = (event, id, active) => {
     setIdRowProduct(id);
+    setStateRowProduct(active);
     setOpen(event.currentTarget);
   };
 
@@ -292,12 +298,12 @@ function ProductsPage() {
                             >
                               <Avatar
                                 alt={product.name}
-                                src={product.images[0]}
+                                src={imageServer + product.images[0]}
                                 variant="rounded"
                                 sx={{ width: 55, height: 55 }}
                               />
                               <Link
-                                href="/dashboard/products/new"
+                                href={`/dashboard/products/edit/${product.productID}`}
                                 underline="hover"
                                 color="inherit"
                                 variant="subtitle2"
@@ -338,7 +344,11 @@ function ProductsPage() {
                               size="large"
                               color="inherit"
                               onClick={(event) =>
-                                handleOpenMenu(event, product.productID)
+                                handleOpenMenu(
+                                  event,
+                                  product.productID,
+                                  product.active
+                                )
                               }
                             >
                               <Iconify icon={"eva:more-vertical-fill"} />
@@ -416,11 +426,24 @@ function ProductsPage() {
           <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
-
         {/* click to remove product */}
-        <MenuItem sx={{ color: "error.main" }} onClick={handleClickOpenDialog}>
-          <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
-          Delete
+        <MenuItem
+          sx={
+            stateRowProduct
+              ? { color: "error.main" }
+              : { color: "success.main" }
+          }
+          onClick={handleClickOpenDialog}
+        >
+          <Iconify
+            icon={
+              stateRowProduct
+                ? "eva:toggle-left-outline"
+                : "eva:toggle-right-outline"
+            }
+            sx={{ mr: 2 }}
+          />
+          {stateRowProduct ? "Disable" : "Enable"}
         </MenuItem>
       </Popover>
       <DeleteDialog
@@ -428,6 +451,7 @@ function ProductsPage() {
         handleClose={handleCloseDialog}
         deleteProduct={deleteProduct}
         id={idRowProduct}
+        state={stateRowProduct}
       />
     </>
   );

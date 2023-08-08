@@ -58,19 +58,31 @@ function DashboardLayout() {
   );
   const loadingTags = useSelector((state) => state.categories.loading);
   const loadingManufacturer = useSelector((state) => state.categories.loading);
+  const getProducts = useSelector(
+    (state) => state.products.productList.getProducts
+  );
   useEffect(() => {
-    dispatch(getAllProduct());
-    dispatch(getAllCategories());
-    dispatch(getAllTags());
-    dispatch(getAllManufacturer());
+    async function fetchData() {
+      await Promise.all([
+        dispatch(getAllProduct()),
+        dispatch(getAllCategories()),
+        dispatch(getAllTags()),
+        dispatch(getAllManufacturer()),
+      ]);
+    }
+    fetchData();
   }, [dispatch]);
 
+  if (getProducts) {
+    dispatch(getAllProduct());
+  }
   if (
     loadingProducts ||
     loadingCategories ||
     loadingTags ||
     loadingManufacturer
   ) {
+    console.log("Loading...................");
     return <SkeletonLoading />;
   }
   return (
