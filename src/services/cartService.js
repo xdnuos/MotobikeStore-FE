@@ -1,58 +1,58 @@
 import axios from "axios";
 import { BASE_URL, getAuthConfig } from "../utils/baseURL";
-// import { openNotificationIcon } from "../Components/NotificationIcon/NotificationIcon";
-
+import { message } from "antd";
 
 export let cartService = {
-  getAllCart: async (idAccount) => { 
+  getAllCart: async (userID) => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/customers/${idAccount}/carts`
-      // ,{
-      //   ...getAuthConfig(),
-      // }
+      const response = await axios.get(
+        BASE_URL + `/api/v1/carts/get/${userID}`
+        // ,{
+        //   ...getAuthConfig(),
+        // }
       );
-      return response.data
-  } catch (error) {
-      console.log(error);      
-  }
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   addToCart: async (AddToCartRequest) => {
     try {
-      const response = await axios.post(BASE_URL + `/api/v1/carts/add-item`,AddToCartRequest
-      // {
-      //   ...getAuthConfig(),
-      // }
+      const response = await axios.post(
+        BASE_URL + `/api/v1/carts/add`,
+        AddToCartRequest
+        // {
+        //   ...getAuthConfig(),
+        // }
       );
-      // openNotificationIcon('success', 'Success', 'Add Product Success!');
+      message.success(response.data);
       console.log(response);
-      return response.data
+      return response.data;
     } catch (error) {
-      // openNotificatio nIcon('error', 'Error', 'Failed to add product to cart!');
+      message.error(error.response.data);
       console.log(error);
     }
   },
   updateToCart: async (UpdateCartItemRequest) => {
     try {
-      const response = await axios.put(BASE_URL + `/api/v1/carts/update-item`,UpdateCartItemRequest 
-      //, {
-      //   ...getAuthConfig(),
-      // }
-      )
+      const response = await axios.put(
+        BASE_URL + `/api/v1/carts/edit`,
+        UpdateCartItemRequest
+      );
       console.log(response);
-      return response.data
+      return response;
     } catch (error) {
       console.log(error);
     }
   },
   deleteToCart: async (idCartItem) => {
     try {
-      const response = await axios.delete(BASE_URL + `/api/v1/carts/${idCartItem}`,
-      // {
-      //   ...getAuthConfig(),
-      // }
+      const response = await axios.delete(
+        BASE_URL + `/api/v1/carts/delete/${idCartItem}`
       );
       console.log(response);
+      return response;
     } catch (error) {
       console.log(error);
     }

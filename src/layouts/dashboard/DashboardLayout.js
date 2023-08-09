@@ -11,6 +11,7 @@ import { getAllProduct } from "src/redux/products/productList";
 import { getAllCategories } from "src/redux/productProperties/categorySlice";
 import { getAllTags } from "src/redux/productProperties/tagSlice";
 import { getAllManufacturer } from "src/redux/productProperties/manufacturerSlice";
+import { fetchCartItems } from "src/redux/cart/cartSlice";
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +51,7 @@ function DashboardLayout() {
   const manufacturer = useSelector(
     (state) => state.manufacturer.allManufacturer
   );
-
+  const userID = useSelector((state) => state.auth.idAccount);
   // loading
   const loadingCategories = useSelector((state) => state.categories.loading);
   const loadingProducts = useSelector(
@@ -61,22 +62,31 @@ function DashboardLayout() {
   const getProducts = useSelector(
     (state) => state.products.productList.getProducts
   );
+  const loadCart = useSelector((state) => state.cart.loading);
+  const loadOk = useSelector((state) => state.cart.loadOk);
+  console.log("loading cart", loadCart);
   useEffect(() => {
     dispatch(getAllProduct());
     dispatch(getAllCategories());
     dispatch(getAllTags());
     dispatch(getAllManufacturer());
+    dispatch(fetchCartItems(userID));
     if (getProducts) {
       console.log("Get lai product");
       dispatch(getAllProduct());
     }
-  }, [dispatch, getProducts]);
+    if (!loadOk) {
+      console.log("Get lai cart");
+      dispatch(fetchCartItems(userID));
+    }
+  }, [dispatch, getProducts, loadOk, userID]);
 
   if (
-    loadingProducts ||
-    loadingCategories ||
-    loadingTags ||
-    loadingManufacturer
+    loadingProducts
+    // loadingCategories ||
+    // loadingTags ||
+    // loadingManufacturer ||
+    // loadCart
   ) {
     console.log("Loading...................");
     return <SkeletonLoading />;

@@ -155,6 +155,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     if (isValid) {
       const formData = new FormData();
       imageMap(imageFiles).forEach((file, index) => {
+        console.log("Add image");
         const newFile = blobToFile(file, file.name);
         console.log(newFile);
         formData.append(`imageFiles`, newFile);

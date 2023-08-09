@@ -3,9 +3,9 @@ import { cartService } from "../../services/cartService";
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
-  async (userId, { rejectWithValue }) => {
+  async (userID, { rejectWithValue }) => {
     try {
-      const items = await cartService.getAllCart(userId);
+      const items = await cartService.getAllCart(userID);
       return items;
     } catch (error) {
       return rejectWithValue(error);
@@ -30,8 +30,8 @@ export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async (idCartItem) => {
     try {
-      await cartService.deleteToCart(idCartItem);
-      return idCartItem;
+      const response = await cartService.deleteToCart(idCartItem);
+      return response;
     } catch (error) {
       throw new Error(error);
     }
@@ -55,6 +55,7 @@ const initialState = {
   loading: false,
   error: null,
   emptyCart: true,
+  loadOk: false,
 };
 
 const cartSlice = createSlice({
@@ -73,7 +74,8 @@ const cartSlice = createSlice({
       .addCase(fetchCartItems.fulfilled, (state, { payload }) => {
         state.cart = payload;
         state.loading = false;
-        state.emptyCart = !payload.cartItems[0];
+        state.emptyCart = state.cart.length === 0;
+        state.loadOk = true;
       })
       .addCase(fetchCartItems.rejected, (state, { payload }) => {
         state.loading = false;
@@ -85,9 +87,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(addToCart.fulfilled, (state, { payload }) => {
-        const updatedCartItems = [...state.cart.cartItems, payload.cartItems];
-        state.cart = { ...state.cart, cartItems: updatedCartItems };
+        state.cart = payload.cart;
         state.loading = false;
+        state.loadOk = false;
       })
       .addCase(addToCart.rejected, (state, { error }) => {
         state.loading = false;
@@ -98,13 +100,10 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(removeFromCart.fulfilled, (state, { payload }) => {
-        const updatedCartItems = state.cart.cartItems.filter(
-          (item) => item.cartItemId !== payload
-        );
-        console.log(updatedCartItems);
-        state.cart = { ...state.cart, cartItems: updatedCartItems };
+        state.cart = payload.cart;
         state.loading = false;
-        state.emptyCart = !state.cart.cartItems[0];
+        state.emptyCart = state.cart?.length === 0;
+        state.loadOk = false;
       })
       .addCase(removeFromCart.rejected, (state, { error }) => {
         state.loading = false;
@@ -115,8 +114,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(updateQuantity.fulfilled, (state, { payload }) => {
-        state.cart = payload;
+        state.cart = payload.cart;
         state.loading = false;
+        state.loadOk = false;
       })
       .addCase(updateQuantity.rejected, (state, { error }) => {
         state.loading = false;

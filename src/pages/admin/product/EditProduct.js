@@ -15,7 +15,7 @@ function EditProduct() {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    const foundProduct = products.find(
+    const foundProduct = products?.find(
       (item) => item.productID === parseInt(productID)
     );
     setProduct(foundProduct);
@@ -42,7 +42,7 @@ function EditProduct() {
             >
               Products
             </Link>
-            <Typography color="inherit">{product.name}</Typography>
+            <Typography color="inherit">{product?.name}</Typography>
           </Breadcrumbs>
         </Stack>
         <ProductForm

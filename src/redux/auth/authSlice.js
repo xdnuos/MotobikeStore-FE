@@ -10,6 +10,9 @@ const initialState = {
   idAccount: !!localStorageService.get("USER")
     ? localStorageService.get("USER")?.userID
     : null,
+  email: !!localStorageService.get("USER")
+    ? localStorageService.get("USER")?.email
+    : null,
 };
 
 //LOGIN
