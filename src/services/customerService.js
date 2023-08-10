@@ -5,7 +5,7 @@ export let customersService = {
   getInfo: async (idAccount) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/${idAccount}`
+        BASE_URL + `/api/v1/customers/get/${idAccount}`
       );
 
       return response.data;
@@ -13,7 +13,18 @@ export let customersService = {
       console.log(error);
     }
   },
-
+  getInfoByPhone: async (phone) => {
+    try {
+      console.log("phone:", phone);
+      const response = await axios.get(
+        BASE_URL + `/api/v1/customers/get/${phone}`
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
   getAllCustomers: async () => {
     try {
       const response = await axios.get(BASE_URL + `/api/v1/customers`);

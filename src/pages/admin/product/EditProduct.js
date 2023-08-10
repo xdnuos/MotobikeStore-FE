@@ -4,8 +4,6 @@ import { Helmet } from "react-helmet-async";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import ProductForm from "../../../sections/@dashboard/products/ProductForm";
 import { useOutletContext, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllProduct, reset } from "src/redux/products/productList";
 import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
 
 // import

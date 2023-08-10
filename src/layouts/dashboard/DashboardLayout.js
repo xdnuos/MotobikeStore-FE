@@ -82,10 +82,10 @@ function DashboardLayout() {
   }, [dispatch, getProducts, loadOk, userID]);
 
   if (
-    loadingProducts
-    // loadingCategories ||
-    // loadingTags ||
-    // loadingManufacturer ||
+    loadingProducts ||
+    loadingCategories ||
+    loadingTags ||
+    loadingManufacturer
     // loadCart
   ) {
     console.log("Loading...................");

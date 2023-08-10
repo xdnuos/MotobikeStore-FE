@@ -18,6 +18,8 @@ const ShopTopAction = ({
             <option value="default">Default</option>
             <option value="priceHighToLow">High to low</option>
             <option value="priceLowToHigh">Low to high</option>
+            <option value="nameAZ">A - Z</option>
+            <option value="nameZA">Z - A</option>
           </select>
         </div>
         <p>

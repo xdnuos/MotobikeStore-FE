@@ -15,10 +15,12 @@ import {
 import Iconify from "../../components/iconify/Iconify";
 import PropTypes from "prop-types";
 import { Helmet } from "react-helmet-async";
-import BillingAndAddress from "../../sections/@client/products/checkout/BillingAndAddress";
+import BillingAndAddress from "../../sections/@dashboard/products/checkout/BillingAndAddress";
 import Cart from "../../sections/@dashboard/products/checkout/AdminCart";
-import Payment from "../../sections/@dashboard/products/checkout/Payment";
+import Summary from "../../sections/@dashboard/products/checkout/Summary";
 import OrderSuccessDialog from "src/sections/@dashboard/products/checkout/OrderSuccessDialog";
+import { useDispatch } from "react-redux";
+import { getAllProduct } from "src/redux/products/productList";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -99,15 +101,16 @@ QontoStepIcon.propTypes = {
 
 // const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
-const steps = ["Cart", "Billing and Address", "Payment"];
+const steps = ["Cart", "Billing and Address", "Summary"];
 
 const AdminCheckout = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch();
   const handleClose = () => {
     setOpen(false);
+    dispatch(getAllProduct());
   };
 
   const handleNext = () => {
@@ -125,7 +128,6 @@ const AdminCheckout = () => {
   const handleReset = () => {
     setActiveStep(0);
   };
-
   const getStepContent = (stepIndex) => {
     switch (stepIndex) {
       case 0:
@@ -140,10 +142,11 @@ const AdminCheckout = () => {
         );
       case 2:
         return (
-          <Payment
+          <Summary
             handleBack={handleBack}
             handleNext={handleNext}
             activeStep={activeStep}
+            handleReset={handleReset}
           />
         );
       default:

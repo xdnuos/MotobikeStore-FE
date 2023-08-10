@@ -73,10 +73,15 @@ export const getSortedProducts = (products, sortType, sortValue) => {
         (product) => product.tags.filter((single) => single === sortValue)[0]
       );
     }
+    if (sortType === "manufacturer") {
+      return products.filter((product) => product.manufacturer === sortValue);
+    }
     if (sortType === "filterSort") {
       let sortProducts = [...products];
       if (sortValue === "default") {
-        return sortProducts;
+        return sortProducts.sort((a, b) => {
+          return b.stock - a.stock;
+        });
       }
       if (sortValue === "priceHighToLow") {
         return sortProducts.sort((a, b) => {
@@ -86,6 +91,16 @@ export const getSortedProducts = (products, sortType, sortValue) => {
       if (sortValue === "priceLowToHigh") {
         return sortProducts.sort((a, b) => {
           return a.price - b.price;
+        });
+      }
+      if (sortValue === "nameAZ") {
+        return sortProducts.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+      }
+      if (sortValue === "nameZA") {
+        return sortProducts.sort((a, b) => {
+          return b.name.localeCompare(a.name);
         });
       }
     }
@@ -104,31 +119,37 @@ const getIndividualItemArray = (array) => {
 // get individual categories
 export const getIndividualCategories = (products) => {
   let productCategories = [];
-  products &&
-    products.map((product) => {
-      return (
-        product.categories &&
-        product.categories.map((single) => {
-          return productCategories.push(single);
-        })
-      );
+  products?.map((product) => {
+    return product.categories?.map((single) => {
+      return productCategories.push(single);
     });
+  });
   const individualProductCategories = getIndividualItemArray(productCategories);
+  console.log(individualProductCategories);
   return individualProductCategories;
+};
+
+export const getIndividualManufacturer = (products) => {
+  let productManufacturer = [];
+  products?.forEach((product) => {
+    if (product.manufacturer != null) {
+      productManufacturer.push(product.manufacturer);
+    }
+  });
+  const individualProductManufacturer =
+    getIndividualItemArray(productManufacturer);
+  console.log(individualProductManufacturer);
+  return individualProductManufacturer;
 };
 
 // get individual tags
 export const getIndividualTags = (products) => {
   let productTags = [];
-  products &&
-    products.map((product) => {
-      return (
-        product.tags &&
-        product.tags.map((single) => {
-          return productTags.push(single);
-        })
-      );
+  products?.map((product) => {
+    return product.tags?.map((single) => {
+      return productTags.push(single);
     });
+  });
   const individualProductTags = getIndividualItemArray(productTags);
   return individualProductTags;
 };

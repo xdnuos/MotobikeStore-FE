@@ -200,7 +200,6 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
               mt={3}
               alignItems="center"
               justifyContent="space-between"
-              ju
             >
               <Button sx={{ color: "#000" }} onClick={handleBack}>
                 <Iconify icon="ic:outline-keyboard-arrow-left" mr={1} />

@@ -5,8 +5,8 @@ import { setActiveSort } from "../../helper/product";
 const ShopManufacturer = ({ manufacturers, getSortParams }) => {
   return (
     <div className="sidebar-widget mt-50">
-      <h4 className="pro-sidebar-title">Manufacturers</h4>
-      <div className="sidebar-widget-manufacturer mt-25">
+      <h4 className="pro-sidebar-title">Manufacturer</h4>
+      <div className="sidebar-widget-tag mt-25">
         {manufacturers ? (
           <ul>
             {manufacturers.map((manufacturer, key) => {
@@ -25,7 +25,7 @@ const ShopManufacturer = ({ manufacturers, getSortParams }) => {
             })}
           </ul>
         ) : (
-          "No manufacturers found"
+          "No manufacturer found"
         )}
       </div>
     </div>

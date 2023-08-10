@@ -104,6 +104,9 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     shortDescription: "",
     fullDescription: "",
     arrival: "",
+    manufacturer: "",
+    categories: "",
+    tags: "",
   };
 
   let isEdit = false;
@@ -123,6 +126,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
       tags: getObjectByNames(tags, product.tags),
       imageFiles: imageUrls(product.images),
     };
+    console.log(initialValues);
   }
 
   const validationSchema = yup.object({
@@ -216,6 +220,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
   };
   return (
     <Formik
+      enableReinitialize={true}
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
