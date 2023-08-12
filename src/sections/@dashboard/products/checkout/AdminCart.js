@@ -108,7 +108,7 @@ function AdminCart({ handleNext, activeStep }) {
   };
 
   const handleDecrement = () => {
-    if ((quantity > 1) & (quantity < productStock)) {
+    if (quantity > 1) {
       setUpdateCartRequest({
         ...updateCartRequest,
         price: defaultPrice * quantity - defaultPrice,

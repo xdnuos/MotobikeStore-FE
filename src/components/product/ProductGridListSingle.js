@@ -42,20 +42,23 @@ const ProductGridListSingle = ({
         >
           <div className="product-img">
             <Link to={"/dashboard/product/" + product.productID}>
-              <img
-                className="default-img"
-                src={process.env.REACT_APP_IMAGE_SERVER + product.images[0]}
-                alt=""
-              />
-              {product.images.length > 1 ? (
+              <div className="rect-img-container">
+                {" "}
                 <img
-                  className="hover-img"
-                  src={process.env.REACT_APP_IMAGE_SERVER + product.images[1]}
+                  className="default-img rect-img"
+                  src={process.env.REACT_APP_IMAGE_SERVER + product.images[0]}
                   alt=""
                 />
-              ) : (
-                ""
-              )}
+                {product.images.length > 1 ? (
+                  <img
+                    className="hover-img rect-img"
+                    src={process.env.REACT_APP_IMAGE_SERVER + product.images[1]}
+                    alt=""
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
             </Link>
             {product.discount || product.arrival ? (
               <div className="product-img-badges">
@@ -154,24 +157,27 @@ const ProductGridListSingle = ({
               <div className="product-list-image-wrap">
                 <div className="product-img">
                   <Link to={"/dashboard/product/" + product.productID}>
-                    <img
-                      className="default-img img-fluid"
-                      src={
-                        process.env.REACT_APP_IMAGE_SERVER + product.images[0]
-                      }
-                      alt=""
-                    />
-                    {product.images.length > 1 ? (
+                    <div className="rect-img-container">
                       <img
-                        className="hover-img img-fluid"
+                        className="default-img img-fluid rect-img"
                         src={
-                          process.env.REACT_APP_IMAGE_SERVER + product.images[1]
+                          process.env.REACT_APP_IMAGE_SERVER + product.images[0]
                         }
                         alt=""
                       />
-                    ) : (
-                      ""
-                    )}
+                      {product.images.length > 1 ? (
+                        <img
+                          className="hover-img img-fluid rect-img"
+                          src={
+                            process.env.REACT_APP_IMAGE_SERVER +
+                            product.images[1]
+                          }
+                          alt=""
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </div>
                   </Link>
                   {product.discount || product.arrival ? (
                     <div className="product-img-badges">

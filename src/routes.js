@@ -13,6 +13,7 @@ import CreateProduct from "./pages/admin/product/CreateProduct";
 import EditProduct from "./pages/admin/product/EditProduct";
 import Home from "./pages/client/Home";
 import ProductDetails from "./pages/client/ProductDetails";
+import AdminProductDetails from "./pages/admin/AdminProductDetails";
 import ProductsList from "./pages/client/ProductsListPage";
 import Checkout from "./pages/client/CheckoutPage";
 import AdminCheckout from "./pages/admin/CheckoutPage";
@@ -21,7 +22,7 @@ import CreateStore from "./pages/admin/CreateStore";
 import StorePage from "./pages/admin/StorePage";
 import AdminOrder from "./pages/admin/AdminOrder";
 import OrderPage from "./pages/client/OrderPage";
-import OrderStorePage from "./pages/admin/OrderStorePage";
+import OrdersPage from "./pages/admin/OrdersPage";
 // import FunctionalFoodsList from './pages/client/FunctionalFoodsList';
 // ----------------------------------------------------------------------
 
@@ -31,18 +32,16 @@ export default function Router() {
       path: "/dashboard",
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
+        { element: <Navigate to="/dashboard/buy" />, index: true },
         { path: "app", element: <DashboardAppPage /> },
-        { path: "store", element: <StorePage /> },
-        { path: "store/new", element: <CreateStore /> },
         { path: "checkout", element: <AdminCheckout /> },
-        { path: "order", element: <OrderStorePage /> },
+        { path: "orders", element: <OrdersPage /> },
         { path: "buy", element: <AdminOrder /> },
+        { path: "users", element: <UserPage /> },
         { path: "products", element: <ProductsPage /> },
-        { path: "user", element: <UserPage /> },
-        { path: "blog", element: <BlogPage /> },
         { path: "products/new", element: <CreateProduct /> },
         { path: "products/edit/:productID", element: <EditProduct /> },
+        { path: "product/:id", element: <AdminProductDetails /> },
       ],
     },
     {

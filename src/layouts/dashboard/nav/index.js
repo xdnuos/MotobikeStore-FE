@@ -84,7 +84,6 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 1, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            {/* <Avatar src={account.photoURL} alt="photoURL" /> */}
             <Avatar
               src="/assets/images/avatars/avatar_default.jpg"
               alt="photoURL"
