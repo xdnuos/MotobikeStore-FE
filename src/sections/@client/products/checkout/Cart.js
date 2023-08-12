@@ -519,7 +519,7 @@ function Cart({ handleNext, activeStep }) {
           </Card>
           {/* --------------------------------------- BUTTON --------------------------------------------------- */}
 
-          <Button sx={{ color: "#000", mt: 3 }} href="/home">
+          <Button sx={{ color: "#000", mt: 3 }} href="/">
             <Iconify icon="ic:outline-keyboard-arrow-left" mr={1} />
             Continue Shopping
           </Button>

@@ -92,7 +92,7 @@ export default function RegisterForm() {
     if (isLoggedIn) {
       const role = localStorageService.get('USER').roles[0]
       if(role === "CUSTOMER"){
-      navigate("/home");
+      navigate("/");
       }else{
         navigate("/dashboard/app")
       }

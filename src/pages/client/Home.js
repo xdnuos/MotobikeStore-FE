@@ -26,6 +26,7 @@ import { GlassCardComponent } from '../../components/glassmorphism-card';
 import SkeletonLoading from '../../components/skeleton/SkeletonLoading';
 // _mock
 import POSTS from '../../_mock/blog';
+import { StyledButtonGreen, StyledButtonYellow } from '../../components/custom/CustomButton';
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 const TopSearchChip = [
@@ -106,7 +107,7 @@ export default function Home() {
     <>
       {/* ------------------------------------------------------------------------------- */}
       <Helmet>
-        <title>Medicine Shop - Hệ thống nhà thuốc đạt chuẩn đặc cầu</title>
+        <title>MotobikeStore</title>
       </Helmet>
       {/* ------------------------------------------------------------------------------- */}
 
@@ -122,46 +123,31 @@ export default function Home() {
               {/* </Box> */}
             </Grid>
             <Grid item xs={12} lg={4}>
-              <Grid container spacing={1} >
-                <Grid item xs={12} md={8} lg={12} sx={{ display: { xs: 'none', md: 'block' } }}>
+              <Grid container spacing={2} >
+                <Grid item xs={12} sx={{ display: { xs: 'none', md: 'none', lg: 'block'} }}>
 
-                  <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945169/asset/Subbanner_Destop_4ff4873a67_yuo7de.webp' alt="sss" style={imgStyle} />
+                  <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691824374/motobike_store/Berik_Onsite_EN_03__aiaewk.jpg' alt="sss" style={imgStyle} />
                 </Grid>
-                <Grid item xs={12} md={4} lg={12}>
+                <Grid item xs={12}  sx={{ display: { sm:'none',md: 'none', lg: 'block'} }}>
 
-                  <Stack
-                    direction="row"
-                    // alignItems="stretch"
-                    spacing={1}
-                    justifyContent={"center"}
-                    sx={{ height: '100%' }}
-                  >
-                    <StyledPaper elevation={3} >
-                      <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945202/asset/mua_thuoc_theo_don_44c4a5e961_bwriws.webp' alt="sss" />
-                      <Typography variant='subtitle2'>Cần mua thuốc</Typography>
-                    </StyledPaper>
-                    <StyledPaper elevation={3}>
-                      <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945227/asset/tu_van_cung_duoc_sy_a00aa6cf14_u9rvgg.webp' alt="sss" />
-                      <Typography variant='subtitle2'>Tư vấn với dược sĩ</Typography>
-                    </StyledPaper>
-                    <StyledPaper elevation={3} >
-                      <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945254/asset/tim_nha_thuoc_53a50614c4_khjxzc.webp' alt="sss" />
-                      <Typography variant='subtitle2'>Tìm nhà thuốc gần đây</Typography>
-                    </StyledPaper>
-                  </Stack>
+                  <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691823177/motobike_store/Berik_Onsite_EN_06__vo4dlx.jpg' alt="sss" style={imgStyle} />
+                </Grid>
+                <Grid item xs={12} sx={{ display: { xs: 'none', sm:'block',md: 'block' } }}>
+
+                  <StyledButtonGreen variant="contained" sx={{height: '45px'}} fullWidth>Shop now</StyledButtonGreen>
                 </Grid>
               </Grid>
 
             </Grid>
-            <Grid item xs={12} md={12}>
-              <Grid container spacing={1}>
+            <Grid item xs={12} md={12} sx={{ display: { xs: 'none',  sm: 'block' } }}>
+              <Grid container spacing={1} justifyContent="center" alignItems="center">
                 <Grid item xs={6} md={3} >
                   <Stack direction="row"
                     justifyContent="center"
                     alignItems="center"
                   >
                     <img src=' https://res.cloudinary.com/drn7nawnc/image/upload/v1684945384/asset/doi_tra_trong_30_ngay_473ff3f60b_xhnfea.webp' alt="sss" style={imgStyle2} />
-                    <Typography variant='body2' align='center' ml={1}>Đổi trả trong 30 ngày từ ngày mua</Typography>
+                    <Typography variant='body2' align='center' ml={1}>Return within 30 days from purchase</Typography>
                   </Stack>
                 </Grid>
 
@@ -170,7 +156,7 @@ export default function Home() {
                   alignItems="center"
                 >
                   <img src=' https://res.cloudinary.com/drn7nawnc/image/upload/v1684945406/asset/mien_phi_van_chuyen_617a0730bd_zklmwq.webp' alt="sss" style={imgStyle2} />
-                  <Typography variant='body2' align='center' ml={1}> Miễn phí vận chuyển theo chính sách</Typography>
+                  <Typography variant='body2' align='center' ml={1}>Free shipping to delivery</Typography>
                 </Stack>
                 </Grid>
 
@@ -180,35 +166,28 @@ export default function Home() {
                     alignItems="center"
                   >
                     <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945429/asset/cam_ket_thuoc_chinh_hang_52a4c343f0_ak2jyd.webp' alt="sss" style={imgStyle2} />
-                    <Typography variant='body2' align='center' ml={1}>Cam kết 100% thuốc chính hãng</Typography>
+                    <Typography variant='body2' align='center' ml={1}>Guarantee 100% genuine products</Typography>
                   </Stack>
                 </Grid>
-                <Grid item xs={6} md={3} >
-                  <Stack direction="row"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945452/asset/chuyen_thuoc_dieu_tri_ung_thu_aa2fe84f53_md9gif.webp' alt="sss" style={imgStyle2} />
-                    <Typography variant='body2' align='center' ml={1}>Chuyên thuốc điều trị bệnh ung thư</Typography>
-                  </Stack>
-                </Grid>
+                
               </Grid>
             </Grid>
           </Grid>
 
           {/* danh mục nổi bật */}
           {/* ------------------------------------------------------------------------------- */}
-          <FeaturedCategory title='Danh Mục Nổi Bật' />
+          <FeaturedCategory title='Pick Your Ride' />
+
 
           {/* Sản Phẩm Nổi Bật Hôm Nay */}
           {/* ------------------------------------------------------------------------------- */}
-          <FeaturedSlide title='Sản Phẩm Nổi Bật Hôm Nay' products={products} limit={15} />
+          {/* <FeaturedSlide title='Sản Phẩm Nổi Bật Hôm Nay' products={products} limit={15} /> */}
 
 
           {/* Sản Phẩm Theo Đối Tượng */}
           {/* ------------------------------------------------------------------------------- */}
-          <GlassCardComponent dataTitle={dataTitleTarget} title='BẢO VỆ' content='Sức khoẻ người thân' />
-          <ProductsByTarget title='Sản Phẩm Theo Đối Tượng' product={products} limit={limit} />
+          {/* <GlassCardComponent dataTitle={dataTitleTarget} title='BẢO VỆ' content='Sức khoẻ người thân' />
+          <ProductsByTarget title='Sản Phẩm Theo Đối Tượng' product={products} limit={limit} /> */}
           
 
           {/* Bán Chạy Nhất  */}
@@ -223,12 +202,12 @@ export default function Home() {
 
           {/* Góc Sức Khỏe */}
           {/* ------------------------------------------------------------------------------- */}
-          <GlassCardComponent dataTitle={dataTitleHealthCheck} title='Kiểm tra sức khoẻ' content='Dựa trên đánh giá từ các chuyên gia' />
-          <BlogReview title='Góc Sức Khỏe' blog={POSTS} limit={7} />
+          {/* <GlassCardComponent dataTitle={dataTitleHealthCheck} title='Kiểm tra sức khoẻ' content='Dựa trên đánh giá từ các chuyên gia' />
+          <BlogReview title='Góc Sức Khỏe' blog={POSTS} limit={7} /> */}
 
           {/* Tìm Kiếm Hàng Đầu */}
           {/* ------------------------------------------------------------------------------- */}
-          <TopSearch title='Tìm Kiếm Hàng Đầu' chipData={TopSearchChip} />
+          {/* <TopSearch title='Tìm Kiếm Hàng Đầu' chipData={TopSearchChip} /> */}
           {/* end */}
           {/* ------------------------------------------------------------------------------- */}
           

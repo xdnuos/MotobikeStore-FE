@@ -49,8 +49,7 @@ export default function Router() {
       path: "/",
       element: <ClientLayout />,
       children: [
-        { element: <Navigate to="/home" />, index: true },
-        { path: "home", element: <Home /> },
+        { element:  <Home />, index: true },
         { path: "product-details/:id", element: <ProductDetails /> },
         { path: "blog", element: <BlogPage /> },
         { path: "list-products/:id", element: <ProductsList /> },
@@ -66,7 +65,7 @@ export default function Router() {
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/home" />, index: true },
+        { element: <Navigate to="/" />, index: true },
         { path: "404", element: <Page404 /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],

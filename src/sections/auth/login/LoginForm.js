@@ -56,7 +56,7 @@ export default function LoginForm() {
       const role = localStorageService.get("USER")?.roles[0];
       console.log("role", role);
       if (role === "CUSTOMER") {
-        navigate("/home");
+        navigate("/");
       } else {
         navigate("/dashboard/app");
       }

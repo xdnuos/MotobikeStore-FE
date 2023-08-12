@@ -5,7 +5,7 @@ import { authService } from "../../services/authService";
 const initialState = {
   accessToken: !!localStorageService.get("access_token")
     ? localStorageService.get("access_token")
-    : null,
+    : null, 
   isLoggedIn: !!localStorageService.get("USER"),
   idAccount: !!localStorageService.get("USER")
     ? localStorageService.get("USER")?.userID
