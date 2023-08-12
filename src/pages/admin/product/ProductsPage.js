@@ -40,7 +40,7 @@ import {
   getAllProduct,
 } from "src/redux/products/productList";
 // ----------------------------------------------------------------------
-const imageServer = process.env.REACT_APP_IMAGE_SERVER;
+// const imageServer = process.env.REACT_APP_IMAGE_SERVER;
 const TABLE_HEAD = [
   { id: "name", label: "Product", alignRight: false },
   { id: "sku", label: "SKU", alignRight: false },
@@ -298,7 +298,7 @@ function ProductsPage() {
                             >
                               <Avatar
                                 alt={product.name}
-                                src={imageServer + product.images[0]}
+                                src={product.images[0]}
                                 variant="rounded"
                                 sx={{ width: 55, height: 55 }}
                               />

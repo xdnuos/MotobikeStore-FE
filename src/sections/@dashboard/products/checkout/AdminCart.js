@@ -311,10 +311,7 @@ function AdminCart({ handleNext, activeStep }) {
                                 >
                                   <Avatar
                                     alt={item.productName}
-                                    src={
-                                      process.env.REACT_APP_IMAGE_SERVER +
-                                      item.productImages[0]?.imagePath
-                                    }
+                                    src={item.productImages[0]?.imagePath}
                                     variant="rounded"
                                     sx={{ width: 55, height: 55 }}
                                   />

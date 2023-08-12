@@ -63,21 +63,21 @@ function SimpleSlider() {
     return (
         <>
             <Slider {...settings} style={sliderStyle}>
-                <div style={divStyle}>
-                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945510/asset/BANNER_WEB_PC_805_X246_2_f75c7cc436_cip4mw.webp' alt="sss" style={imgStyle} />
-                </div>
-                <div style={divStyle} ><a href="/blog">
-                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945533/asset/Banner_Web_PC_1610x492_b976d8fc91_l9mkhw.webp' alt="sss" style={imgStyle} />
-                </a></div>
-                <div style={divStyle}>
-                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945555/asset/Banner_Web_PC_1610x492_388508e270_hhbfjm.webp' alt="sss" style={imgStyle} />
-                </div>
                 
-                <div style={divStyle}>
-                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945574/asset/Banner_Destop_cb5af066c4_cfqzf3.webp' alt="sss" style={imgStyle} />
+                <div style={divStyle} >
+                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691822125/motobike_store/image-1683707958-342-Chaser_banner_r5pzmu.jpg' alt="sss" style={imgStyle} />
                 </div>
                 <div style={divStyle}>
-                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1684945600/asset/Banner_Destop_2d9531d01d_slwirv.webp' alt="sss" style={imgStyle} />
+                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691822125/motobike_store/image-1677487829-462-Zard_Banner_baqeql.jpg' alt="sss" style={imgStyle} />
+                </div>
+                <div style={divStyle}>
+                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691819101/motobike_store/image-1688377867-804-BeltsPulleysSprocketsChains_banner_sqt4i4.jpg' alt="sss" style={imgStyle} />
+                </div>
+                <div style={divStyle}>
+                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691822125/motobike_store/image-1687332544-238-Kraus_banner_q9924o.jpg' alt="sss" style={imgStyle} />
+                </div>
+                <div style={divStyle}>
+                    <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691822125/motobike_store/image-1685609272-862-Air_oil_filters_banner_x2xlc1.jpg' alt="sss" style={imgStyle} />
                 </div>
             </Slider>  
         </>

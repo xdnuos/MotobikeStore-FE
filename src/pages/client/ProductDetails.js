@@ -236,7 +236,7 @@ function ProductDetails() {
               separator={<StyledSeparator>&nbsp;•&nbsp;</StyledSeparator>}
               aria-label="breadcrumb"
             >
-              <Link underline="hover" color="text.primary" href="/home">
+              <Link underline="hover" color="text.primary" href="/">
                 Trang chủ
               </Link>
               <Link underline="hover" color="text.primary" href="#">

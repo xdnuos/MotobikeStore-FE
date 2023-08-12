@@ -23,6 +23,7 @@ import StorePage from "./pages/admin/StorePage";
 import AdminOrder from "./pages/admin/AdminOrder";
 import OrderPage from "./pages/client/OrderPage";
 import OrdersPage from "./pages/admin/OrdersPage";
+import InventoryManagement from "./pages/admin/InventoryManagementPage";
 // import FunctionalFoodsList from './pages/client/FunctionalFoodsList';
 // ----------------------------------------------------------------------
 
@@ -42,14 +43,14 @@ export default function Router() {
         { path: "products/new", element: <CreateProduct /> },
         { path: "products/edit/:productID", element: <EditProduct /> },
         { path: "product/:id", element: <AdminProductDetails /> },
+        { path: "stock", element: <InventoryManagement /> },
       ],
     },
     {
       path: "/",
       element: <ClientLayout />,
       children: [
-        { element: <Navigate to="/home" />, index: true },
-        { path: "home", element: <Home /> },
+        { element:  <Home />, index: true },
         { path: "product-details/:id", element: <ProductDetails /> },
         { path: "blog", element: <BlogPage /> },
         { path: "list-products/:id", element: <ProductsList /> },
@@ -65,7 +66,7 @@ export default function Router() {
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/home" />, index: true },
+        { element: <Navigate to="/" />, index: true },
         { path: "404", element: <Page404 /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],
