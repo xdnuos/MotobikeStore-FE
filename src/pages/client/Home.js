@@ -29,45 +29,6 @@ import POSTS from '../../_mock/blog';
 import { StyledButtonGreen, StyledButtonYellow } from '../../components/custom/CustomButton';
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const TopSearchChip = [
-  { key: 0, label: 'Tìm kiếm nhiều', href: '#' },
-  { key: 1, label: 'Mua nhiều', href: '#' },
-  { key: 2, label: 'Sữa cho cả nhà', href: '#' },
-  { key: 3, label: 'Da sáng dáng xinh', href: '#' },
-  { key: 4, label: 'Chồng khỏe vợ vui', href: '#' },
-  { key: 5, label: 'Phòng sốt xuất huyết', href: '#' },
-  { key: 6, label: 'Phòng bệnh mùa hè', href: '#' },
-];
-
-const dataTitleTarget = [
-  { title: 'MẸ VÀ BÉ', href: '/products', img: 'https://res.cloudinary.com/drn7nawnc/image/upload/v1684950515/asset/auijh-removebg-preview_sbi3bm.png' },
-  { title: 'NGƯỜI CAO TUỔI', href: '#', img: 'https://res.cloudinary.com/drn7nawnc/image/upload/v1684950557/asset/happy-senior-couple-elderly-man-woman-smiling-flat-vector-illustration-old-people_511716-121_x0ewex.jpg' },
-  { title: 'TRẺ EM', href: '#', img: 'https://res.cloudinary.com/drn7nawnc/image/upload/v1684950592/asset/teacher-holding-little-students-by-their-hands_52683-45012_uxamiz.jpg' },
-]
-
-const dataTitleHealthCheck = [
-  { title: 'Khả năng trào ngược dạ dày', href: '/products', img: 'https://res.cloudinary.com/drn7nawnc/image/upload/v1684950930/asset/Daday_55938691ef_zpzsja.webp' },
-  { title: 'Nguy cơ phụ thuộc bình xịt cắt cơn', href: '#', img: 'https://res.cloudinary.com/drn7nawnc/image/upload/v1684950866/asset/Phoi_0ff95eb627_acuj9v.webp' },
-  { title: 'Sàng lọc nguy cơ mắc bệnh tim mạch', href: '#', img: 'https://res.cloudinary.com/drn7nawnc/image/upload/v1684950828/asset/Timmach2_c75a0affc5_rqnc9j.webp' },
-]
-
-
-const StyledPaper = styled(Paper)(() => ({
-  textAlign: 'center',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-  padding: '10px',
-
-}));
-const StyledDiv = styled('div')(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
 
 
 const imgStyle = {
@@ -181,13 +142,13 @@ export default function Home() {
 
           {/* Sản Phẩm Nổi Bật Hôm Nay */}
           {/* ------------------------------------------------------------------------------- */}
-          {/* <FeaturedSlide title='Sản Phẩm Nổi Bật Hôm Nay' products={products} limit={15} /> */}
+          <FeaturedSlide title='Sản Phẩm Nổi Bật Hôm Nay' products={products} limit={15} />
 
 
           {/* Sản Phẩm Theo Đối Tượng */}
           {/* ------------------------------------------------------------------------------- */}
           {/* <GlassCardComponent dataTitle={dataTitleTarget} title='BẢO VỆ' content='Sức khoẻ người thân' />
-          <ProductsByTarget title='Sản Phẩm Theo Đối Tượng' product={products} limit={limit} /> */}
+           <ProductsByTarget title='Sản Phẩm Theo Đối Tượng' product={products} limit={limit} /> */}
           
 
           {/* Bán Chạy Nhất  */}

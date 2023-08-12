@@ -27,8 +27,8 @@ const CustomCard = styled('div')(() => ({
     transition: `all 0.3s ease-in-out`,
     background: '#262626',
     borderRadius: '50%',
-    maxWidth: '130px',
-    maxHeight: '130px',
+    maxWidth: '110px',
+    maxHeight: '110px',
     '&:hover': {
         transform: `scale(1.07)`,
         boxShadow: `20px 20px 50px rgba(0, 0, 0, 0.6), 
@@ -38,7 +38,7 @@ const CustomCard = styled('div')(() => ({
 const StyledProductImg = styled('img')({
     width: '70px',
     height: '70px',
-    margin: '30px',
+    margin: '20px',
     objectFit: 'cover', // Không bị mờ
     objectFit: 'contain', // Vừa kích thước
 

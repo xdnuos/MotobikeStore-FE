@@ -31,12 +31,12 @@ function ProductModal(props) {
   const addToCart = props.addtocart;
 
   const handleListItemClick = (event, quantity, productID) => {
-    addToCart({ email, quantity, productID });
+    addToCart({ productID, quantity, email });
   };
-  const cartItems = props.cartitems;
+  const cartItem = props.cartitem;
 
   const productCartQty = getProductCartQuantity(
-    cartItems,
+    cartItem,
     product,
     selectedProductColor,
     selectedProductSize
@@ -103,10 +103,10 @@ function ProductModal(props) {
                   {product.images?.map((single, key) => {
                     return (
                       <div key={key}>
-                        <div className="single-image">
+                        <div className="single-image rect-img-container">
                           <img
-                            src={process.env.REACT_APP_IMAGE_SERVER + single}
-                            className="img-fluid"
+                            src={single}
+                            className="img-fluid rect-img"
                             alt=""
                           />
                         </div>
@@ -120,10 +120,10 @@ function ProductModal(props) {
                   {product.images?.map((single, key) => {
                     return (
                       <div key={key}>
-                        <div className="single-image">
+                        <div className="single-image rect-img-container">
                           <img
-                            src={process.env.REACT_APP_IMAGE_SERVER + single}
-                            className="img-fluid"
+                            src={single}
+                            className="img-fluid rect-img"
                             alt=""
                           />
                         </div>
@@ -308,7 +308,7 @@ function ProductModal(props) {
 ProductModal.propTypes = {
   addtoast: PropTypes.func,
   addtocart: PropTypes.func,
-  cartitems: PropTypes.array,
+  cartitem: PropTypes.array,
   discountedprice: PropTypes.number,
   finaldiscountedprice: PropTypes.string,
   finalproductprice: PropTypes.string,

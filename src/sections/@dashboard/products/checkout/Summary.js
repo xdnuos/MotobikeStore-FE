@@ -138,10 +138,7 @@ function Summary({ handleBack, handleNext, activeStep, handleReset }) {
                           >
                             <Avatar
                               alt={cartItem.productName}
-                              src={
-                                process.env.REACT_APP_IMAGE_SERVER +
-                                cartItem.productImages[0].imagePath
-                              }
+                              src={cartItem.productImages[0].imagePath}
                               shape="square"
                               sx={{ width: 55, height: 55 }}
                             />

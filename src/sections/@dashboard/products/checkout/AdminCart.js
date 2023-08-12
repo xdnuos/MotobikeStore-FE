@@ -108,7 +108,7 @@ function AdminCart({ handleNext, activeStep }) {
   };
 
   const handleDecrement = () => {
-    if ((quantity > 1) & (quantity < productStock)) {
+    if (quantity > 1) {
       setUpdateCartRequest({
         ...updateCartRequest,
         price: defaultPrice * quantity - defaultPrice,
@@ -311,10 +311,7 @@ function AdminCart({ handleNext, activeStep }) {
                                 >
                                   <Avatar
                                     alt={item.productName}
-                                    src={
-                                      process.env.REACT_APP_IMAGE_SERVER +
-                                      item.productImages[0]?.imagePath
-                                    }
+                                    src={item.productImages[0]?.imagePath}
                                     variant="rounded"
                                     sx={{ width: 55, height: 55 }}
                                   />

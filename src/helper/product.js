@@ -33,7 +33,7 @@ export const getDiscountPrice = (price, discount) => {
 };
 
 // get product cart quantity
-export const getProductCartQuantity = (cartItems, product, color, size) => {
+export const getProductCartQuantity = (cartItem, product, color, size) => {
   // let productInCart = cartItems.filter(
   //   (single) =>
   //     single.id === product.productID &&
@@ -57,6 +57,12 @@ export const getProductCartQuantity = (cartItems, product, color, size) => {
   // } else {
   //   return 0;
   // }
+  // console.log(cartItem);
+  if (cartItem === undefined) {
+    return 0;
+  } else {
+    return cartItem.quantity;
+  }
 };
 
 //get products based on category
