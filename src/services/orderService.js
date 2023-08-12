@@ -10,7 +10,7 @@ export let orderService = {
         AddToCartRequest
       );
       console.log("Response: ", response);
-      return response.data;
+      return response;
     } catch (error) {
       console.log(error);
       throw error;

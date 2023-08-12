@@ -23,6 +23,7 @@ import StorePage from "./pages/admin/StorePage";
 import AdminOrder from "./pages/admin/AdminOrder";
 import OrderPage from "./pages/client/OrderPage";
 import OrdersPage from "./pages/admin/OrdersPage";
+import InventoryManagement from "./pages/admin/InventoryManagementPage";
 // import FunctionalFoodsList from './pages/client/FunctionalFoodsList';
 // ----------------------------------------------------------------------
 
@@ -42,6 +43,7 @@ export default function Router() {
         { path: "products/new", element: <CreateProduct /> },
         { path: "products/edit/:productID", element: <EditProduct /> },
         { path: "product/:id", element: <AdminProductDetails /> },
+        { path: "stock", element: <InventoryManagement /> },
       ],
     },
     {

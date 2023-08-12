@@ -46,13 +46,13 @@ const ProductGridListSingle = ({
                 {" "}
                 <img
                   className="default-img rect-img"
-                  src={process.env.REACT_APP_IMAGE_SERVER + product.images[0]}
+                  src={product.images[0]}
                   alt=""
                 />
                 {product.images.length > 1 ? (
                   <img
                     className="hover-img rect-img"
-                    src={process.env.REACT_APP_IMAGE_SERVER + product.images[1]}
+                    src={product.images[1]}
                     alt=""
                   />
                 ) : (
@@ -160,18 +160,13 @@ const ProductGridListSingle = ({
                     <div className="rect-img-container">
                       <img
                         className="default-img img-fluid rect-img"
-                        src={
-                          process.env.REACT_APP_IMAGE_SERVER + product.images[0]
-                        }
+                        src={product.images[0]}
                         alt=""
                       />
                       {product.images.length > 1 ? (
                         <img
                           className="hover-img img-fluid rect-img"
-                          src={
-                            process.env.REACT_APP_IMAGE_SERVER +
-                            product.images[1]
-                          }
+                          src={product.images[1]}
                           alt=""
                         />
                       ) : (

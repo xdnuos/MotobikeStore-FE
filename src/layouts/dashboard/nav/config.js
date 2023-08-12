@@ -31,7 +31,7 @@ const navConfig = [
     icon: <Icon icon="icon-park:ad-product" />,
   },
   {
-    title: "Stock",
+    title: "Warehouse",
     path: "/dashboard/stock",
     icon: <Icon icon="vaadin:stock" />,
   },

@@ -105,7 +105,7 @@ function ProductModal(props) {
                       <div key={key}>
                         <div className="single-image rect-img-container">
                           <img
-                            src={process.env.REACT_APP_IMAGE_SERVER + single}
+                            src={single}
                             className="img-fluid rect-img"
                             alt=""
                           />
@@ -122,7 +122,7 @@ function ProductModal(props) {
                       <div key={key}>
                         <div className="single-image rect-img-container">
                           <img
-                            src={process.env.REACT_APP_IMAGE_SERVER + single}
+                            src={single}
                             className="img-fluid rect-img"
                             alt=""
                           />

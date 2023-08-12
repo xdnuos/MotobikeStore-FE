@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addProduct, updateProduct } from "src/redux/products/productList";
-const imageServer = process.env.REACT_APP_IMAGE_SERVER;
+// const imageServer = process.env.REACT_APP_IMAGE_SERVER;
 // -------------------------------------------------------------------
 message.config({
   top: 100,
@@ -79,12 +79,12 @@ function getObjectByNames(arr, names) {
   });
   return objects;
 }
-function imageUrls(images) {
-  if (images.length === 0) {
-    return;
-  }
-  return images.map((image) => imageServer + image);
-}
+// function imageUrls(images) {
+//   if (images.length === 0) {
+//     return;
+//   }
+//   return images.map((image) => imageServer + image);
+// }
 function blobToFile(theBlob, fileName) {
   return new File([theBlob], fileName, {
     lastModified: new Date().getTime(),
@@ -104,9 +104,9 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     shortDescription: "",
     fullDescription: "",
     arrival: "",
-    manufacturer: "",
-    categories: "",
-    tags: "",
+    // manufacturer: "",
+    // categories: "",
+    // tags: "",
   };
 
   let isEdit = false;
@@ -124,7 +124,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
       manufacturer: getIDByName(manufacturer, product.manufacturer),
       categories: getObjectByNames(categories, product.categories),
       tags: getObjectByNames(tags, product.tags),
-      imageFiles: imageUrls(product.images),
+      imageFiles: product.images,
     };
     console.log(initialValues);
   }

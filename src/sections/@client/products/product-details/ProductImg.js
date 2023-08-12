@@ -91,11 +91,7 @@ function ProductImg(props) {
         >
           {props.data?.map((slide, index) => (
             <div className="rect-img-container" key={index}>
-              <img
-                className="rect-img"
-                src={`${process.env.REACT_APP_IMAGE_SERVER + slide}`}
-                alt="product"
-              />
+              <img className="rect-img" src={`${slide}`} alt="product" />
             </div>
           ))}
         </Slider>
