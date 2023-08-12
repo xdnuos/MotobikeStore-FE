@@ -20,7 +20,7 @@ import {
   useTheme,
 } from '@mui/material';
 // sections
-import { SearchForm, FeaturedSlide, SimpleSlider, Bestseller, ProductsByTarget, Suggestions, BlogReview, FeaturedCategory, TopSearch } from '../../sections/@client/home';
+import { SearchForm, FeaturedSlide, SimpleSlider, ProductsByTag, BlogReview, FeaturedCategory } from '../../sections/@client/home';
 // components
 import { GlassCardComponent } from '../../components/glassmorphism-card';
 import SkeletonLoading from '../../components/skeleton/SkeletonLoading';
@@ -56,6 +56,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(getAllProduct());
+    console.log("products", products);
   }, [dispatch]);
 
   if (loading) {
@@ -140,31 +141,29 @@ export default function Home() {
           <FeaturedCategory title='Pick Your Ride' />
 
 
+
+
           {/* Sản Phẩm Nổi Bật Hôm Nay */}
           {/* ------------------------------------------------------------------------------- */}
-          <FeaturedSlide title='Sản Phẩm Nổi Bật Hôm Nay' products={products} limit={15} />
+          <FeaturedSlide title='Featured products' products={products} limit={15} />
 
 
+         
           {/* Sản Phẩm Theo Đối Tượng */}
           {/* ------------------------------------------------------------------------------- */}
-          {/* <GlassCardComponent dataTitle={dataTitleTarget} title='BẢO VỆ' content='Sức khoẻ người thân' />
-           <ProductsByTarget title='Sản Phẩm Theo Đối Tượng' product={products} limit={limit} /> */}
+          {/* <GlassCardComponent dataTitle={dataTitleTarget} title='BẢO VỆ' content='Sức khoẻ người thân' />*/}
+            <ProductsByTag  product={products} limit={limit} /> 
           
 
-          {/* Bán Chạy Nhất  */}
-          {/* ------------------------------------------------------------------------------- */}
-          {/* <Bestseller title='Bán Chạy Nhất' product={products} limit={10} /> */}
-
-
-
+        
           {/* Gợi Ý Hôm Nay */}
           {/* ------------------------------------------------------------------------------- */}
           {/* <Suggestions title='Sản Phẩm Theo Đối Tượng' product={products} limit={10} /> */}
 
           {/* Góc Sức Khỏe */}
           {/* ------------------------------------------------------------------------------- */}
-          {/* <GlassCardComponent dataTitle={dataTitleHealthCheck} title='Kiểm tra sức khoẻ' content='Dựa trên đánh giá từ các chuyên gia' />
-          <BlogReview title='Góc Sức Khỏe' blog={POSTS} limit={7} /> */}
+          {/* <GlassCardComponent dataTitle={dataTitleHealthCheck} title='Kiểm tra sức khoẻ' content='Dựa trên đánh giá từ các chuyên gia' /> */}
+          <BlogReview title='Góc Sức Khỏe' blog={POSTS} limit={7} />
 
           {/* Tìm Kiếm Hàng Đầu */}
           {/* ------------------------------------------------------------------------------- */}

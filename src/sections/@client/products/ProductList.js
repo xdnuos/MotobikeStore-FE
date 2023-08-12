@@ -12,8 +12,8 @@ ProductList.propTypes = {
 export default function ProductList({ products, limit, ...other }) {
   return (
     <Grid container spacing={3} {...other}>
-      {products?.slice(0, limit).map((product,index) => (
-        <Grid key={product?.id} item xs={12} sm={6} md={3} lg={2.4}>
+      {products?.slice(0, limit).map((product) => (
+        <Grid key={product?.productID} item xs={12} sm={6} md={3} lg={2.4}>
           <ShopProductCard product={product} />
         </Grid>
       ))}
