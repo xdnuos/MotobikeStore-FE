@@ -75,7 +75,7 @@ export default function ShopProductCard({ product = [], sx, loading  }) {
       {loading ? <Skeleton variant="rectangular" sx={{ width: "auto", height: "250px", p: "16px" }} /> :
         <Link underline='none' component={RouterLink} to={`/product-details/${productID}`}>
           <Box sx={{ pt: '100%', position: 'relative' }} >
-            <StyledProductImg alt={name} src={"https://res.cloudinary.com/drn7nawnc/image/upload/v1691867460/motobike_store/den-pha-led-2-tang-zhipat-cho-yamaha-y125zr-yaz-products-2015_sc7g6j.jpg"} />
+            <StyledProductImg alt={name} src={images[0]} />
           </Box>
         </Link>
       }
@@ -95,8 +95,8 @@ export default function ShopProductCard({ product = [], sx, loading  }) {
 
 
         <StyledChipContainer>
-          {!loading && arrival !== null && <Label variant="filled" color={"warning"}>🔥 {arrival}</Label>}
-          {!loading && manufacturer !== null && <Label variant="filled" color={"info"} >{manufacturer}</Label>}
+          {!loading && arrival !== null && <Label variant="filled" color={"warning"} >🔥 {arrival}</Label>}
+          {!loading && manufacturer !== null && <Label variant="filled"  sx={{color: "#fff", backgroundColor: "#0084ffcf"}} >{manufacturer}</Label>}
         </StyledChipContainer>
 
         <Chip size="small" label={
@@ -109,7 +109,15 @@ export default function ShopProductCard({ product = [], sx, loading  }) {
             <Typography variant="body1"
               textAlign="end"
               color={'primary.main'}>
-              {fCurrency(price)} đ
+              {!price
+              ? product?.price.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })
+              : price.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
             </Typography>} />
       </Stack>
 
