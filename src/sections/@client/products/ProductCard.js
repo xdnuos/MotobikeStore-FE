@@ -95,8 +95,8 @@ export default function ShopProductCard({ product = [], sx, loading  }) {
 
 
         <StyledChipContainer>
-          {!loading && arrival !== null && <Label variant="filled" color={"warning"}>🔥 {arrival}</Label>}
-          {!loading && manufacturer !== null && <Label variant="filled" color={"info"} >{manufacturer}</Label>}
+          {!loading && arrival !== null && <Label variant="filled" color={"warning"} >🔥 {arrival}</Label>}
+          {!loading && manufacturer !== null && <Label variant="filled"  sx={{color: "#fff", backgroundColor: "#0084ffcf"}} >{manufacturer}</Label>}
         </StyledChipContainer>
 
         <Chip size="small" label={
@@ -109,7 +109,15 @@ export default function ShopProductCard({ product = [], sx, loading  }) {
             <Typography variant="body1"
               textAlign="end"
               color={'primary.main'}>
-              {fCurrency(price)} đ
+              {!price
+              ? product?.price.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })
+              : price.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
             </Typography>} />
       </Stack>
 

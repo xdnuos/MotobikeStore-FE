@@ -225,7 +225,7 @@ function ProductDetailsPage() {
   return (
     <>
       <Helmet>
-        <title>Chi tiết sản phẩm</title>
+        <title>Product details</title>
       </Helmet>
 
       <Container>
@@ -239,21 +239,18 @@ function ProductDetailsPage() {
               <Link underline="hover" color="text.primary" href="/">
                 Trang chủ
               </Link>
-              <Link underline="hover" color="text.primary" href="#">
-                Category1
+              {product?.categories.map((category,index) => (
+
+              <Link  key={index} underline="hover" color="text.primary" href="#">
+              {category}
               </Link>
-              <Link underline="hover" color="text.primary" href="#">
-                Category2
-              </Link>
-              {/* {loading ? <SkeletonLoading/> : */}
-              <Typography color="inherit">{product?.slug}</Typography>
-              {/* } */}
-            </Breadcrumbs>
+              ))}
+          </Breadcrumbs>
           </Grid>
 
           {/* hình ảnh sản phẩm */}
           <Grid item xs={12} md={6} p={"16px 32px"}>
-            <ProductImg data={product?.assets} />
+            <ProductImg data={product?.images} />
           </Grid>
           {/* thông tin sp */}
           <Grid item xs={12} md={6} p={"16px 32px 16px 40px"}>
