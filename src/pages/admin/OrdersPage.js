@@ -369,7 +369,7 @@ export default function OrderStorePage() {
                       const selectedUser = selected.indexOf(orderItems) !== -1;
 
                       return (
-                        <Accordion>
+                        <Accordion key={orderID}>
                           <AccordionSummary
                             aria-controls="panel1a-content"
                             id="panel1a-header"

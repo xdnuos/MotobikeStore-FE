@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { productService } from "../../services/productService";
+import { stockService } from "src/services/stockService";
 /** State **/
 const initialState = {
   allProduct: [],
@@ -28,6 +29,18 @@ export const updateProduct = createAsyncThunk(
   async ({ formData, id }) => {
     try {
       const response = await productService.update({ formData, id });
+      console.log(response);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+export const creatStockProduct = createAsyncThunk(
+  "product/creatStockProduct",
+  async (formData) => {
+    try {
+      const response = await stockService.create(formData);
       console.log(response);
       return response;
     } catch (error) {
@@ -120,6 +133,18 @@ const listProductSlice = createSlice({
         state.getProducts = true;
       })
       .addCase(changeState.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message;
+      })
+      .addCase(creatStockProduct.pending, (state) => {
+        state.allProduct = [];
+        state.loading = true;
+      })
+      .addCase(creatStockProduct.fulfilled, (state, actions) => {
+        state.allProduct = actions.payload;
+        state.getProducts = true;
+      })
+      .addCase(creatStockProduct.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message;
       })

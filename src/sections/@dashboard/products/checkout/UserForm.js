@@ -58,20 +58,28 @@ function UserForm({ handleBack, handleNext, activeStep }) {
       console.log(error);
       if (error?.response.status === 404) {
         message.error(error.response.data);
+        console.log("k có");
+        dispatch(
+          setUser({
+            ...orderInfo,
+            customerID: null,
+          })
+        );
       }
     }
   };
   const handleFormSubmit = async (values, { resetForm }) => {
     try {
-      handleNext();
       dispatch(
         setUser({
+          ...orderInfo,
           firstName: values.firstName,
           lastName: values.lastName,
           phone: values.phone,
-          customerID: orderInfo.data.customerID,
         })
       );
+      console.log(orderInfo);
+      handleNext();
     } catch (error) {
       console.log(error);
     }
