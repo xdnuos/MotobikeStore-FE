@@ -75,7 +75,7 @@ export default function ShopProductCard({ product = [], sx, loading  }) {
       {loading ? <Skeleton variant="rectangular" sx={{ width: "auto", height: "250px", p: "16px" }} /> :
         <Link underline='none' component={RouterLink} to={`/product-details/${productID}`}>
           <Box sx={{ pt: '100%', position: 'relative' }} >
-            <StyledProductImg alt={name} src={"https://res.cloudinary.com/drn7nawnc/image/upload/v1691867460/motobike_store/den-pha-led-2-tang-zhipat-cho-yamaha-y125zr-yaz-products-2015_sc7g6j.jpg"} />
+            <StyledProductImg alt={name} src={images[0]} />
           </Box>
         </Link>
       }
