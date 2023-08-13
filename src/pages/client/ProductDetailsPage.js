@@ -81,7 +81,7 @@ const StyledTick = styled(Typography)(({ theme }) => ({
   },
 }));
 
-function ProductDetails() {
+function ProductDetailsPage() {
   const { id } = useParams();
 
   // const [aaa,setAaa] = useState(1);
@@ -486,4 +486,4 @@ function ProductDetails() {
   );
 }
 
-export default ProductDetails;
+export default ProductDetailsPage;

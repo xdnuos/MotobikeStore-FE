@@ -20,9 +20,10 @@ function BlogReview({ title, blog = [], limit }) {
                     <Iconify icon="fluent-mdl2:page-list-mirrored-solid" sx={{ p: 0.1, mr: 1.5, color: '#fff', background: '#1565c0', borderRadius: "50%" }} />
                    {title}
                 </Typography>
-                <Link underline="hover" href='/blog'>
+                <Link href='/blog'>
                     <Typography variant="subtitle1"  >
-                        Xem Tất Cả
+                        Show more 
+                        <Iconify icon="mingcute:right-fill" sx={{  ml: 1, color: '#000' }} />
                     </Typography>
                 </Link>
             </Stack>

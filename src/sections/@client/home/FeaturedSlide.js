@@ -36,10 +36,11 @@ FeaturedSlide.propTypes = {
     title: PropTypes.string,
     products: PropTypes.array.isRequired,
     limit: PropTypes.number,
+    loading: PropTypes.bool,
 };
 // ------------------------------------------------------------------------
 
-function FeaturedSlide({ title, products = [], limit }) {
+function FeaturedSlide({ title, products = [], limit ,loading}) {
    
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('lg'));
@@ -62,7 +63,7 @@ function FeaturedSlide({ title, products = [], limit }) {
                     <Iconify icon="ri:shield-star-fill" sx={{ pt: 0.2, mr: 1.5, ml: 1.5, color: '#fff', background: '#1565c0', borderRadius: "50%" }} /> {title}</Typography>
                 <Slider {...settings} style={{ margin: '0 10px' }}>
                     {products.slice(0, limit).map((data) => (
-                        <ProductCard product={data} sx={{ m: '0 10px' }} />
+                        <ProductCard product={data} sx={{ m: '0 10px' }} loading={loading} key={data?.productID} />
                     ))}
                 </Slider>
             </Stack>
