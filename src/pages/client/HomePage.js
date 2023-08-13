@@ -18,6 +18,7 @@ import {
   Skeleton,
   useMediaQuery,
   useTheme,
+  LinearProgress,
 } from '@mui/material';
 // sections
 import { SearchForm, FeaturedSlide, SimpleSlider, ProductsByTag, BlogReview, FeaturedCategory } from '../../sections/@client/home';
@@ -44,7 +45,7 @@ const imgStyle2 = {
 
 };
 
-export default function Home() {
+export default function HomePage() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('lg'));
   const limit = matches ? 10 : 8;
@@ -59,22 +60,17 @@ export default function Home() {
     console.log("products", products);
   }, [dispatch]);
 
-  if (loading) {
-    return (
-    <SkeletonLoading/>
-    )
-  }
-
   return (
     <>
       {/* ------------------------------------------------------------------------------- */}
       <Helmet>
-        <title>MotobikeStore</title>
+        <title>Motobike Store</title>
       </Helmet>
       {/* ------------------------------------------------------------------------------- */}
-
+      {loading &&
+        <LinearProgress sx={{ mt: -1.5 }} />
+      }
       <Container >
-
         <Stack spacing={4}>
 
           <Grid container spacing={2}>
@@ -86,22 +82,22 @@ export default function Home() {
             </Grid>
             <Grid item xs={12} lg={4}>
               <Grid container spacing={2} >
-                <Grid item xs={12} sx={{ display: { xs: 'none', md: 'none', lg: 'block'} }}>
+                <Grid item xs={12} sx={{ display: { xs: 'none', md: 'none', lg: 'block' } }}>
 
                   <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691824374/motobike_store/Berik_Onsite_EN_03__aiaewk.jpg' alt="sss" style={imgStyle} />
                 </Grid>
-                <Grid item xs={12}  sx={{ display: { sm:'none',md: 'none', lg: 'block'} }}>
+                <Grid item xs={12} sx={{ display: { sm: 'none', md: 'none', lg: 'block' } }}>
 
                   <img src='https://res.cloudinary.com/drn7nawnc/image/upload/v1691823177/motobike_store/Berik_Onsite_EN_06__vo4dlx.jpg' alt="sss" style={imgStyle} />
                 </Grid>
-                <Grid item xs={12} sx={{ display: { xs: 'none', sm:'block',md: 'block' } }}>
+                <Grid item xs={12} sx={{ display: { xs: 'none', sm: 'block', md: 'block' } }}>
 
-                  <StyledButtonGreen variant="contained" sx={{height: '45px'}} fullWidth>Shop now</StyledButtonGreen>
+                  <StyledButtonGreen variant="contained" sx={{ height: '45px' }} fullWidth>Shop now</StyledButtonGreen>
                 </Grid>
               </Grid>
 
             </Grid>
-            <Grid item xs={12} md={12} sx={{ display: { xs: 'none',  sm: 'block' } }}>
+            <Grid item xs={12} md={12} sx={{ display: { xs: 'none', sm: 'block' } }}>
               <Grid container spacing={1} justifyContent="center" alignItems="center">
                 <Grid item xs={6} md={3} >
                   <Stack direction="row"
@@ -131,46 +127,37 @@ export default function Home() {
                     <Typography variant='body2' align='center' ml={1}>Guarantee 100% genuine products</Typography>
                   </Stack>
                 </Grid>
-                
+
               </Grid>
             </Grid>
           </Grid>
 
-          {/* danh mục nổi bật */}
+          {/* brand */}
           {/* ------------------------------------------------------------------------------- */}
           <FeaturedCategory title='Pick Your Ride' />
 
 
 
 
-          {/* Sản Phẩm Nổi Bật Hôm Nay */}
+          {/* Sản Phẩm Nổi Bật */}
           {/* ------------------------------------------------------------------------------- */}
-          <FeaturedSlide title='Featured products' products={products} limit={15} />
+          <FeaturedSlide title='Featured products' products={products} limit={15} loading={loading} />
 
 
-         
-          {/* Sản Phẩm Theo Đối Tượng */}
-          {/* ------------------------------------------------------------------------------- */}
-          {/* <GlassCardComponent dataTitle={dataTitleTarget} title='BẢO VỆ' content='Sức khoẻ người thân' />*/}
-            <ProductsByTag  product={products} limit={limit} /> 
-          
 
-        
-          {/* Gợi Ý Hôm Nay */}
+          {/* Sản Phẩm Theo Tags */}
           {/* ------------------------------------------------------------------------------- */}
-          {/* <Suggestions title='Sản Phẩm Theo Đối Tượng' product={products} limit={10} /> */}
+          <ProductsByTag product={products} limit={limit} loading={loading} />
 
-          {/* Góc Sức Khỏe */}
-          {/* ------------------------------------------------------------------------------- */}
-          {/* <GlassCardComponent dataTitle={dataTitleHealthCheck} title='Kiểm tra sức khoẻ' content='Dựa trên đánh giá từ các chuyên gia' /> */}
-          <BlogReview title='Góc Sức Khỏe' blog={POSTS} limit={7} />
+          {/* Blog Review */}
+          <BlogReview title='News for you' blog={POSTS} limit={7} />
 
           {/* Tìm Kiếm Hàng Đầu */}
           {/* ------------------------------------------------------------------------------- */}
           {/* <TopSearch title='Tìm Kiếm Hàng Đầu' chipData={TopSearchChip} /> */}
           {/* end */}
           {/* ------------------------------------------------------------------------------- */}
-          
+
 
         </Stack>
       </Container>

@@ -16,43 +16,35 @@ import Logo from '../../../components/logoHome';
 const COPYRIGHT = '©2023 Medicine® by Giang~Đình, lnc.';
 
 const AboutUs = [
-  { title: 'Giới thiệu', href: "#" },
-  { title: 'Hệ thống cửa hàng', href: "#" },
-  { title: 'Giấy phép kinh doanh', href: "#" },
-  { title: 'Quy chế hoạt động', href: "#" },
-  { title: 'Chính sách đặt cọc', href: "#" },
-  { title: 'Chính sách đổi trả thuốc', href: "#" },
-  { title: 'Chính sách giao hàng', href: "#" },
-  { title: 'Chính sách bảo mật', href: "#" },
-  { title: 'Chính sách thanh toán', href: "#" },
-  { title: 'Kiểm tra hóa đơn điện tử', href: "#" },
-  { title: 'Tra cứu đơn hàng', href: "#" }];
+  { title: 'Introduce', href: "/" },
+  { title: 'Hệ thống cửa hàng', href: "/" },
+  { title: 'Giấy phép kinh doanh', href: "/" },
+  { title: 'Quy chế hoạt động', href: "/" },
+  { title: 'Chính sách đặt cọc', href: "/" },
+  { title: 'Chính sách đổi trả thuốc', href: "/" },
+  { title: 'Chính sách giao hàng', href: "/" },
+  { title: 'Tra cứu đơn hàng', href: "/" }];
 
 const Category = [
-  { title: 'Giới thiệu', href: "#" },
-  { title: 'Hệ thống cửa hàng', href: "#" },
-  { title: 'Giấy phép kinh doanh', href: "#" },
-  { title: 'Quy chế hoạt động', href: "#" },
-  { title: 'Chính sách đặt cọc', href: "#" },
-  { title: 'Chính sách đổi trả thuốc', href: "#" },
-  { title: 'Chính sách giao hàng', href: "#" },
-  { title: 'Chính sách bảo mật', href: "#" },
-  { title: 'Chính sách thanh toán', href: "#" },
-  { title: 'Kiểm tra hóa đơn điện tử', href: "#" },
-  { title: 'Tra cứu đơn hàng', href: "#" }];
+  { title: 'Giới thiệu', href: "/" },
+  { title: 'Hệ thống cửa hàng', href: "/" },
+  { title: 'Giấy phép kinh doanh', href: "/" },
+  { title: 'Quy chế hoạt động', href: "/" },
+  { title: 'Chính sách đặt cọc', href: "/" },
+  { title: 'Chính sách đổi trả thuốc', href: "/" },
+  { title: 'Chính sách bảo mật', href: "/" },
+  { title: 'Chính sách thanh toán', href: "/" }];
 
 const FunctionalFoods = [
-  { title: 'Giới thiệu', href: "#" },
-  { title: 'Hệ thống cửa hàng', href: "#" },
-  { title: 'Giấy phép kinh doanh', href: "#" },
-  { title: 'Quy chế hoạt động', href: "#" },
-  { title: 'Chính sách đặt cọc', href: "#" },
-  { title: 'Chính sách đổi trả thuốc', href: "#" },
-  { title: 'Chính sách giao hàng', href: "#" },
-  { title: 'Chính sách bảo mật', href: "#" },
-  { title: 'Chính sách thanh toán', href: "#" },
-  { title: 'Kiểm tra hóa đơn điện tử', href: "#" },
-  { title: 'Tra cứu đơn hàng', href: "#" }];
+  { title: 'Giới thiệu', href: "/" },
+  { title: 'Hệ thống cửa hàng', href: "/" },
+  { title: 'Giấy phép kinh doanh', href: "/" },
+  { title: 'Quy chế hoạt động', href: "/" },
+  { title: 'Chính sách đặt cọc', href: "/" },
+  { title: 'Chính sách đổi trả thuốc', href: "/" },
+  { title: 'Chính sách giao hàng', href: "/" },
+  { title: 'Chính sách bảo mật', href: "/" }
+];
 
 const StyledFooter = styled('footer')(() => ({
   position: "absolute",
@@ -102,9 +94,9 @@ function Footer() {
           justifyContent: 'space-between',
           py: 1
         }}>
-          <Typography variant="h5" sx={{ color: '#fff', mt: 0.3 }}> <Iconify icon="material-symbols:location-on" sx={{ mr: 1, mb: -0.2 }} />Xem hệ thống nhà thuốc toàn quốc</Typography>
+          <Typography variant="h5" sx={{ color: '#fff', mt: 0.3 }}> <Iconify icon="material-symbols:location-on" sx={{ mr: 1, mb: -0.2 }} />Nationwide Motobike Store system</Typography>
 
-          <Button variant="filled" sx={{ px: '15px', borderRadius: '18px', bgcolor: '#fff', '&:hover': { bgcolor: '#ffffffbd' }, }}>Xem danh sách nhà thuốc</Button>
+          <Button variant="filled" sx={{ px: '15px', borderRadius: '18px', bgcolor: '#fff', '&:hover': { bgcolor: '#ffffffbd' }, }}>View Location</Button>
 
         </StyledRoot>
       </div>
@@ -133,7 +125,7 @@ function Footer() {
           {/* Cột VỀ CHÚNG TÔI */}
           <StyledGridItem item xs={12} md={2} >
             <Stack spacing={1}>
-              <Typography variant="subtitle2">VỀ CHÚNG TÔI</Typography>
+              <Typography variant="subtitle2" >ABOUT US</Typography>
 
               {AboutUs.map((data, index) => {
                 return (
@@ -150,7 +142,7 @@ function Footer() {
           {/* DANH MỤC */}
           <StyledGridItem item xs={12} md={2} >
             <Stack spacing={1}>
-              <Typography variant="subtitle2">DANH MỤC</Typography>
+              <Typography variant="subtitle2">CATEGORY</Typography>
               {Category.map((data, index) => {
                 return (
                   <ListItem key={index} sx={{ p: 0 }}>
@@ -196,7 +188,7 @@ function Footer() {
                   <Typography fontWeight={'bold'} fontSize={'h3.fontSize'} variant="body2">1800 0204</Typography>
                 </Link>
               </Stack>
-              <Stack direction={'row'} spacing={3} pt={8}>
+              <Stack direction={'row'} spacing={3} pt={3}>
                 <Iconify height={25} width={25} icon="logos:facebook" />
                 <Iconify height={25} width={25} icon="skill-icons:twitter" />
                 <Iconify height={25} width={25} icon="logos:linkedin-icon" />
