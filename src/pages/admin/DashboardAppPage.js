@@ -17,12 +17,201 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from "../../sections/@dashboard/app";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { orderService } from "src/services/orderService";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const currentDate = new Date();
+  const oneDay = 24 * 60 * 60 * 1000;
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+  const products = useSelector(
+    (state) => state.products.productList.allProduct
+  );
+  const generateLabels = (numLabels, daysApart) => {
+    const labels = [];
+    const currentDate = new Date();
 
+    for (let i = 0; i < numLabels; i++) {
+      const newDate = new Date(currentDate);
+      newDate.setDate(newDate.getDate() - i * daysApart);
+      labels.push(newDate.toLocaleDateString());
+    }
+
+    return labels;
+  };
+  const chartLabels = generateLabels(10, 3);
+  const [orders, setOrders] = useState([]);
+
+  const getAllOrder = async () => {
+    return new Promise((resolve, reject) => {
+      orderService
+        .getAllOrdersAdmin()
+        .then((response) => {
+          setOrders(response);
+          console.log("response", response);
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+  useEffect(() => {
+    getAllOrder();
+  }, []);
+
+  const sevenDaysAgo = new Date(currentDate.getTime() - 7 * oneDay);
+
+  const totalQuantitySoldLast7Days = orders.reduce((total, order) => {
+    if (
+      order.orderStatus === "SUCCESS" &&
+      new Date(order.orderTime) >= sevenDaysAgo
+    ) {
+      return (
+        total +
+        order.orderItems.reduce((subTotal, item) => subTotal + item.quantity, 0)
+      );
+    }
+    return total;
+  }, 0);
+
+  const oneWeekAgo = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  const revenueLastWeek = orders.reduce((total, order) => {
+    if (
+      order.orderStatus === "SUCCESS" &&
+      new Date(order.orderTime) >= oneWeekAgo
+    ) {
+      return total + order.total;
+    }
+    return total;
+  }, 0);
+
+  const thirtyDaysAgo = new Date(currentDate.getTime() - 30 * oneDay);
+
+  const revenuesLast30Days = [];
+  for (let i = 0; i < 10; i++) {
+    const endDate = new Date(thirtyDaysAgo.getTime() + (i + 1) * 3 * oneDay);
+    const startDate = new Date(endDate.getTime() - 3 * oneDay);
+
+    const revenue = orders.reduce((total, order) => {
+      if (
+        order.orderStatus === "SUCCESS" &&
+        new Date(order.orderTime) >= startDate &&
+        new Date(order.orderTime) <= endDate
+      ) {
+        return total + order.total;
+      }
+      return total;
+    }, 0);
+
+    revenuesLast30Days.push(revenue);
+  }
+
+  const chartData = [
+    {
+      name: "Revenue",
+      type: "area",
+      fill: "gradient",
+      data: revenuesLast30Days,
+    },
+  ];
+
+  const latestOrders = orders
+    .filter((order) => order.orderStatus === "SUCCESS")
+    .sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime))
+    .slice(0, 5);
+
+  const currentMonthRevenue = orders.reduce((total, order) => {
+    const orderDate = new Date(order.orderTime);
+    if (
+      order.orderStatus === "SUCCESS" &&
+      orderDate.getMonth() === currentMonth &&
+      orderDate.getFullYear() === currentYear
+    ) {
+      return total + order.total;
+    }
+    return total;
+  }, 0);
+
+  const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+  const lastMonthRevenue = orders.reduce((total, order) => {
+    const orderDate = new Date(order.orderTime);
+    if (
+      order.orderStatus === "SUCCESS" &&
+      orderDate.getMonth() === lastMonth &&
+      orderDate.getFullYear() === lastMonthYear
+    ) {
+      return total + order.total;
+    }
+    return total;
+  }, 0);
+
+  let revenueRatio = 0;
+  if (lastMonthRevenue === 0) {
+    revenueRatio = 100;
+  } else {
+    revenueRatio = currentMonthRevenue / lastMonthRevenue;
+  }
+  const formattedLatestOrders = latestOrders.map((order, index) => ({
+    id: order.orderID,
+    title: `Order #${order.orderID} from ${new Date(
+      order.orderTime
+    ).toLocaleDateString()}, ${order.total.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    })}`,
+    type: `order${index + 1}`,
+    time: new Date(order.orderTime),
+  }));
+  const newestCreatedProducts = [];
+  for (const product of products) {
+    if (newestCreatedProducts.length < 5) {
+      newestCreatedProducts.push(product);
+    } else {
+      const oldestNewestProduct = newestCreatedProducts.reduce((oldest, p) =>
+        new Date(p.createAt) < new Date(oldest.createAt) ? p : oldest
+      );
+      if (new Date(product.createAt) > new Date(oldestNewestProduct.createAt)) {
+        newestCreatedProducts[
+          newestCreatedProducts.indexOf(oldestNewestProduct)
+        ] = product;
+      }
+    }
+  }
+  const topSaleProducts = products.reduce((result, product) => {
+    if (result.length < 5) {
+      result.push(product);
+    } else {
+      const lowestTopSaleProduct = result.reduce((lowest, p) =>
+        p.saleCount < lowest.saleCount ? p : lowest
+      );
+      if (product.saleCount > lowestTopSaleProduct.saleCount) {
+        result[result.indexOf(lowestTopSaleProduct)] = product;
+      }
+    }
+    return result;
+  }, []);
+  const topSale = topSaleProducts.map((product) => ({
+    label: product.name,
+    value: product.saleCount,
+  }));
+  const formattedNewestCreatedProducts = newestCreatedProducts.map(
+    (product) => ({
+      id: product.productID,
+      title: product.name,
+      description: product.shortDescription,
+      image: product?.images[0],
+      postedAt: new Date(product.createAt),
+    })
+  );
   return (
     <>
       <Helmet>
@@ -38,15 +227,15 @@ export default function DashboardAppPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Weekly Sales"
-              total={714000}
+              total={totalQuantitySoldLast7Days}
               icon={"ant-design:android-filled"}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
-              title="New Users"
-              total={1352831}
+              title="Product"
+              total={products.length}
               color="info"
               icon={"ant-design:apple-filled"}
             />
@@ -54,8 +243,8 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
-              title="Item Orders"
-              total={1723315}
+              title="Orders"
+              total={orders.length}
               color="warning"
               icon={"ant-design:windows-filled"}
             />
@@ -63,8 +252,8 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
-              title="Bug Reports"
-              total={234}
+              title="Weekly Revenue"
+              total={revenueLastWeek}
               color="error"
               icon={"ant-design:bug-filled"}
             />
@@ -72,63 +261,28 @@ export default function DashboardAppPage() {
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
-              title="Website Visits"
-              subheader="(+43%) than last year"
-              chartLabels={[
-                "01/01/2003",
-                "02/01/2003",
-                "03/01/2003",
-                "04/01/2003",
-                "05/01/2003",
-                "06/01/2003",
-                "07/01/2003",
-                "08/01/2003",
-                "09/01/2003",
-                "10/01/2003",
-                "11/01/2003",
-              ]}
-              chartData={[
-                {
-                  name: "Team A",
-                  type: "column",
-                  fill: "solid",
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-                {
-                  name: "Team B",
-                  type: "area",
-                  fill: "gradient",
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                },
-                {
-                  name: "Team C",
-                  type: "line",
-                  fill: "solid",
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
-              ]}
+              title="Revenue"
+              subheader={revenueRatio + " % than last month"}
+              chartLabels={chartLabels}
+              chartData={chartData}
             />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
-              title="Current Visits"
-              chartData={[
-                { label: "America", value: 4344 },
-                { label: "Asia", value: 5435 },
-                { label: "Europe", value: 1443 },
-                { label: "Africa", value: 4443 },
-              ]}
+              title="Top 5 product sale"
+              chartData={topSale}
               chartColors={[
                 theme.palette.primary.main,
                 theme.palette.info.main,
                 theme.palette.warning.main,
                 theme.palette.error.main,
+                theme.palette.success.main,
               ]}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppConversionRates
               title="Conversion Rates"
               subheader="(+43%) than last year"
@@ -145,9 +299,9 @@ export default function DashboardAppPage() {
                 { label: "United Kingdom", value: 1380 },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentSubject
               title="Current Subject"
               chartLabels={[
@@ -167,101 +321,19 @@ export default function DashboardAppPage() {
                 () => theme.palette.text.secondary
               )}
             />
-          </Grid>
+          </Grid> */}
 
           <Grid item xs={12} md={6} lg={8}>
             <AppNewsUpdate
-              title="News Update"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: faker.name.jobTitle(),
-                description: faker.name.jobTitle(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
+              title="New product"
+              list={formattedNewestCreatedProducts}
             />
           </Grid>
 
           <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Order Timeline"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.datatype.uuid(),
-                title: [
-                  "1983, orders, $4220",
-                  "12 Invoices have been paid",
-                  "Order #37745 from September",
-                  "New order placed #XF-2356",
-                  "New order placed #XF-2346",
-                ][index],
-                type: `order${index + 1}`,
-                time: faker.date.past(),
-              }))}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={4}>
-            <AppTrafficBySite
-              title="Traffic by Site"
-              list={[
-                {
-                  name: "FaceBook",
-                  value: 323234,
-                  icon: (
-                    <Iconify
-                      icon={"eva:facebook-fill"}
-                      color="#1877F2"
-                      width={32}
-                    />
-                  ),
-                },
-                {
-                  name: "Google",
-                  value: 341212,
-                  icon: (
-                    <Iconify
-                      icon={"eva:google-fill"}
-                      color="#DF3E30"
-                      width={32}
-                    />
-                  ),
-                },
-                {
-                  name: "Linkedin",
-                  value: 411213,
-                  icon: (
-                    <Iconify
-                      icon={"eva:linkedin-fill"}
-                      color="#006097"
-                      width={32}
-                    />
-                  ),
-                },
-                {
-                  name: "Twitter",
-                  value: 443232,
-                  icon: (
-                    <Iconify
-                      icon={"eva:twitter-fill"}
-                      color="#1C9CEA"
-                      width={32}
-                    />
-                  ),
-                },
-              ]}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6} lg={8}>
-            <AppTasks
-              title="Tasks"
-              list={[
-                { id: "1", label: "Create FireStone Logo" },
-                { id: "2", label: "Add SCSS and JS files if required" },
-                { id: "3", label: "Stakeholder Meeting" },
-                { id: "4", label: "Scoping & Estimations" },
-                { id: "5", label: "Sprint Showcase" },
-              ]}
+              list={formattedLatestOrders}
             />
           </Grid>
         </Grid>

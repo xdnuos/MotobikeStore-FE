@@ -89,6 +89,14 @@ export let productService = {
       console.log(error);
     }
   },
+  stockProduct: async (values) => {
+    try {
+      const response = await https.delete(`/api/v1/products/delete`, values);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  },
   changeState: async (values) => {
     try {
       const response = await https.put(
