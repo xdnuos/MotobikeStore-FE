@@ -41,6 +41,7 @@ import {
 import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
 import { getProductById } from "../../redux/products/ProductDetail";
 import { addToCart } from "../../redux/cart/cartSlice";
+import Label from "src/components/label/Label";
 
 const StyledListItem = styled(ListItem)(({ theme, selected }) => ({
   border: `1px solid ${selected ? theme.palette.primary.main : "gray"}`,
@@ -92,40 +93,37 @@ function ProductDetailsPage() {
   const idAcc = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const [selectedIndex, setSelectedIndex] = useState(
-    product?.units?.length - 1
-  );
+ 
   const [unit, setUnit] = useState(product?.unit);
   const [showAlert, setShowAlert] = useState(false);
   const [showPrice, setShowPrice] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     dispatch(getProductById(id));
-    console.log("selectedIndex", selectedIndex);
+    console.log("product", product);
   }, [dispatch, id]);
-  // console.log("product", product);
 
   const [cartRequest, setCartRequest] = useState({
     idAccount: idAcc,
     idProduct: id,
     idUnit: null,
     price: null,
-    quantity: 1,
   });
 
-  const { idAccount, idProduct, idUnit, price, quantity } = cartRequest;
+  const { idAccount, idProduct, idUnit, price } = cartRequest;
 
   const handleListItemClick = (event, selected, index, unit, id) => {
-    setSelectedIndex(selected);
+   
     setUnit(unit);
     setShowAlert(false);
     setCartRequest({
       ...cartRequest,
       idUnit: id,
-      price: product?.units[index].specifications * product?.price,
+      price: product?.price,
       quantity: 1,
     });
-    setShowPrice(product?.units[index].specifications * product?.price);
+    setShowPrice(product?.price);
 
     // console.log("selectedIndex----->", cartRequest);
   };
@@ -139,32 +137,33 @@ function ProductDetailsPage() {
   const { vertical, horizontal, open } = state;
 
   const handleClickAdd = async () => {
-    if (isLoggedIn) {
-      if (isNaN(selectedIndex)) {
-        setShowAlert(true);
-      } else {
-        await dispatch(addToCart(cartRequest));
-        setState({ ...state, open: true });
-        console.log("cartRequestzzzzzzzzzzzzzzzzzz", cartRequest);
-      }
-    } else {
-      setState({ ...state, open: true });
-    }
+    // if (isLoggedIn) {
+    //   if (isNaN(selectedIndex)) {
+    //     setShowAlert(true);
+    //   } else {
+    //     await dispatch(addToCart(cartRequest));
+    //     setState({ ...state, open: true });
+    //     console.log("cartRequestzzzzzzzzzzzzzzzzzz", cartRequest);
+    //   }
+    // } else {
+    //   setState({ ...state, open: true });
+    // }
+    console.log("showPrice===> ", showPrice);
   };
 
   const handleClickBuyNow = async () => {
-    if (isLoggedIn) {
-      if (isNaN(selectedIndex)) {
-        setShowAlert(true);
-      } else {
-        await dispatch(addToCart(cartRequest));
-        setState({ ...state, open: true });
-        navigate("/checkout");
-        console.log("cartRequest", cartRequest);
-      }
-    } else {
-      setState({ ...state, open: true });
-    }
+    // if (isLoggedIn) {
+    //   if (isNaN(selectedIndex)) {
+    //     setShowAlert(true);
+    //   } else {
+    //     await dispatch(addToCart(cartRequest));
+    //     setState({ ...state, open: true });
+    //     navigate("/checkout");
+    //     console.log("cartRequest", cartRequest);
+    //   }
+    // } else {
+    //   setState({ ...state, open: true });
+    // }
   };
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -174,49 +173,41 @@ function ProductDetailsPage() {
   };
 
   const handleIncrement = () => {
-    // setCartRequest({
+    console.log("show price",product?.price);
+    console.log("quantity",quantity);
+    
+    // if (quantity === 1) {
+    //   // setCartRequest({
+    //   //   ...cartRequest,
+
+    //   //   price: showPrice * 3,
+     setQuantity( quantity + 1);
+    //   // });
+
+    //   showPrice(product?.price * product?.price );
+      
+    // } else {
+    //   setCartRequest({
     //     ...cartRequest,
-    //     quantity: quantity + 1
-    // })
-
-    if (quantity === 2) {
-      setCartRequest({
-        ...cartRequest,
-
-        price: showPrice * 3,
-        quantity: quantity + 1,
-      });
-
-      // setTotalPrice(showPrice * 3);
-    } else {
-      setCartRequest({
-        ...cartRequest,
-        price: showPrice * quantity + showPrice,
-        quantity: quantity + 1,
-      });
-      // setTotalPrice();
-    }
+    //     price: showPrice * quantity + showPrice,
+    //     quantity: quantity + 1,
+    //   });
+    //   // setTotalPrice();
+    // }
 
     console.log("showPrice ===========>", showPrice);
   };
 
   const handleDecrement = () => {
     if (quantity > 1) {
-      // setCartRequest({
-      //     ...cartRequest,
-      //
-      // });
-
+     
+      
       console.log("handleDecrement===========>", quantity);
-
-      setCartRequest({
-        ...cartRequest,
-        price: showPrice * quantity - showPrice,
-        quantity: quantity - 1,
-      });
+      setQuantity( quantity - 1);
     }
     // setTotalPrice(showPrice * quantity - showPrice);
   };
+  const totalPrice = product?.price * quantity;
 
   if (loading) {
     return <SkeletonLoading />;
@@ -239,13 +230,13 @@ function ProductDetailsPage() {
               <Link underline="hover" color="text.primary" href="/">
                 Trang chủ
               </Link>
-              {product?.categories.map((category,index) => (
+              {product?.categories.map((category, index) => (
 
-              <Link  key={index} underline="hover" color="text.primary" href="#">
-              {category}
-              </Link>
+                <Link key={index} underline="hover" color="text.primary" href="#">
+                  {category}
+                </Link>
               ))}
-          </Breadcrumbs>
+            </Breadcrumbs>
           </Grid>
 
           {/* hình ảnh sản phẩm */}
@@ -258,56 +249,19 @@ function ProductDetailsPage() {
               {/* thông tin tên , giá ,... */}
               <ProductInfoForm
                 product={product}
-                price={showPrice}
-                unit={unit}
+                price={totalPrice}
               />
 
-              {/* option lựa đơn vị bán, số lượng */}
-
-              {/* đơn vị bán */}
-              <Grid container spacing={0}>
-                <Grid item xs={12} md={3}>
-                  <Typography variant="subtitle1">Đơn vị bán</Typography>
-                </Grid>
-
-                <Grid item xs={12} md={9}>
-                  {/* <OptionList data={product?.units} /> */}
-
-                  <List>
-                    <Stack
-                      direction="row"
-                      justifyContent="flex-end"
-                      alignItems="center"
-                      spacing={2}
-                    >
-                      {product?.units?.map((option) => (
-                        <StyledListItem
-                          key={option.rank}
-                          button
-                          selected={selectedIndex === option.rank}
-                          onClick={(event) =>
-                            handleListItemClick(
-                              event,
-                              option.rank,
-                              product?.units.length - 1 - option.rank,
-                              option.name,
-                              option.unitId
-                            )
-                          }
-                        >
-                          <ListItemText primary={option.name} />
-                          {selectedIndex === option.rank && <StyledTick />}
-                        </StyledListItem>
-                      ))}
-                    </Stack>
-                  </List>
-                </Grid>
+              {/* option lựa số lượng */}
+              <Grid item xs={12}>
+              <Label sx={{ fontSize: "14px" }} color={product?.stock > 0 ? "success" : "error"}>
+                {product?.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}
+              </Label>
               </Grid>
 
-              {/* Số lượng */}
               <Grid item xs={12}>
                 <Stack direction="row" justifyContent="space-between">
-                  <Typography variant="subtitle1"> Chọn số lượng </Typography>
+                  <Typography variant="subtitle1"> Quantity </Typography>
                   <Stack>
                     <Quantity
                       countNumber={quantity}
@@ -321,7 +275,7 @@ function ProductDetailsPage() {
                       textAlign={"right"}
                     >
                       {" "}
-                      Có sẵn : {product?.quantity}{" "}
+                      Available : {product?.stock }{" "}
                     </Typography>
                   </Stack>
                 </Stack>
@@ -378,7 +332,7 @@ function ProductDetailsPage() {
             py={3}
           >
             <Typography variant="h5" align="center" textTransform={"uppercase"}>
-              Medicine shop cam kết
+              Motobike Store promises
             </Typography>
           </Grid>
           <Grid item xs={4} md={4}>
@@ -398,9 +352,9 @@ function ProductDetailsPage() {
                   icon={"uiw:time"}
                 />
               </Stack>
-              <Typography variant="h6">Đổi trả trong 30 ngày</Typography>
+              <Typography variant="h6">100% Original</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-                kể từ ngày mua hàng
+              without editing, dissection
               </Typography>
             </Stack>
           </Grid>
@@ -422,9 +376,9 @@ function ProductDetailsPage() {
                   icon={"bi:shield-fill-check"}
                 />
               </Stack>
-              <Typography variant="h6">Miễn phí 100%</Typography>
+              <Typography variant="h6">10 Day Replacement</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-                đổi thuốc
+              if the proposal is rejected
               </Typography>
             </Stack>
           </Grid>
@@ -445,9 +399,9 @@ function ProductDetailsPage() {
                   icon={"material-symbols:local-shipping-rounded"}
                 />
               </Stack>
-              <Typography variant="h6">Miễn phí vận chuyển</Typography>
+              <Typography variant="h6">Year Warranty</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-                theo chính sách giao hàng
+              hungskr cuacoem thaooongannnnn
               </Typography>
             </Stack>
           </Grid>

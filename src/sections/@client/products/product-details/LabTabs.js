@@ -70,8 +70,8 @@ function TabDescriptionAndReview({ product }) {
         textColor="primary"
         aria-label="description and review tabs"
       >
-        <StyledTab label="Mô Tả Sản Phẩm" />
-        <StyledTab label="Đánh Giá & Nhận Xét" />
+        <StyledTab label="Description" />
+        <StyledTab label="Review product" />
       </StyledTabs>
 
       {selectedTab === 0 && (
@@ -79,7 +79,9 @@ function TabDescriptionAndReview({ product }) {
           <Typography>{product?.fullDescription}</Typography>
         </TabPanel>
       )}
-      {selectedTab === 1 && <TabPanel>This is the review tab.</TabPanel>}
+      {selectedTab === 1 && <TabPanel>
+        
+        </TabPanel>}
     </Root>
   );
 }
