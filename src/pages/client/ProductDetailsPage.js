@@ -19,6 +19,12 @@ import {
   styled,
   ListItem,
   ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 
 // sections
@@ -41,46 +47,8 @@ import {
 import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
 import { getProductById } from "../../redux/products/ProductDetail";
 import { addToCart } from "../../redux/cart/cartSlice";
-import Label from "src/components/label/Label";
+import Label from "../../components/label/Label";
 
-const StyledListItem = styled(ListItem)(({ theme, selected }) => ({
-  border: `1px solid ${selected ? theme.palette.primary.main : "gray"}`,
-  borderRadius: 5,
-  width: "30%",
-  padding: "0 22px 0 15px",
-  backgroundColor: selected ? theme.palette.primary.main : "transparent",
-  color: selected ? "text.secondary" : "inherit",
-  "&:hover": {
-    backgroundColor: selected ? theme.palette.primary.main : "#f5f5f5",
-  },
-  "& .MuiListItemText-primary": {
-    fontWeight: selected ? "bold" : "normal",
-  },
-}));
-
-const StyledTick = styled(Typography)(({ theme }) => ({
-  display: "inline-block",
-  width: 0,
-  height: 0,
-  top: 0,
-  right: 0,
-  borderRadius: "0 10% 0 100%",
-  borderBottom: `28px solid transparent`,
-  borderRight: `28px solid ${theme.palette.primary.main}`,
-  position: "absolute",
-
-  transformOrigin: "100% 0%",
-  "&::before": {
-    content: '""',
-    display: "block",
-    width: 5,
-    height: 10,
-    borderBottom: `2px solid ${theme.palette.background.default}`,
-    borderRight: `2px solid ${theme.palette.background.default}`,
-    transform: "rotate(45deg)",
-    transformOrigin: "180% 260%",
-  },
-}));
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -90,7 +58,7 @@ function ProductDetailsPage() {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products.productDetail.product);
   const loading = useSelector((state) => state.products.productDetail.loading);
-  const idAcc = useSelector((state) => state.auth.idAccount);
+  const idAccount = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
  
@@ -102,31 +70,10 @@ function ProductDetailsPage() {
   useEffect(() => {
     dispatch(getProductById(id));
     console.log("product", product);
-  }, [dispatch, id]);
+  }, [dispatch, id,idAccount]);
 
-  const [cartRequest, setCartRequest] = useState({
-    idAccount: idAcc,
-    idProduct: id,
-    idUnit: null,
-    price: null,
-  });
 
-  const { idAccount, idProduct, idUnit, price } = cartRequest;
 
-  const handleListItemClick = (event, selected, index, unit, id) => {
-   
-    setUnit(unit);
-    setShowAlert(false);
-    setCartRequest({
-      ...cartRequest,
-      idUnit: id,
-      price: product?.price,
-      quantity: 1,
-    });
-    setShowPrice(product?.price);
-
-    // console.log("selectedIndex----->", cartRequest);
-  };
 
   // const [open, setOpen] = useState(false);
   const [state, setState] = useState({
@@ -152,18 +99,19 @@ function ProductDetailsPage() {
   };
 
   const handleClickBuyNow = async () => {
-    // if (isLoggedIn) {
-    //   if (isNaN(selectedIndex)) {
-    //     setShowAlert(true);
-    //   } else {
-    //     await dispatch(addToCart(cartRequest));
-    //     setState({ ...state, open: true });
-    //     navigate("/checkout");
-    //     console.log("cartRequest", cartRequest);
-    //   }
-    // } else {
-    //   setState({ ...state, open: true });
-    // }
+    if (isLoggedIn) {
+      await  dispatch(addToCart({
+          productID: id,
+          quantity: quantity,
+          userID: idAccount
+        }));
+        setState({ ...state, open: true });
+        navigate("/checkout");
+      
+      // console.log("is login = true",quantity);
+    } else {
+      setState({ ...state, open: true });
+    }
   };
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -172,42 +120,19 @@ function ProductDetailsPage() {
     setState({ ...state, open: false });
   };
 
+
+  // ========== Quantity ========== //
+  const totalPrice = product?.price * quantity;
   const handleIncrement = () => {
-    console.log("show price",product?.price);
-    console.log("quantity",quantity);
-    
-    // if (quantity === 1) {
-    //   // setCartRequest({
-    //   //   ...cartRequest,
-
-    //   //   price: showPrice * 3,
      setQuantity( quantity + 1);
-    //   // });
-
-    //   showPrice(product?.price * product?.price );
-      
-    // } else {
-    //   setCartRequest({
-    //     ...cartRequest,
-    //     price: showPrice * quantity + showPrice,
-    //     quantity: quantity + 1,
-    //   });
-    //   // setTotalPrice();
-    // }
-
-    console.log("showPrice ===========>", showPrice);
   };
 
   const handleDecrement = () => {
     if (quantity > 1) {
-     
-      
-      console.log("handleDecrement===========>", quantity);
       setQuantity( quantity - 1);
     }
-    // setTotalPrice(showPrice * quantity - showPrice);
   };
-  const totalPrice = product?.price * quantity;
+  
 
   if (loading) {
     return <SkeletonLoading />;
@@ -419,7 +344,7 @@ function ProductDetailsPage() {
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
-          autoHideDuration={3000}
+          // autoHideDuration={3000}
           onClose={handleClose}
         >
           {isLoggedIn ? (
@@ -432,6 +357,18 @@ function ProductDetailsPage() {
             </Alert>
           )}
         </Snackbar>
+        <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add to Cart</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please login to add products to the cart.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Continue</Button>
+          <Button onClick={() => navigate("/login")}>Login</Button>
+        </DialogActions>
+      </Dialog>
       </Container>
     </>
   );

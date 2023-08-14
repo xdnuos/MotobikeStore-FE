@@ -136,21 +136,13 @@ function Payment({ handleBack, handleNext, activeStep }) {
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <Card>
-            <CardHeader title="Delivery options" />
-            <CardContent>
-              <DeliveryOptions />
-            </CardContent>
-          </Card>
-
-          <Card sx={{ mt: 3 }}>
+          <Card >
             <CardHeader title="Payment Options" />
             <CardContent>
               <PaymentOptions />
             </CardContent>
           </Card>
 
-          {/* --------------------------------------- BUTTON --------------------------------------------------- */}
           <Button sx={{ color: "#000", mt: 3 }} onClick={handleBack}>
             <Iconify icon="ic:outline-keyboard-arrow-left" mr={1} />
             Back

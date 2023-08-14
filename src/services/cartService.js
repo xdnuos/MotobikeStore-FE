@@ -17,28 +17,27 @@ export let cartService = {
     }
   },
 
-  addToCart: async (AddToCartRequest) => {
-    try {
-      const response = await axios.post(
+  addToCart: (AddToCartRequest) => {
+    return axios.post(
         BASE_URL + `/api/v1/carts/add`,
-        AddToCartRequest
-        // {
-        //   ...getAuthConfig(),
-        // }
+        AddToCartRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
-      message.success(response.data);
-      console.log(response);
-      return response.data;
-    } catch (error) {
-      message.error(error.response.data);
-      console.log(error);
-    }
   },
   updateToCart: async (UpdateCartItemRequest) => {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/carts/edit`,
-        UpdateCartItemRequest
+        UpdateCartItemRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log(response);
       return response;
@@ -47,15 +46,15 @@ export let cartService = {
     }
   },
   deleteToCart: async (idCartItem) => {
-    try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/carts/delete/${idCartItem}`
+      return await axios.delete(
+        BASE_URL + `/api/v1/carts/delete/${idCartItem}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
-      console.log(response);
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+      
   },
   // deleteAll: async (idAccount) => {
   //   try {

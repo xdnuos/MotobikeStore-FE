@@ -36,6 +36,7 @@ function ProductsByTag({ product = [], limit, loading }) {
             setTags(res.data);
 
         }).catch((err) => {
+            setTags([]);
             console.log(err);
         })
         console.log("sssssssssssssssooooooooooooooosssssssssssssssssss");
@@ -64,7 +65,7 @@ function ProductsByTag({ product = [], limit, loading }) {
                 spacing={2} mb={2}
             >
                 <Typography variant='h4' >
-                    <Iconify icon="streamline:money-cashier-tag-codes-tags-tag-product-label" sx={{ mr: 2, color: '#fff', background: '#1565c0', borderRadius: "50%" }} />
+                    <Iconify icon="streamline:money-cashier-tag-codes-tags-tag-product-label" sx={{ mx: 2, color: '#fff', background: '#1565c0', borderRadius: "50%" }} />
                     {selectedTags !== '' ? selectedTags : 'All products'}
                 </Typography>
                 <Stack direction="row" spacing={1} alignItems={"center"}>
