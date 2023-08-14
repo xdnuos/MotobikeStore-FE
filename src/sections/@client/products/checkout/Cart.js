@@ -41,7 +41,7 @@ import SvgColor from "../../../../components/svg-color/SvgColor";
 import {
   fetchCartItems,
   removeFromCart,
-  updateQuantity,
+  updateCart,
 } from "../../../../redux/cart/cartSlice";
 
 import { getProductById } from "../../../../redux/products/ProductDetail";
@@ -64,29 +64,12 @@ Cart.propTypes = {
 };
 
 function Cart({ handleNext, activeStep }) {
-  // const history = useHistory();
-
-  // lấy id của sản phẩm trong bảng
-  // const [idRowProduct, setIdRowProduct] = useState(-1)
-
-  //  lấy id của sản phẩm đã checked
   const [selected, setSelected] = useState([]);
-  const [units, setUnits] = useState([]);
-
   const [isEdited, setIsEdited] = useState(NaN);
-
-  // const handleGoBack = () => {
-  //   props.history.goBack();
-  // };
-  const [defaultPrice, setDefaultPrice] = useState(NaN);
-
-  const [updateCartRequest, setUpdateCartRequest] = useState({
-    idUnit: null,
-    price: null,
-    quantity: 1,
-  });
-
-  const { idUnit, price, quantity } = updateCartRequest;
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [priceOrder, setPriceOrder] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   // load sản phẩm
 
@@ -94,10 +77,10 @@ function Cart({ handleNext, activeStep }) {
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.cart);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const loading = useSelector((state) => state.cart.loading);
   const emptyCart = useSelector((state) => state.cart.emptyCart);
-
   const idAccount = useSelector((state) => state.auth.idAccount);
+
+
 
   const [state, setState] = useState({
     open: false,
@@ -109,7 +92,7 @@ function Cart({ handleNext, activeStep }) {
   const handleRemoveItem = async (idCartItem) => {
     try {
       if (!!idCartItem) {
-        dispatch(removeFromCart(idCartItem));
+        await dispatch(removeFromCart(idCartItem));
         console.log("Product deleted successfullyyyyyyyyyyyyyyyyy");
       } else {
         console.log("idCartItem is undefined", idCartItem);
@@ -119,79 +102,40 @@ function Cart({ handleNext, activeStep }) {
     }
   };
 
-  const getProduct = async (idPr) => {
-    setUnits([]);
-    return new Promise((resolve, reject) => {
-      productService
-        .getUnitsByIdProduct(idPr)
-        .then((response) => {
-          setUnits(response);
-          console.log("response", response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
+  useEffect(() => {
+    setTotalPrice(quantity * price);
+  }, [quantity]);
 
-  const handleChange = (event, selected, price, nameUnit, idUnit) => {
-    setUpdateCartRequest({
-      ...updateCartRequest,
-      idUnit: idUnit,
-      price: price * quantity,
-    });
-    setDefaultPrice(price);
-  };
 
   const handleIncrement = () => {
-    setUpdateCartRequest({
-      ...updateCartRequest,
-      price: defaultPrice * quantity + defaultPrice,
-      quantity: quantity + 1,
-    });
+    setQuantity(quantity + 1);
   };
 
   const handleDecrement = () => {
     if (quantity > 1) {
-      setUpdateCartRequest({
-        ...updateCartRequest,
-        price: defaultPrice * quantity - defaultPrice,
-        quantity: quantity - 1,
-      });
+      setQuantity(quantity - 1);
     }
   };
 
-  const handleEditCartItem = (idCartItem, idPr, price, quantity, unitId) => {
+  const handleEditCartItem = (idCartItem, price, quantity) => {
     setIsEdited(idCartItem);
-    setDefaultPrice(price / quantity);
-
-    getProduct(idPr);
-
-    setUpdateCartRequest({
-      idUnit: unitId,
-      price: price,
-      quantity: quantity,
-    });
-
-    console.log("updateCartssssssssssRequest", updateCartRequest);
+    setTotalPrice(quantity * price);
+    setPrice(price);
+    setQuantity(quantity);
   };
 
-  const handleSaveUpdate = async () => {
+  const handleSaveUpdate = async (idCart) => {
     if (!isNaN(isEdited)) {
       try {
         await dispatch(
-          updateQuantity({
-            idItem: isEdited,
-            idUnit: idUnit,
-            price: price,
+          updateCart({
+            cartProductID: idCart,
             quantity: quantity,
+            userID: idAccount
           })
         );
         setState({ ...state, open: true });
         setIsEdited(NaN);
-        console.log("Cart quantity updated successfully", updateCartRequest);
-        // console.log('Reponnnnnnnnnnnnnnnnnnn', response);
       } catch (error) {
         console.error("Failed to update cart quantity:", error);
       }
@@ -202,8 +146,7 @@ function Cart({ handleNext, activeStep }) {
 
   const handleCheckout = () => {
     handleNext();
-    // dispatch(addToOrder({ id: selected, price: totalPrice }));
-    // console.log("checkouttt",selected);
+    // console.log("pricceeeee", priceOrder);
   };
 
   useEffect(() => {
@@ -212,16 +155,6 @@ function Cart({ handleNext, activeStep }) {
       // console.log("localStorageService",localStorageService.get("USER")?.id)
     }
   }, [dispatch, isLoggedIn, idAccount]);
-
-  
-
-  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  // if (loading) {
-  //   return (
-  //   <SkeletonLoading/>
-  //   )
-  // }
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -237,39 +170,38 @@ function Cart({ handleNext, activeStep }) {
 
       const newTotalPrice = cart
         ?.filter((item) => newSelecteds.indexOf(item?.cartProductID) !== -1)
-        .map((item) => item?.totalPrice)
+        .map((item) => item?.quantity * item?.productPrice)
         .reduce((total, price) => total + price, 0);
-      // setTotalPrice(newTotalPrice);
+      setPriceOrder(newTotalPrice);
+
       return;
     }
-    // setTotalPrice(0);
+    setPriceOrder(0);
     setSelected([]);
   };
 
   const handleClick = (event, id, price) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
-    // let newTotalPrice = totalPrice;
+    let newTotalPrice = priceOrder;
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
-      // newTotalPrice += price;
+      newTotalPrice += price;
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
-      // newTotalPrice -= price;
+      newTotalPrice -= price;
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
-      // newTotalPrice -= price;
+      newTotalPrice -= price;
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
       );
-      // newTotalPrice -= price;
+      newTotalPrice -= price;
     }
-    // setTotalPrice(newTotalPrice);
+    setPriceOrder(newTotalPrice);
     setSelected(newSelected);
-    // console.log("totalPrice",totalPrice);
-    // console.log("ssssssssssssss",selected);
   };
 
   return (
@@ -324,7 +256,9 @@ function Cart({ handleNext, activeStep }) {
                       <TableBody>
                         {cart?.map((product, index) => {
                           // ========== Quantity ========== //
-                        const totalPrice = product?.productPrice * product?.quantity;
+
+                          const basePrice = (product?.productPrice * product?.quantity);
+
                           const selectedProduct =
                             selected.indexOf(product?.cartProductID) !== -1;
                           return (
@@ -345,7 +279,7 @@ function Cart({ handleNext, activeStep }) {
                                     handleClick(
                                       event,
                                       product?.cartProductID,
-                                      product.totalPrice
+                                      product?.productPrice * product?.quantity
                                     )
                                   }
                                 />
@@ -358,46 +292,49 @@ function Cart({ handleNext, activeStep }) {
                                 padding="none"
                               >
                                 <Link to={`/product-details/${product?.productID}`}>
-                                
-                                <Stack
-                                  direction="row"
-                                  alignItems="center"
-                                  spacing={2}
-                                >
-                                  <Avatar
-                                    alt={product?.productName}
-                                    src={product?.productImages[0]?.imagePath}
-                                    variant="rounded"
-                                    sx={{ width: 55, height: 55 }}
-                                  />
 
-                                  <Typography
-                                    variant="subtitle2"
-                                    component="div"
-                                    sx={{
-                                      display: "-webkit-box",
-                                      overflow: "hidden",
-                                      textOverflow: "ellipsis",
-                                      WebkitLineClamp: 3,
-                                      WebkitBoxOrient: "vertical",
-                                      lineHeight: 1.2,
-                                      maxHeight: "3.6em", // 3 lines * line-height of 1.2
-                                    }}
+                                  <Stack
+                                    direction="row"
+                                    alignItems="center"
+                                    spacing={2}
                                   >
-                                    {product?.productName}
-                                  </Typography>
-                                </Stack>
+                                    <Avatar
+                                      alt={product?.productName}
+                                      src={product?.productImages[0]?.imagePath}
+                                      variant="rounded"
+                                      sx={{ width: 55, height: 55 }}
+                                    />
+
+                                    <Typography
+                                      variant="subtitle2"
+                                      component="div"
+                                      sx={{
+                                        display: "-webkit-box",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        WebkitLineClamp: 3,
+                                        WebkitBoxOrient: "vertical",
+                                        lineHeight: 1.2,
+                                        maxHeight: "3.6em", // 3 lines * line-height of 1.2
+                                      }}
+                                    >
+                                      {product?.productName}
+                                    </Typography>
+                                  </Stack>
                                 </Link>
                               </TableCell>
 
                               {/* Giá thành */}
                               <TableCell align="center">
-                                {isEdited === product?.cartProductID
-                                  ? price
-                                  :  totalPrice.toLocaleString("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    })}
+                                {isEdited === product?.cartProductID ?
+                                  totalPrice.toLocaleString("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  }) :
+                                  basePrice.toLocaleString("vi-VN", {
+                                    style: "currency",
+                                    currency: "VND",
+                                  })}
                               </TableCell>
 
                               {/* Số lượng */}
@@ -405,66 +342,44 @@ function Cart({ handleNext, activeStep }) {
                                 {isEdited === product?.cartProductID ? (
                                   <Quantity
                                     countNumber={quantity}
-                                    handleDecrement={handleDecrement}
-                                    handleIncrement={handleIncrement}
+                                    handleDecrement={() => handleDecrement()}
+                                    handleIncrement={() => handleIncrement()}
                                   />
                                 ) : (
                                   product.quantity
                                 )}
                               </TableCell>
 
-                             
-
-                              {/*button delete product */}
                               <TableCell align="right">
-                                {/* 1111111111111111111111111111111111111111111 */}
                                 <Stack direction={"row"} spacing={0.5}>
-                                  {isEdited === product?.cartProductID ? (
-                                    // button save
-                                    <IconButton
-                                      color="inherit"
-                                      size="small"
-                                      onClick={() => handleSaveUpdate()}
-                                    >
-                                      <Iconify
-                                        icon={"humbleicons:save"}
-                                        sx={{ height: "18px", width: "18px" }}
-                                      />
-                                    </IconButton>
+                                  {(isEdited === product?.cartProductID) ? (
+                                    <>
+                                      {/*  ================ Button save  ================ */}
+                                      <IconButton color="inherit" size="small" onClick={() => handleSaveUpdate(product?.cartProductID)}>
+                                        <Iconify icon={"humbleicons:save"} sx={{ height: "18px", width: "18px" }} />
+                                      </IconButton>
+                                      {/* ================ Button cancel  ================ */}
+                                      <IconButton sx={{ color: "error.main" }} size="small" onClick={() => setIsEdited(NaN)}>
+                                        <Iconify icon={"ic:round-cancel"} sx={{ height: "18px", width: "18px" }} />
+                                      </IconButton>
+                                    </>
                                   ) : (
-                                    // button edit
-                                    <IconButton
-                                      color="inherit"
-                                      size="small"
-                                      onClick={() =>
-                                        handleEditCartItem(
-                                          product?.cartProductID,
-                                          product.productId,
-                                          product.totalPrice,
-                                          product.quantity,
-                                          product.productIDUnit
-                                        )
-                                      }
-                                    >
-                                      <Iconify
-                                        icon={"eva:edit-fill"}
-                                        sx={{ height: "18px", width: "18px" }}
-                                      />
-                                    </IconButton>
+                                    <>
+                                      {/* ================  Button edit  ================ */}
+                                      <IconButton color="inherit" size="small" onClick={() => handleEditCartItem(
+                                        product?.cartProductID,
+                                        product?.productPrice,
+                                        product?.quantity,
+                                      )}>
+                                        <Iconify icon={"eva:edit-fill"} sx={{ height: "18px", width: "18px" }} />
+                                      </IconButton>
+                                      {/* ================  Button delete  ================ */}
+                                      <IconButton sx={{ color: "error.main" }} size="small" onClick={() => handleRemoveItem(product?.cartProductID)}>
+                                        <Iconify icon={"eva:trash-2-outline"} sx={{ height: "18px", width: "18px" }} />
+                                      </IconButton>
+                                    </>
                                   )}
-                                  {/* button delete */}
-                                  <IconButton
-                                    sx={{ color: "error.main" }}
-                                    size="small"
-                                    onClick={() =>
-                                      handleRemoveItem(product?.cartProductID)
-                                    }
-                                  >
-                                    <Iconify
-                                      icon={"eva:trash-2-outline"}
-                                      sx={{ height: "18px", width: "18px" }}
-                                    />
-                                  </IconButton>
+
                                 </Stack>
                               </TableCell>
                             </TableRow>
@@ -487,7 +402,7 @@ function Cart({ handleNext, activeStep }) {
 
         <Grid item xs={12} md={3.5}>
           {/* Order Summary  */}
-          {/* <OrderSummary activeStep={activeStep} totalPrice={totalPrice} /> */}
+          <OrderSummary activeStep={activeStep} totalPrice={priceOrder} />
 
           {/* --------------------------------------- BUTTON --------------------------------------------------- */}
           {/* if empty cart => button is disabled */}
@@ -509,7 +424,7 @@ function Cart({ handleNext, activeStep }) {
         onClose={handleClose}
       >
         <Alert onClose={handleClose} variant="filled" severity="success">
-          Cập nhật giỏ hàng thành công
+          Update cart xong roi ne
         </Alert>
       </Snackbar>
     </Container>

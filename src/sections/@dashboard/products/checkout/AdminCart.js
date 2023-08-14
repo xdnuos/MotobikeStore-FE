@@ -32,7 +32,7 @@ import { Quantity } from "../product-details";
 import SvgColor from "../../../../components/svg-color/SvgColor";
 import {
   removeFromCart,
-  updateQuantity,
+  updateCart,
 } from "../../../../redux/cart/cartSlice";
 
 import { addToOrder } from "src/redux/order/OrderSlice";
@@ -133,7 +133,7 @@ function AdminCart({ handleNext, activeStep }) {
       try {
         console.log(cartProductID, quantity);
         const response = await dispatch(
-          updateQuantity({
+          updateCart({
             cartProductID: cartProductID,
             quantity: quantity,
           })

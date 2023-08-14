@@ -20,12 +20,8 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (AddToCartRequest) => {
     await cartService.addToCart(AddToCartRequest).then((res) => {
-      console.log("AddToCartRequest", res.data);
-
-      if (res.data === "Added to cart") {
-        console.log("aloooooooooo", fetchCartItems(localStorageService.getItem("USER")?.userID));
-        return fetchCartItems(localStorageService.getItem("USER")?.userID);
-      }
+      console.log("ppppppppppppp", res.data?.cart);
+      return res.data;
     }).catch((err) => { return err.response.data.message });
 
   }
@@ -35,20 +31,20 @@ export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async (idCartItem) => {
     try {
-      const response = await cartService.deleteToCart(idCartItem);
-      return response;
-    } catch (error) {
-      throw new Error(error);
+      await cartService.deleteToCart(idCartItem);
+      return idCartItem;
+    } catch (err) {
+      throw err.response.data.message;
     }
   }
 );
 
-export const updateQuantity = createAsyncThunk(
-  "cart/updateQuantity",
+export const updateCart = createAsyncThunk(
+  "cart/updateCart",
   async (updateCartRequest) => {
     try {
       const response = await cartService.updateToCart(updateCartRequest);
-      return response;
+      return response.data;
     } catch (error) {
       throw new Error(error);
     }
@@ -104,15 +100,7 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(addToCart.fulfilled, (state, { payload }) => {
-        if (state?.cart?.length === 0) {
-          state.cart = payload;
-        } else {
-          const uniqueElements = new Set([...state?.cart?.cart, ...payload]);
-          const mergedArray = Array.from(uniqueElements);
-
-          state.cart = { ...state.cart, cart: mergedArray };
-        }
-
+          state.cart = payload?.cart;
         state.loading = false;
         state.loadOk = false;
       })
@@ -125,40 +113,29 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(removeFromCart.fulfilled, (state, { payload }) => {
-        state.cart = fetchCart()?.cart;
+        const updatedCartItems = state.cart.filter( (item) => item.cartProductID !== payload );
+        state.cart = [...updatedCartItems];
         state.loading = false;
-        state.emptyCart = fetchCart()?.cart?.length === 0;
-        state.loadOk = false;
+        state.emptyCart = updatedCartItems?.length === 0;
+        // state.loadOk = false;
       })
       .addCase(removeFromCart.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message;
       })
-      .addCase(updateQuantity.pending, (state) => {
+      .addCase(updateCart.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateQuantity.fulfilled, (state, { payload }) => {
+      .addCase(updateCart.fulfilled, (state, { payload }) => {
         state.cart = payload.cart;
         state.loading = false;
         state.loadOk = false;
       })
-      .addCase(updateQuantity.rejected, (state, { error }) => {
+      .addCase(updateCart.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message;
       });
-    // .addCase(updateCartItem.pending, (state) => {
-    //   state.loading = true;
-    //   state.error = null;
-    // })
-    // .addCase(updateCartItem.fulfilled, (state, { payload }) => {
-    //   state.cart = payload
-    //   state.loading = false;
-    // })
-    // .addCase(updateCartItem.rejected, (state, { error }) => {
-    //   state.loading = false;
-    //   state.error = error.message;
-    // });
   },
 });
 

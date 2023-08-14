@@ -27,13 +27,17 @@ export let cartService = {
           },
         }
       );
-    
   },
   updateToCart: async (UpdateCartItemRequest) => {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/carts/edit`,
-        UpdateCartItemRequest
+        UpdateCartItemRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log(response);
       return response;
@@ -42,15 +46,15 @@ export let cartService = {
     }
   },
   deleteToCart: async (idCartItem) => {
-    try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/carts/delete/${idCartItem}`
+      return await axios.delete(
+        BASE_URL + `/api/v1/carts/delete/${idCartItem}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
-      console.log(response);
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+      
   },
   // deleteAll: async (idAccount) => {
   //   try {
