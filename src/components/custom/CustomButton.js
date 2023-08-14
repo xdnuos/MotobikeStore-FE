@@ -47,5 +47,8 @@ export const StyledButtonGreenText = styled(Button)(() => ({
     backgroundColor: '#00ab5529',
     '&:hover': {
         backgroundColor: '#00ab5552',
+    },
+    '&:disabled': {
+        backgroundColor: '#aba4a429',
     }
 }));

@@ -27,38 +27,135 @@ import AddressForm from "./AddressForm";
 import { useDispatch, useSelector } from "react-redux";
 import { customersService } from "../../../../services/customerService";
 import { setAddress } from "src/redux/order/OrderSlice";
+import { Input, Select } from "antd";
+import { useEffect } from "react";
+import axios from "axios";
 
 BillingAndAddress.propTypes = {
   handleBack: PropTypes.func,
   handleNext: PropTypes.func,
   activeStep: PropTypes.number,
 };
+const PROVINCES_API_URL = "https://provinces.open-api.vn/api";
 
 function BillingAndAddress({ handleBack, handleNext, activeStep }) {
   const dispatch = useDispatch();
-  const [province, setProvince] = useState("");
-  const [district, setDistrict] = useState("");
-  const [ward, setWard] = useState("");
+
+
+  const [province, setProvince] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [nameProvince, setNameProvince] = useState("");
+  const [nameDistrict, setNameDistrict] = useState("");
+  const [nameWard, setNameWard] = useState("");
   const [street, setStreet] = useState("");
+  const [address, setAddress] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+  const [location, setLocation] = useState();
+
+
+
 
   const [open, setOpen] = useState(null);
 
   const totalPrice = useSelector((state) => state.order.totalPrice);
   const idAccount = useSelector((state) => state.auth.idAccount);
 
+
+
+  const handleProvinceChange = (value, option) => {
+    setSelectedProvince(value);
+    setNameProvince(option?.label ?? "");
+  };
+
+  const handleDistrictChange = (value, option) => {
+    setSelectedDistrict(value);
+    setNameDistrict(option?.label ?? "");
+  };
+
+  const handleWardChange = (value, option) => {
+    setSelectedWard(value);
+    setNameWard(option?.label ?? "");
+  };
+
+  const handleStreetChange = (e) => {
+    setStreet(e.target.value);
+
+  };
+
+
+
+  useEffect(() => {
+    setAddress(
+      street + ", " + nameWard + ", " + nameDistrict + ", " + nameProvince
+    );
+  }, [nameProvince, nameDistrict, nameWard, street]);
+
+  useEffect(() => {
+    axios
+      .get(`${PROVINCES_API_URL}/p`)
+      .then((response) => {
+        setProvince(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [selectedWard]);
+
+  useEffect(() => {
+    // Fetch the list of districts when a province is selected
+    if (selectedProvince) {
+      axios
+        .get(`${PROVINCES_API_URL}/p/${selectedProvince}?depth=2`)
+        .then((response) => {
+          setDistricts(response.data.districts);
+          setSelectedDistrict(null);
+          setWards([]);
+          setSelectedWard(null);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      setDistricts([]);
+      setSelectedDistrict(null);
+      setWards([]);
+      setSelectedWard(null);
+    }
+  }, [selectedProvince]);
+
+  useEffect(() => {
+    // Fetch the list of wards when a district is selected
+    if (selectedDistrict) {
+      axios
+        .get(`${PROVINCES_API_URL}/d/${selectedDistrict}?depth=2`)
+        .then((response) => {
+          setWards(response.data.wards);
+          setSelectedWard(null);
+          console.log(response);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      setWards([]);
+      setSelectedWard(null);
+    }
+  }, [selectedDistrict]);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (province.length < 4 || district.length < 4 || street.length < 4) {
-      return;
-    }
+    
     try {
       handleNext();
       const addAddress = await customersService.createAddress({
         idAccount: idAccount,
         address: {
           province: province,
-          district: district,
-          ward: ward,
+          district: districts,
+          ward: wards,
           street: street,
         },
         isDefault: true,
@@ -134,44 +231,74 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
                 <form onSubmit={handleFormSubmit}>
                   <Grid container spacing={2} mt={1}>
                     <Grid item md={6} xs={12}>
-                      <TextField
-                        required
-                        type="text"
-                        label="Tỉnh thành"
-                        value={province}
-                        onChange={(e) => setProvince(e.target.value)}
-                        fullWidth
+                      <Select
+                        showSearch
+                        placeholder="Tỉnh..."
+                        optionFilterProp="children"
+                        value={selectedProvince}
+                        rules={[{ required: true }]}
+                        onChange={handleProvinceChange}
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={province.map((province) => ({
+                          value: province.code,
+                          label: province.name,
+                        }))}
+                        style={{ width: "100%" }}
                       />
                     </Grid>
                     <Grid item md={6} xs={12}>
-                      <TextField
-                        required
-                        type="text"
-                        label="Quận/huyện"
-                        value={district}
-                        onChange={(e) => setDistrict(e.target.value)}
-                        fullWidth
+                      <Select
+                        showSearch
+                        placeholder="Huyện..."
+                        optionFilterProp="children"
+                        value={selectedDistrict}
+                        rules={[{ required: true }]}
+                        onChange={handleDistrictChange}
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={districts.map((district) => ({
+                          value: district.code,
+                          label: district.name,
+                        }))}
+                        style={{ width: "100%" }}
+                        disabled={!selectedProvince}
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField
-                        required
-                        type="text"
-                        label="Phường/Xã"
-                        value={ward}
-                        onChange={(e) => setWard(e.target.value)}
-                        fullWidth
+                      <Select
+                        showSearch
+                        placeholder="Xã..."
+                        optionFilterProp="children"
+                        value={selectedWard}
+                        rules={[{ required: true }]}
+                        onChange={handleWardChange}
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={wards.map((ward) => ({
+                          value: ward.code,
+                          label: ward.name,
+                        }))}
+                        style={{ width: "100%" }}
+                        disabled={!selectedDistrict}
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField
-                        required
-                        label="Địa chỉ cụ thể"
-                        value={street}
-                        onChange={(e) => setStreet(e.target.value)}
-                        multiline
-                        fullWidth
-                      />
+                    <Input
+                  placeholder="Địa chỉ cụ thể"
+                  style={{ marginTop: "15px" }}
+                  value={street}
+                  onChange={handleStreetChange}
+                />
                     </Grid>
                   </Grid>
                   <Grid
@@ -181,6 +308,7 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
                   >
                     <StyledButtonGreenText
                       type="submit"
+                      disabled={!selectedWard || !selectedDistrict || !selectedProvince || street.valueOf(0) === ""}
                       sx={{ mt: 3.5, height: "50px", width: "40%" }}
                     >
                       <Iconify
