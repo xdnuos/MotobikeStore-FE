@@ -17,22 +17,17 @@ export let cartService = {
     }
   },
 
-  addToCart: async (AddToCartRequest) => {
-    try {
-      const response = await axios.post(
+  addToCart: (AddToCartRequest) => {
+    return axios.post(
         BASE_URL + `/api/v1/carts/add`,
-        AddToCartRequest
-        // {
-        //   ...getAuthConfig(),
-        // }
+        AddToCartRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
-      message.success(response.data);
-      console.log(response);
-      return response.data;
-    } catch (error) {
-      message.error(error.response.data);
-      console.log(error);
-    }
+    
   },
   updateToCart: async (UpdateCartItemRequest) => {
     try {

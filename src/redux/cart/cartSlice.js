@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { cartService } from "../../services/cartService";
+import { useDispatch, useSelector } from "react-redux";
+import { localStorageService } from "src/services/localStorageService";
+
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
@@ -16,13 +19,15 @@ export const fetchCartItems = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (AddToCartRequest) => {
-    try {
-      const response = await cartService.addToCart(AddToCartRequest);
-      console.log(response);
-      return response;
-    } catch (error) {
-      throw new Error(error);
-    }
+    await cartService.addToCart(AddToCartRequest).then((res) => {
+      console.log("AddToCartRequest", res.data);
+
+      if (res.data === "Added to cart") {
+        console.log("aloooooooooo", fetchCartItems(localStorageService.getItem("USER")?.userID));
+        return fetchCartItems(localStorageService.getItem("USER")?.userID);
+      }
+    }).catch((err) => { return err.response.data.message });
+
   }
 );
 
@@ -49,7 +54,19 @@ export const updateQuantity = createAsyncThunk(
     }
   }
 );
+export const fetchCart = () => async () => {
 
+  const dispatch = useDispatch();
+
+  // const idAccount = useSelector((state) => state.auth.idAccount);
+  try {
+
+    console.log("sssssssssss");
+    return dispatch(fetchCartItems(localStorageService.getItem("USER")?.userID));
+  } catch (error) {
+    return error;
+  }
+};
 const initialState = {
   cart: [],
   loading: false,
@@ -74,7 +91,7 @@ const cartSlice = createSlice({
       .addCase(fetchCartItems.fulfilled, (state, { payload }) => {
         state.cart = payload;
         state.loading = false;
-        state.emptyCart = state.cart.length === 0;
+        state.emptyCart = state.cart?.length === 0;
         state.loadOk = true;
       })
       .addCase(fetchCartItems.rejected, (state, { payload }) => {
@@ -87,7 +104,15 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(addToCart.fulfilled, (state, { payload }) => {
-        state.cart = payload.cart;
+        if (state?.cart?.length === 0) {
+          state.cart = payload;
+        } else {
+          const uniqueElements = new Set([...state?.cart?.cart, ...payload]);
+          const mergedArray = Array.from(uniqueElements);
+
+          state.cart = { ...state.cart, cart: mergedArray };
+        }
+
         state.loading = false;
         state.loadOk = false;
       })
@@ -100,9 +125,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(removeFromCart.fulfilled, (state, { payload }) => {
-        state.cart = payload.cart;
+        state.cart = fetchCart()?.cart;
         state.loading = false;
-        state.emptyCart = state.cart?.length === 0;
+        state.emptyCart = fetchCart()?.cart?.length === 0;
         state.loadOk = false;
       })
       .addCase(removeFromCart.rejected, (state, { error }) => {

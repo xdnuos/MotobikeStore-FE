@@ -19,6 +19,12 @@ import {
   styled,
   ListItem,
   ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 
 // sections
@@ -90,7 +96,7 @@ function ProductDetailsPage() {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products.productDetail.product);
   const loading = useSelector((state) => state.products.productDetail.loading);
-  const idAcc = useSelector((state) => state.auth.idAccount);
+  const emailAccount = useSelector((state) => state.auth.email);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
  
@@ -102,31 +108,10 @@ function ProductDetailsPage() {
   useEffect(() => {
     dispatch(getProductById(id));
     console.log("product", product);
-  }, [dispatch, id]);
+  }, [dispatch, id,emailAccount]);
 
-  const [cartRequest, setCartRequest] = useState({
-    idAccount: idAcc,
-    idProduct: id,
-    idUnit: null,
-    price: null,
-  });
 
-  const { idAccount, idProduct, idUnit, price } = cartRequest;
 
-  const handleListItemClick = (event, selected, index, unit, id) => {
-   
-    setUnit(unit);
-    setShowAlert(false);
-    setCartRequest({
-      ...cartRequest,
-      idUnit: id,
-      price: product?.price,
-      quantity: 1,
-    });
-    setShowPrice(product?.price);
-
-    // console.log("selectedIndex----->", cartRequest);
-  };
 
   // const [open, setOpen] = useState(false);
   const [state, setState] = useState({
@@ -151,19 +136,21 @@ function ProductDetailsPage() {
     console.log("showPrice===> ", showPrice);
   };
 
-  const handleClickBuyNow = async () => {
-    // if (isLoggedIn) {
-    //   if (isNaN(selectedIndex)) {
-    //     setShowAlert(true);
-    //   } else {
-    //     await dispatch(addToCart(cartRequest));
-    //     setState({ ...state, open: true });
-    //     navigate("/checkout");
-    //     console.log("cartRequest", cartRequest);
-    //   }
-    // } else {
-    //   setState({ ...state, open: true });
-    // }
+  const handleClickBuyNow =  () => {
+    if (isLoggedIn) {
+      
+        dispatch(addToCart({
+          productID: id,
+          quantity: quantity,
+          email: emailAccount
+        }));
+        setState({ ...state, open: true });
+        navigate("/checkout");
+      
+      // console.log("is login = true",quantity);
+    } else {
+      setState({ ...state, open: true });
+    }
   };
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -172,42 +159,19 @@ function ProductDetailsPage() {
     setState({ ...state, open: false });
   };
 
+
+  // ========== Quantity ========== //
+  const totalPrice = product?.price * quantity;
   const handleIncrement = () => {
-    console.log("show price",product?.price);
-    console.log("quantity",quantity);
-    
-    // if (quantity === 1) {
-    //   // setCartRequest({
-    //   //   ...cartRequest,
-
-    //   //   price: showPrice * 3,
      setQuantity( quantity + 1);
-    //   // });
-
-    //   showPrice(product?.price * product?.price );
-      
-    // } else {
-    //   setCartRequest({
-    //     ...cartRequest,
-    //     price: showPrice * quantity + showPrice,
-    //     quantity: quantity + 1,
-    //   });
-    //   // setTotalPrice();
-    // }
-
-    console.log("showPrice ===========>", showPrice);
   };
 
   const handleDecrement = () => {
     if (quantity > 1) {
-     
-      
-      console.log("handleDecrement===========>", quantity);
       setQuantity( quantity - 1);
     }
-    // setTotalPrice(showPrice * quantity - showPrice);
   };
-  const totalPrice = product?.price * quantity;
+  
 
   if (loading) {
     return <SkeletonLoading />;
@@ -419,7 +383,7 @@ function ProductDetailsPage() {
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
-          autoHideDuration={3000}
+          // autoHideDuration={3000}
           onClose={handleClose}
         >
           {isLoggedIn ? (
@@ -432,6 +396,18 @@ function ProductDetailsPage() {
             </Alert>
           )}
         </Snackbar>
+        <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add to Cart</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please login to add products to the cart.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Continue</Button>
+          <Button onClick={() => navigate("/login")}>Login</Button>
+        </DialogActions>
+      </Dialog>
       </Container>
     </>
   );

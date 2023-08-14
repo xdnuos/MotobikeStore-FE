@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { withRouter } from "react-router";
 
 import { useHistory } from "react-router-dom";
@@ -53,7 +53,6 @@ import { addToOrder } from "src/redux/order/OrderSlice";
 const TABLE_HEAD = [
   { id: "price", label: "Giá thành", alignRight: false },
   { id: "quantity", label: "Số lượng", alignRight: false },
-  { id: "unit", label: "Đơn vị", alignRight: false },
   { id: "" },
 ];
 
@@ -76,7 +75,6 @@ function Cart({ handleNext, activeStep }) {
 
   const [isEdited, setIsEdited] = useState(NaN);
 
-  const [totalPrice, setTotalPrice] = useState(0);
   // const handleGoBack = () => {
   //   props.history.goBack();
   // };
@@ -94,12 +92,12 @@ function Cart({ handleNext, activeStep }) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart.cart.cartItems);
+  const cart = useSelector((state) => state.cart.cart);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const loading = useSelector((state) => state.cart.loading);
   const emptyCart = useSelector((state) => state.cart.emptyCart);
 
-  const email = useSelector((state) => state.auth.email);
+  const idAccount = useSelector((state) => state.auth.idAccount);
 
   const [state, setState] = useState({
     open: false,
@@ -204,16 +202,18 @@ function Cart({ handleNext, activeStep }) {
 
   const handleCheckout = () => {
     handleNext();
-    dispatch(addToOrder({ id: selected, price: totalPrice }));
+    // dispatch(addToOrder({ id: selected, price: totalPrice }));
     // console.log("checkouttt",selected);
   };
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(fetchCartItems(email));
+      dispatch(fetchCartItems(idAccount));
       // console.log("localStorageService",localStorageService.get("USER")?.id)
     }
-  }, [dispatch, isLoggedIn, email]);
+  }, [dispatch, isLoggedIn, idAccount]);
+
+  
 
   // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
@@ -232,41 +232,41 @@ function Cart({ handleNext, activeStep }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = cart?.map((n) => n.cartItemId);
+      const newSelecteds = cart?.map((n) => n?.cartProductID);
       setSelected(newSelecteds);
 
       const newTotalPrice = cart
-        ?.filter((item) => newSelecteds.indexOf(item.cartItemId) !== -1)
-        .map((item) => item.totalPrice)
+        ?.filter((item) => newSelecteds.indexOf(item?.cartProductID) !== -1)
+        .map((item) => item?.totalPrice)
         .reduce((total, price) => total + price, 0);
-      setTotalPrice(newTotalPrice);
+      // setTotalPrice(newTotalPrice);
       return;
     }
-    setTotalPrice(0);
+    // setTotalPrice(0);
     setSelected([]);
   };
 
   const handleClick = (event, id, price) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
-    let newTotalPrice = totalPrice;
+    // let newTotalPrice = totalPrice;
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
-      newTotalPrice += price;
+      // newTotalPrice += price;
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
-      newTotalPrice -= price;
+      // newTotalPrice -= price;
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
-      newTotalPrice -= price;
+      // newTotalPrice -= price;
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
       );
-      newTotalPrice -= price;
+      // newTotalPrice -= price;
     }
-    setTotalPrice(newTotalPrice);
+    // setTotalPrice(newTotalPrice);
     setSelected(newSelected);
     // console.log("totalPrice",totalPrice);
     // console.log("ssssssssssssss",selected);
@@ -323,8 +323,10 @@ function Cart({ handleNext, activeStep }) {
                       />
                       <TableBody>
                         {cart?.map((product, index) => {
+                          // ========== Quantity ========== //
+                        const totalPrice = product?.productPrice * product?.quantity;
                           const selectedProduct =
-                            selected.indexOf(product.cartItemId) !== -1;
+                            selected.indexOf(product?.cartProductID) !== -1;
                           return (
                             // 1 row có:
                             <TableRow
@@ -342,7 +344,7 @@ function Cart({ handleNext, activeStep }) {
                                   onChange={(event) =>
                                     handleClick(
                                       event,
-                                      product.cartItemId,
+                                      product?.cartProductID,
                                       product.totalPrice
                                     )
                                   }
@@ -355,14 +357,16 @@ function Cart({ handleNext, activeStep }) {
                                 scope="row"
                                 padding="none"
                               >
+                                <Link to={`/product-details/${product?.productID}`}>
+                                
                                 <Stack
                                   direction="row"
                                   alignItems="center"
                                   spacing={2}
                                 >
                                   <Avatar
-                                    alt={product.productName}
-                                    src={product.asset}
+                                    alt={product?.productName}
+                                    src={product?.productImages[0]?.imagePath}
                                     variant="rounded"
                                     sx={{ width: 55, height: 55 }}
                                   />
@@ -380,21 +384,25 @@ function Cart({ handleNext, activeStep }) {
                                       maxHeight: "3.6em", // 3 lines * line-height of 1.2
                                     }}
                                   >
-                                    {product.productName}
+                                    {product?.productName}
                                   </Typography>
                                 </Stack>
+                                </Link>
                               </TableCell>
 
                               {/* Giá thành */}
                               <TableCell align="center">
-                                {isEdited === product.cartItemId
+                                {isEdited === product?.cartProductID
                                   ? price
-                                  : product.totalPrice}
+                                  :  totalPrice.toLocaleString("vi-VN", {
+                                      style: "currency",
+                                      currency: "VND",
+                                    })}
                               </TableCell>
 
                               {/* Số lượng */}
                               <TableCell align="center">
-                                {isEdited === product.cartItemId ? (
+                                {isEdited === product?.cartProductID ? (
                                   <Quantity
                                     countNumber={quantity}
                                     handleDecrement={handleDecrement}
@@ -405,61 +413,13 @@ function Cart({ handleNext, activeStep }) {
                                 )}
                               </TableCell>
 
-                              {/* đơn vị */}
-                              <TableCell
-                                sx={{ minWidth: "80px" }}
-                                align="center"
-                              >
-                                {isEdited === product.cartItemId ? (
-                                  <FormControl>
-                                    <Select
-                                      sx={{ minWidth: "80px", height: "32px" }}
-                                      size="small"
-                                      value={units[0]}
-                                      displayEmpty
-                                      inputProps={{
-                                        "aria-label": "Without label",
-                                      }}
-                                    >
-                                      {units.map((option) => (
-                                        <MenuItem
-                                          size="small"
-                                          key={option.unitId}
-                                          value={option}
-                                          onClick={(event) =>
-                                            handleChange(
-                                              event,
-                                              option.rank,
-                                              option.priceUnit,
-                                              option.name,
-                                              option.unitId
-                                            )
-                                          }
-                                          onChange={(event) =>
-                                            handleChange(
-                                              event,
-                                              option.rank,
-                                              option.priceUnit,
-                                              option.name,
-                                              option.unitId
-                                            )
-                                          }
-                                        >
-                                          {option.name}
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                  </FormControl>
-                                ) : (
-                                  product.unit
-                                )}
-                              </TableCell>
+                             
 
                               {/*button delete product */}
                               <TableCell align="right">
                                 {/* 1111111111111111111111111111111111111111111 */}
                                 <Stack direction={"row"} spacing={0.5}>
-                                  {isEdited === product.cartItemId ? (
+                                  {isEdited === product?.cartProductID ? (
                                     // button save
                                     <IconButton
                                       color="inherit"
@@ -478,7 +438,7 @@ function Cart({ handleNext, activeStep }) {
                                       size="small"
                                       onClick={() =>
                                         handleEditCartItem(
-                                          product.cartItemId,
+                                          product?.cartProductID,
                                           product.productId,
                                           product.totalPrice,
                                           product.quantity,
@@ -497,7 +457,7 @@ function Cart({ handleNext, activeStep }) {
                                     sx={{ color: "error.main" }}
                                     size="small"
                                     onClick={() =>
-                                      handleRemoveItem(product.cartItemId)
+                                      handleRemoveItem(product?.cartProductID)
                                     }
                                   >
                                     <Iconify
@@ -527,7 +487,7 @@ function Cart({ handleNext, activeStep }) {
 
         <Grid item xs={12} md={3.5}>
           {/* Order Summary  */}
-          <OrderSummary activeStep={activeStep} totalPrice={totalPrice} />
+          {/* <OrderSummary activeStep={activeStep} totalPrice={totalPrice} /> */}
 
           {/* --------------------------------------- BUTTON --------------------------------------------------- */}
           {/* if empty cart => button is disabled */}
