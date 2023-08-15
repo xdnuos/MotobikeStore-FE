@@ -47,8 +47,7 @@ import {
 import { getProductById } from "../../../../redux/products/ProductDetail";
 import { productService } from "../../../../services/productService";
 import { cartService } from "../../../../services/cartService";
-import { map } from "lodash";
-import { addToOrder } from "src/redux/order/OrderSlice";
+import { addToOrder } from "../../../../redux/order/OrderSlice";
 
 const TABLE_HEAD = [
   { id: "price", label: "Giá thành", alignRight: false },
@@ -92,8 +91,14 @@ function Cart({ handleNext, activeStep }) {
   const handleRemoveItem = async (idCartItem) => {
     try {
       if (!!idCartItem) {
-        await dispatch(removeFromCart(idCartItem));
-        console.log("Product deleted successfullyyyyyyyyyyyyyyyyy");
+        await dispatch(removeFromCart({
+          "cartProductID":idCartItem,
+          "userID": idAccount
+      }));
+      // dispatch(fetchCartItems(idAccount));
+      setSelected([]);
+      setPriceOrder(0);
+        // console.log("Product deleted successfullyyyyyyyyyyyyyyyyy");
       } else {
         console.log("idCartItem is undefined", idCartItem);
       }
@@ -144,9 +149,9 @@ function Cart({ handleNext, activeStep }) {
     }
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
+   await dispatch(addToOrder({ id:selected, price:priceOrder }));
     handleNext();
-    // console.log("pricceeeee", priceOrder);
   };
 
   useEffect(() => {

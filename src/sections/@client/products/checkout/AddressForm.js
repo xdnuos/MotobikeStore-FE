@@ -14,16 +14,17 @@ import {
   TextField,
 } from '@mui/material';
 import axios from 'axios';
-import { addressService } from 'src/services/addressService';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LoadingButton } from '@mui/lab';
-import Iconify from 'src/components/iconify/Iconify';
-import { set } from 'lodash';
-import { tr } from 'date-fns/locale';
+import { CreateAddress } from '../../../../redux/address/AddressSlice';
+import Iconify from '../../../../components/iconify/Iconify';
 
 const PROVINCES_API_URL = "https://provinces.open-api.vn/api";
 
 function AddressForm({ open, onClose }) {
+
+  const dispatch = useDispatch();
+
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
 
@@ -38,12 +39,12 @@ function AddressForm({ open, onClose }) {
   const [nameDistrict, setNameDistrict] = useState("");
   const [nameWard, setNameWard] = useState("");
   const [street, setStreet] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
 
-  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const loading = useSelector((state) => state.address.loading);
   const idAccount = useSelector((state) => state.auth.idAccount);
 
 
@@ -129,25 +130,25 @@ function AddressForm({ open, onClose }) {
   }, [selectedDistrict]);
 
 
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     // Do something with the form data
     try {
-    await addressService.addAddress({
-      address: `${street}, ${nameWard}, ${nameDistrict}, ${nameProvince}`,
-      fullname: name,
-      phone: phone,
-      userID: idAccount
-    });
-    setLoading(true);
-  
-  } catch (err) {
-      console.log(err);}
-    // .then((res) => {
-    //   
-    // }).catch((err) => { console.log(err) });
-    setLoading(false);
+      await dispatch(CreateAddress({
+        address: `${street}, ${nameWard}, ${nameDistrict}, ${nameProvince}`,
+        fullname: name,
+        phone: phone,
+        userID: idAccount
+      }));
+      setName('');
+      setPhone('');
+      setNameDistrict('');
+      setNameProvince('');
+      setNameWard('');
+      setStreet('');
+    } catch (err) {
+      console.log(err);
+    }
     onClose();
   };
 

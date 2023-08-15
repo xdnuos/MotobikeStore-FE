@@ -6,17 +6,43 @@ import {
   Container,
   CardHeader,
   CardContent,
+  RadioGroup,
+  Stack,
+  styled,
+  FormControlLabel
 } from "@mui/material";
 import Iconify from "../../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
-import DeliveryOptions from "./DeliveryOptions";
-import PaymentOptions from "./PaymentOptions";
 import BillingAddress from "./BillingAddress";
 import OrderSummary from "./OrderSummary";
 import { StyledButtonGreen } from "../../../../components/custom/CustomButton";
 import { useSelector } from "react-redux";
-import { customersService } from "../../../../services/customerService";
 import { orderService } from "../../../../services/orderService";
+import { CustomRadio } from "../../../../components/custom/CustomRadio";
+
+
+
+
+const StyledFormControlLabel = styled(FormControlLabel)(({ selected }) => ({
+
+  border: '1px solid #919eab3d',
+  borderRadius: '8px',
+  padding: '20px 10px ',
+  width: '100%',
+  margin: 0,
+  transition: selected
+    ? 'all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
+    : 'none',
+  boxShadow: selected ? '0px 20px 40px -4px #919eab29' : 'none',
+}));
+
+const PAYMENTOPTION = [
+  { lable: "Cash on Checkout/Delivery", value: "COD" },
+  { lable: "MoMo Wallet", value: "MOMO" },
+  { lable: "Credit / Debit Card", value: "ATM" },
+  { lable: "LE VAL LIVE", value: "LIVE" },
+];
+
 
 Payment.propTypes = {
   handleBack: PropTypes.func,
@@ -24,113 +50,44 @@ Payment.propTypes = {
   activeStep: PropTypes.number,
 };
 function Payment({ handleBack, handleNext, activeStep }) {
-  const [infoCustomer, setInfoCustomer] = useState({
-    name: "",
-    phone: "",
-  });
-  const [request, setRequest] = useState({
-    idAccount: null,
-    idAddress: null,
-    idStore: 3,
-    shippingFee: 0,
-    idCartItems: [],
-  });
-
-  const { idAccount, idAddress, idCartItems } = request;
-
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const idAcc = useSelector((state) => state.auth.idAccount);
-
-  const getInfo = async (idAccount) => {
-    return new Promise((resolve, reject) => {
-      customersService
-        .getInfo(idAccount)
-        .then((response) => {
-          setInfoCustomer({ name: response.name, phone: response.phoneNumber });
-          console.log("response", response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
+  const idAccount = useSelector((state) => state.auth.idAccount);
 
   const totalPrice = useSelector((state) => state.order.totalPrice);
-
   const address = useSelector((state) => state.order.address);
-  const idAdd = useSelector((state) => state.order.idAddress);
+  const fullName = useSelector((state) => state.order.firstName);
+  const phoneNumber = useSelector((state) => state.order.phone);
+  const idAddress = useSelector((state) => state.order.idAddress);
+  const listIdCart = useSelector((state) => state.order.idCartItems);
 
-  const idCartIt = useSelector((state) => state.order.idCartItems);
 
-  // const create = async () => {
-  //   return new Promise((resolve, reject) => {
-  //     OrderService.createOrder({
-  //       idAccount: idAccount,
-  //       idAddress: idAddress,
-  //       idStore: 3,
-  //       shippingFee: 0,
-  //       idCartItem: idCartItem
+  const [paymentOption, setPaymentOption] = useState('');
 
-  //       // idAccount : 2,
-  //       // idAddress : 13,
-  //       // idStore: 3,
-  //       // shippingFee: 0,
-  //       // idCartItems :[39, 40]
+  const handleChange = (event) => {
+    setPaymentOption(event.target.value);
+  };
 
-  //     })
-  //       .then(response => {
 
-  //         console.log("rrrrrrrrrrrrrrrrrrrrppppppppppppppppppppppppppppppppppp", response);
-  //         resolve();
-  //       })
-  //       .catch(error => {
-  //         reject(error);
-  //       });
-
-  //   });
-  // };
 
   const handleComplete = async () => {
-    try {
-      const response = await orderService.createOrder({ ...request });
-      //   idAccount: {...idAccount},
-      //   idAddress: {...idAddress},
-      //   idStore: 3,
-      //   shippingFee: 0,
-      //   idCartItem: {...idCartItem},
-
-      //     // idAccount : 2,
-      //     // idAddress : 13,
-      //     // idStore: 3,
-      //     // shippingFee: 0,
-      //     // idCartItems :[39, 40]
-
-      // })
-      // create();
-      console.log("asjikhdikjahsdlkijhaslkjdhlsjkahlkjsahlkjh", request);
-      console.log(
-        "rrrrrrrrrrrrrrrrrrrrppppppppppppppppppppppppppppppppppp",
-        response
-      );
+    await orderService.createOrderByCustomer({
+      cartProductIDs: listIdCart,
+      userID: idAccount,
+      addressID: idAddress,
+      payment: paymentOption
+    }).then((response) => {
       handleNext();
-    } catch (error) {
+      return response;
+    }).catch((error) => {
       console.log(error);
-    }
+    });
   };
 
   useEffect(() => {
     if (isLoggedIn) {
-      setRequest({
-        ...request,
-        idAccount: idAcc,
-        idAddress: idAdd,
-        idCartItems: idCartIt,
-      });
-      getInfo(idAcc);
-      console.log("asjikhdikjahsdlkijhaslkjdhlsjkahlkjsahlkjh", request);
+
     }
-  }, [isLoggedIn, idAcc]);
+  }, [isLoggedIn, idAccount]);
 
   return (
     <Container>
@@ -139,7 +96,27 @@ function Payment({ handleBack, handleNext, activeStep }) {
           <Card >
             <CardHeader title="Payment Options" />
             <CardContent>
-              <PaymentOptions />
+              <RadioGroup value={paymentOption} onChange={handleChange} >
+                <Stack spacing={2}>
+
+                  {PAYMENTOPTION.map((item) => {
+                    return (
+                      <StyledFormControlLabel
+                        key={item.value}
+                        value={item.value}
+                        control={<CustomRadio />}
+                        label={
+                          <div style={{ marginLeft: "10px" }}>
+                            {item.lable}
+                          </div>}
+                        labelPlacement="end"
+                        selected={paymentOption === item.value}
+                      />
+                    )
+                  }
+                  )}
+                </Stack>
+              </RadioGroup>
             </CardContent>
           </Card>
 
@@ -153,8 +130,8 @@ function Payment({ handleBack, handleNext, activeStep }) {
           <BillingAddress
             handleBack={handleBack}
             address={address}
-            name={infoCustomer.name}
-            phone={infoCustomer.phone}
+            name={fullName}
+            phone={phoneNumber}
           />
 
           <div style={{ marginTop: "24px" }}>

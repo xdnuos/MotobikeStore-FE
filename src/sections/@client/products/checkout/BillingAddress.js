@@ -17,7 +17,7 @@ function BillingAddress({handleBack, address, name,phone}) {
         <Card>
             <CardHeader title={
                 <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'} spacing={1}>
-                    <Typography variant='h6'> Billing Address </Typography>
+                    <Typography variant='subtitle1'> Billing Address </Typography>
                     <Button sx={{ color: '#00ab55' }} onClick={handleBack} >
                         <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
                         Edit
@@ -26,15 +26,13 @@ function BillingAddress({handleBack, address, name,phone}) {
             } />
 
             <CardContent>
-                <Stack >
-                    <Stack direction={'row'} spacing={1}>
+                    <Stack direction={'row'} spacing={1} sx={{ mt: - 2 }}>
                         <Typography variant='h5' gutterBottom> {name} </Typography>
                         <Typography variant='body2' color="text.secondary" >  (Home)</Typography>
                     </Stack>
-                    <Typography variant='body2' color="text.secondary" >  {phone}</Typography>
+                    <Typography variant='body2' color="text.secondary" pb={1}>  {phone}</Typography>
                     <Typography variant='body2' gutterBottom>  {address}</Typography>
 
-                </Stack>
             </CardContent>
         </Card>
     )

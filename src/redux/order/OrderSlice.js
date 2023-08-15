@@ -8,7 +8,7 @@ const OrderSlice = createSlice({
     idAddress: null,
     address: null,
     customerID: null,
-    fistName: "",
+    firstName: "",
     lastName: "",
     phone: "",
   },
