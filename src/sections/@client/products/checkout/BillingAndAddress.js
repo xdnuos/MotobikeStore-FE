@@ -30,134 +30,39 @@ import { setAddress } from "src/redux/order/OrderSlice";
 import { Input, Select } from "antd";
 import { useEffect } from "react";
 import axios from "axios";
+import AddressCart from "./AddressCart";
 
 BillingAndAddress.propTypes = {
   handleBack: PropTypes.func,
   handleNext: PropTypes.func,
   activeStep: PropTypes.number,
 };
-const PROVINCES_API_URL = "https://provinces.open-api.vn/api";
 
 function BillingAndAddress({ handleBack, handleNext, activeStep }) {
   const dispatch = useDispatch();
 
 
-  const [province, setProvince] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [nameProvince, setNameProvince] = useState("");
-  const [nameDistrict, setNameDistrict] = useState("");
-  const [nameWard, setNameWard] = useState("");
-  const [street, setStreet] = useState("");
-  const [address, setAddress] = useState("");
-  const [selectedProvince, setSelectedProvince] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [selectedWard, setSelectedWard] = useState(null);
-  const [location, setLocation] = useState();
-
-
-
+  
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [open, setOpen] = useState(null);
 
   const totalPrice = useSelector((state) => state.order.totalPrice);
   const idAccount = useSelector((state) => state.auth.idAccount);
 
-
-
-  const handleProvinceChange = (value, option) => {
-    setSelectedProvince(value);
-    setNameProvince(option?.label ?? "");
-  };
-
-  const handleDistrictChange = (value, option) => {
-    setSelectedDistrict(value);
-    setNameDistrict(option?.label ?? "");
-  };
-
-  const handleWardChange = (value, option) => {
-    setSelectedWard(value);
-    setNameWard(option?.label ?? "");
-  };
-
-  const handleStreetChange = (e) => {
-    setStreet(e.target.value);
-
-  };
-
-
-
-  useEffect(() => {
-    setAddress(
-      street + ", " + nameWard + ", " + nameDistrict + ", " + nameProvince
-    );
-  }, [nameProvince, nameDistrict, nameWard, street]);
-
-  useEffect(() => {
-    axios
-      .get(`${PROVINCES_API_URL}/p`)
-      .then((response) => {
-        setProvince(response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [selectedWard]);
-
-  useEffect(() => {
-    // Fetch the list of districts when a province is selected
-    if (selectedProvince) {
-      axios
-        .get(`${PROVINCES_API_URL}/p/${selectedProvince}?depth=2`)
-        .then((response) => {
-          setDistricts(response.data.districts);
-          setSelectedDistrict(null);
-          setWards([]);
-          setSelectedWard(null);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
-      setDistricts([]);
-      setSelectedDistrict(null);
-      setWards([]);
-      setSelectedWard(null);
-    }
-  }, [selectedProvince]);
-
-  useEffect(() => {
-    // Fetch the list of wards when a district is selected
-    if (selectedDistrict) {
-      axios
-        .get(`${PROVINCES_API_URL}/d/${selectedDistrict}?depth=2`)
-        .then((response) => {
-          setWards(response.data.wards);
-          setSelectedWard(null);
-          console.log(response);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
-      setWards([]);
-      setSelectedWard(null);
-    }
-  }, [selectedDistrict]);
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       handleNext();
       const addAddress = await customersService.createAddress({
         idAccount: idAccount,
-        address: {
-          province: province,
-          district: districts,
-          ward: wards,
-          street: street,
-        },
+        // address: {
+        //   province: province,
+        //   district: districts,
+        //   ward: wards,
+        //   street: street,
+        // },
         isDefault: true,
       });
       dispatch(
@@ -179,8 +84,6 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
     setOpen(null);
   };
 
-  const [openDialog, setOpenDialog] = useState(false);
-
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -194,41 +97,8 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8.5}>
-            <Card>
-              <CardContent>
-                {/* <Stack spacing={1}  >
-                    <Stack direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Stack direction={'row'} spacing={1}>
-                        <Typography variant='subtitle1'> Jayvion Simon </Typography>
-                        <Typography color={'text.secondary'}>(Home)</Typography>
-                        <Label color={'info'}>Default</Label>
-                      </Stack>
-  
-                      <IconButton size="small" sx={{ height: 26, width: 26 }} color="inherit" onClick={handleOpenMenu}>
-                        <Iconify icon={'eva:more-vertical-fill'} />
-                      </IconButton>
-                    </Stack>
-                    <Typography variant='body2'>
-                      19034 Verna Unions Apt. 164 - Honolulu, RI / 87535
-                    </Typography>
-  
-                    <Grid container alignItems={'center'}>
-                      <Grid item xs={12} md={9}>
-                        <Typography variant='body2' alignItems={'center'} color={'text.secondary'} noWrap>
-                          365-374-4961
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={12} md={3}>
-                      
-                        <StyledButtonGreenOutlined sx={{ mt: { xs: 2, md: 0 }, padding: '3px 9px' }} size='small' onClick={handleNext}>Chọn địa chỉ này</StyledButtonGreenOutlined>
-                      </Grid>
-                    </Grid>
-                  </Stack> */}
-
-                <form onSubmit={handleFormSubmit}>
+           <AddressCart handleNext={handleNext} handleOpenMenu={handleOpenMenu}/>
+            {/* <form onSubmit={handleFormSubmit}>
                   <Grid container spacing={2} mt={1}>
                     <Grid item md={6} xs={12}>
                       <Select
@@ -318,9 +188,8 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
                       &nbsp; Thêm địa chỉ &nbsp;
                     </StyledButtonGreenText>
                   </Grid>
-                </form>
-              </CardContent>
-            </Card>
+                </form> */}
+
 
             {/* --------------------------------------- BUTTON --------------------------------------------------- */}
             <Stack
@@ -334,10 +203,10 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
                 Back
               </Button>
 
-              {/* <StyledButtonGreenText size='small' onClick={handleOpenDialog}>
-                  <Iconify icon='ic:sharp-plus' sx={{ height: 16, width: 16 }} />
-                  &nbsp; Thêm địa chỉ mới &nbsp;
-                </StyledButtonGreenText> */}
+              <StyledButtonGreenText size='small' onClick={handleOpenDialog}>
+                <Iconify icon='ic:sharp-plus' sx={{ height: 16, width: 16 }} />
+                &nbsp; Thêm địa chỉ mới &nbsp;
+              </StyledButtonGreenText>
             </Stack>
           </Grid>
 
