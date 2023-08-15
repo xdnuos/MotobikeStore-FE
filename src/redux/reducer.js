@@ -6,11 +6,13 @@ import OrderSlice from "./order/OrderSlice";
 import categorySlice from "./productProperties/categorySlice";
 import tagSlice from "./productProperties/tagSlice";
 import manufacturerSlice from "./productProperties/manufacturerSlice";
+import AddressSlice from "./address/AddressSlice";
 // compine user
 const rootReducer = combineReducers({
   products: productReducer,
   cart: cartSlice,
   auth: authSlice,
+  address: AddressSlice,
   order: OrderSlice,
   categories: categorySlice,
   tags: tagSlice,

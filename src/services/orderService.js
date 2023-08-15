@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/baseURL";
+import { message } from "antd";
 
 export let orderService = {
   createOrder: async (AddToCartRequest) => {
@@ -63,4 +64,39 @@ export let orderService = {
       throw error;
     }
   },
+  createOrderByCustomer: async (request) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + `/api/v1/order/add`,
+        request,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log("Response: ", response);
+      message.success("Đặt hàng thành công");
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  getOrderByCustomer: async (idUser) => {
+    try {
+      const response = await axios.get(
+        BASE_URL + `/api/v1/order/get/${idUser}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 };

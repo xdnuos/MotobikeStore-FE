@@ -45,9 +45,9 @@ export let cartService = {
       console.log(error);
     }
   },
-  deleteToCart: async (idCartItem) => {
-      return await axios.delete(
-        BASE_URL + `/api/v1/carts/delete/${idCartItem}`,
+  deleteToCart: async (value) => {
+      return await axios.put(
+        BASE_URL + `/api/v1/carts/delete`, value,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

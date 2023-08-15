@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { cartService } from "../../services/cartService";
-import { useDispatch, useSelector } from "react-redux";
-import { localStorageService } from "src/services/localStorageService";
-
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
@@ -30,11 +27,14 @@ export const addToCart = createAsyncThunk(
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async (idCartItem) => {
+
     try {
-      await cartService.deleteToCart(idCartItem);
-      return idCartItem;
-    } catch (err) {
-      throw err.response.data.message;
+      const response = await cartService.deleteToCart(idCartItem);
+       return response.data?.cart;
+    } catch (error) {
+
+      throw new Error(error);
+
     }
   }
 );
@@ -50,19 +50,7 @@ export const updateCart = createAsyncThunk(
     }
   }
 );
-export const fetchCart = () => async () => {
 
-  const dispatch = useDispatch();
-
-  // const idAccount = useSelector((state) => state.auth.idAccount);
-  try {
-
-    console.log("sssssssssss");
-    return dispatch(fetchCartItems(localStorageService.getItem("USER")?.userID));
-  } catch (error) {
-    return error;
-  }
-};
 const initialState = {
   cart: [],
   loading: false,
@@ -100,7 +88,7 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(addToCart.fulfilled, (state, { payload }) => {
-          state.cart = payload?.cart;
+        state.cart = payload?.cart;
         state.loading = false;
         state.loadOk = false;
       })
@@ -113,11 +101,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(removeFromCart.fulfilled, (state, { payload }) => {
-        const updatedCartItems = state.cart.filter( (item) => item.cartProductID !== payload );
-        state.cart = [...updatedCartItems];
+       state.cart = payload;
         state.loading = false;
-        state.emptyCart = updatedCartItems?.length === 0;
-        // state.loadOk = false;
+        state.emptyCart = payload?.length === 0;
       })
       .addCase(removeFromCart.rejected, (state, { error }) => {
         state.loading = false;
