@@ -34,7 +34,6 @@ const PAYMENTOPTION = [
   { lable: "Cash on Checkout/Delivery", value: "COD" },
   { lable: "MoMo Wallet", value: "MOMO" },
   { lable: "Credit / Debit Card", value: "ATM" },
-  { lable: "LE VAL LIVE", value: "LIVE" },
 ];
 
 Payment.propTypes = {
