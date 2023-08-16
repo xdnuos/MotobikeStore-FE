@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState,forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Button, Checkbox } from '@mui/material';
+import { Link, Stack, IconButton, InputAdornment, TextField, Button, Checkbox, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, Slide, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import { useEffect } from 'react';
@@ -10,23 +10,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../../redux/auth/authSlice';
 import { localStorageService } from '../../../services/localStorageService';
 import { authService } from '../../../services/authService';
+import { DatePicker, Form, message } from 'antd';
 
 // ----------------------------------------------------------------------
-
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export default function RegisterForm() {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleFullNameChange = (event) => {
-    setFullName(event.target.value);
-  };
+  const [open, setOpen] = useState(false);
 
-  const handlePhoneNumberChange = (event) => {
-    setPhoneNumber(event.target.value);
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handlePasswordChange = (event) => {
@@ -37,8 +37,8 @@ export default function RegisterForm() {
     setConfirmPassword(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     // Check if passwords match
     if (password !== confirmPassword) {
       setErrorMessage('Passwords do not match');
@@ -49,16 +49,31 @@ export default function RegisterForm() {
       setErrorMessage('Password must be at least 8 characters long');
       return;
     }
-    try {
-      const register = await authService.register({ name:fullName, username:phoneNumber, password:password });
-      if ( !!register){
-        dispatch(loginUser({username: phoneNumber, password: password }));
-      }else{
-        console.log("register error",register);
+      setLoading(true);
+    const info = e.target;
+    await authService.register({
+      email: info.email.value,
+      password: confirmPassword,
+      phone: info.phone.value,
+      birth: info.birth.value,
+      address: info.address.value,
+      sex: info.gender.value,
+      firstName: info.firstName.value,
+      lastName: info.lastName.value
+    }).then((res) => {
+      localStorageService.set('_tempUser', { email: info.email.value, password: confirmPassword });
+      message.success("Check mail đê bạn ơi");
+      console.log(res.data);
+      setOpen(true);
+    setLoading(false);
+      return;
+    }).catch((err) => {
+      if (err.response.data.emailError === "Email is already in use." || err.response.data.emailError === "Phone number is already in use.") {
+        message.error(err.response.data.emailError + " Please login");
+        return navigate("/login");
       }
-    } catch (error) {
-      console.log(error);
-    }
+      console.log(err);
+    });
 
     // Handle form submission logic here
     setErrorMessage('');
@@ -76,30 +91,17 @@ export default function RegisterForm() {
 
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  // const handleClick = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //      console.log(values)
-  //   dispatch(loginUser(values))
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
 
-
-  // };
 
   useEffect(() => {
     if (isLoggedIn) {
       const role = localStorageService.get('USER').roles[0]
-      if(role === "CUSTOMER"){
-      navigate("/");
-      }else{
+      if (role === "CUSTOMER") {
+        navigate("/");
+      } else {
         navigate("/dashboard/app")
       }
     }
-    // else{
-    //   navigate("/login")
-    // }
   }, [isLoggedIn, navigate]);
 
   // const handleClick = () => {
@@ -107,73 +109,142 @@ export default function RegisterForm() {
   // };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <TextField
-        label="Full Name"
-        variant="outlined"
-        placeholder="Nguyễn Văn A"
-        value={fullName}
-        onChange={handleFullNameChange}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Phone Number"
-        variant="outlined"
-        value={phoneNumber}
-        placeholder="0394 XXX XXX"
-        onChange={handlePhoneNumberChange}
-        fullWidth
-        required
-        margin="normal"
-      />
-      <TextField
-        label="Password"
-        variant="outlined"
-        placeholder="password123"
-        type={showPassword ? 'text' : 'password'}
-        value={password}
-        onChange={handlePasswordChange}
-        fullWidth
-        required
-        margin="normal"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <TextField
-        label="Confirm Password"
-        variant="outlined"
-        placeholder="password123"
-        type={showPassword ? 'text' : 'password'}
-        value={confirmPassword}
-        onChange={handleConfirmPasswordChange}
-        fullWidth
-        required
-        margin="normal"
-        error={errorMessage !== ''}
-        helperText={errorMessage}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+    <>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" sx={{ mt: 3 }}>
-        Sign Up
-      </LoadingButton>
-    </form>
+      <form onSubmit={handleSubmit}>
+
+        <div>
+          <TextField
+            label="First Name"
+            variant="outlined"
+            placeholder="Mẫn Thị"
+            name='firstName'
+            required
+          />
+          <TextField
+            label="Last Name"
+            variant="outlined"
+            placeholder="Nhi"
+            name='lastName'
+            required
+          />
+        </div>
+        <TextField
+          label="Phone Number"
+          variant="outlined"
+          name='phone'
+          type="number"
+          placeholder="0394 XXX XXX"
+          fullWidth
+          required
+        />
+        <TextField
+          label="Email"
+          variant="outlined"
+          name='email'
+          type="email"
+          placeholder="XXX@gmail.com"
+          fullWidth
+          required
+        />
+        <TextField
+          label="Address"
+          variant="outlined"
+          name='address'
+          type="text"
+          placeholder="61 đường Tình Duyên,..."
+          fullWidth
+          required
+        />
+        <Form.Item
+          className="mb-4"
+          name="birth"
+          wrapperCol={{ sm: 24 }}
+          style={{ width: '100%', marginRight: '1rem' }}
+        >
+          <DatePicker className="datepicker-register w-full " format={'YYYY-MM-DD'} />
+        </Form.Item>
+
+        <FormControl>
+          <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="gender"
+          >
+            <FormControlLabel value="Female" control={<Radio />} label="Female" />
+            <FormControlLabel value="Male" control={<Radio />} label="Male" />
+            <FormControlLabel value="Other" control={<Radio />} label="Other" />
+
+          </RadioGroup>
+        </FormControl>
+
+        <TextField
+          label="Password"
+          variant="outlined"
+          placeholder="password123"
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={handlePasswordChange}
+          fullWidth
+          required
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          label="Confirm Password"
+          variant="outlined"
+          placeholder="password123"
+          type={showPassword ? 'text' : 'password'}
+          value={confirmPassword}
+          onChange={handleConfirmPasswordChange}
+          fullWidth
+          required
+          error={errorMessage !== ''}
+          helperText={errorMessage}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        <LoadingButton loading={loading} fullWidth size="large" type="submit" variant="contained" sx={{ mt: 3 }}>
+          Sign Up
+        </LoadingButton>
+      </form>
+
+
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Let Google help apps determine location. This means sending anonymous
+            location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Agree</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

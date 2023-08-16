@@ -19,6 +19,7 @@ import BillingAndAddress from "../../sections/@client/checkout/BillingAndAddress
 import Cart from "../../sections/@client/checkout/Cart";
 import Payment from "../../sections/@client/checkout/Payment";
 import OrderSuccessDialog from "../../sections/@client/checkout/OrderSuccessDialog";
+import { useNavigate } from "react-router-dom";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -102,12 +103,14 @@ QontoStepIcon.propTypes = {
 const steps = ["Cart", "Billing and Address", "Payment"];
 
 const Checkout = () => {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
 
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
+    navigate('/order')
   };
 
   const handleNext = () => {

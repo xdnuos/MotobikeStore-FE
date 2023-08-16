@@ -152,7 +152,7 @@ function Payment({ handleBack, handleNext, activeStep }) {
           />
 
           <div style={{ marginTop: "24px" }}>
-            {/* Order Summary  */}
+            {/*  Order Summary  */}
             <OrderSummary activeStep={activeStep} totalPrice={totalPrice} />
           </div>
           {/* --------------------------------------- BUTTON --------------------------------------------------- */}
