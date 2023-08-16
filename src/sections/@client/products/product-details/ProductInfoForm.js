@@ -111,28 +111,36 @@ function ProductInfoForm({ product, price }) {
           <Typography variant="subtitle1">Category: </Typography>
           <Typography variant="body1">
             {product?.categories.map((category, index) => (
-              <span key={index}>{category} &nbsp;• &nbsp;</span>
+              <span key={index}>
+                {category}{" "}
+                {index !== product.tags.length - 1 && <>&nbsp;•&nbsp;&nbsp;</>}
+              </span>
             ))}
           </Typography>
         </Stack>
       </Grid>
 
       {/* Manufacturer */}
-      {product?.manufacturer !== "" ? (
+      {product?.manufacturer !== null ? (
         <Grid item xs={12}>
           <Stack direction={"row"} spacing={1}>
             <Typography variant="subtitle1">Manufacturer:</Typography>
             <Typography variant="body1">{product?.manufacturer} </Typography>
           </Stack>
         </Grid>
-      ) : null}
+      ) : (
+        ""
+      )}
 
       <Grid item xs={12}>
         <Stack direction={"row"} spacing={1}>
           <Typography variant="subtitle1">Tag: </Typography>
           <Typography variant="body1">
-            {product?.tags.map((category, index) => (
-              <span key={index}>{category} &nbsp;• &nbsp;</span>
+            {product?.tags.map((tag, index) => (
+              <span key={index}>
+                {tag}{" "}
+                {index !== product.tags.length - 1 && <>&nbsp;•&nbsp;&nbsp;</>}
+              </span>
             ))}
           </Typography>
         </Stack>
