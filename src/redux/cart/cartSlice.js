@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { cartService } from "../../services/cartService";
+import { message } from "antd";
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async (userID, { rejectWithValue }) => {
     try {
       const items = await cartService.getAllCart(userID);
-      return items;
+      return items.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -16,25 +17,28 @@ export const fetchCartItems = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (AddToCartRequest) => {
-    await cartService.addToCart(AddToCartRequest).then((res) => {
-      console.log("ppppppppppppp", res.data?.cart);
-      return res.data;
-    }).catch((err) => { return err.response.data.message });
-
+    try {
+      const response = await cartService.addToCart(AddToCartRequest);
+      console.log(response.data);
+      message.success(response.data.message);
+      return response.data;
+    } catch (error) {
+      message.error(error.response.data);
+      throw new Error(error);
+    }
   }
 );
 
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
-  async (idCartItem) => {
-
+  async (request) => {
     try {
-      const response = await cartService.deleteToCart(idCartItem);
-       return response.data?.cart;
+      const response = await cartService.deleteToCart(request);
+      message.success(response.data.message);
+      return response.data;
     } catch (error) {
-
+      message.error(error.response.data);
       throw new Error(error);
-
     }
   }
 );
@@ -44,8 +48,10 @@ export const updateCart = createAsyncThunk(
   async (updateCartRequest) => {
     try {
       const response = await cartService.updateToCart(updateCartRequest);
+      message.success(response.data.message);
       return response.data;
     } catch (error) {
+      message.error(error.response.data);
       throw new Error(error);
     }
   }
@@ -88,7 +94,7 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(addToCart.fulfilled, (state, { payload }) => {
-        state.cart = payload?.cart;
+        state.cart = payload.cart;
         state.loading = false;
         state.emptyCart = state.cart?.length === 0;
       })
@@ -101,9 +107,9 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(removeFromCart.fulfilled, (state, { payload }) => {
-       state.cart = payload;
+        state.cart = payload.cart;
         state.loading = false;
-        state.emptyCart = payload?.length === 0;
+        state.emptyCart = state.cart?.length === 0;
       })
       .addCase(removeFromCart.rejected, (state, { error }) => {
         state.loading = false;

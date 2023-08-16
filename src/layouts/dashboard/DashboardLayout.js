@@ -66,7 +66,6 @@ function DashboardLayout() {
     (state) => state.products.productList.getProducts
   );
   const loadCart = useSelector((state) => state.cart.loading);
-  const loadOk = useSelector((state) => state.cart.loadOk);
   console.log("loading cart", loadCart);
   useEffect(() => {
     dispatch(getAllProductAdmin());
@@ -78,11 +77,7 @@ function DashboardLayout() {
       console.log("Get lai product");
       dispatch(getAllProductAdmin());
     }
-    // if (!loadOk) {
-    //   console.log("Get lai cart");
-    //   dispatch(fetchCartItems(userID));
-    // }
-  }, [dispatch, getProducts, loadOk, userID]);
+  }, [dispatch, getProducts, userID]);
 
   if (
     loadingProducts ||
