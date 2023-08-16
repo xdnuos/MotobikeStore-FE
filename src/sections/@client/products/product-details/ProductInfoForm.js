@@ -121,14 +121,16 @@ function ProductInfoForm({ product, price }) {
       </Grid>
 
       {/* Manufacturer */}
-      {product?.manufacturer !== "" ? (
+      {product?.manufacturer !== null ? (
         <Grid item xs={12}>
           <Stack direction={"row"} spacing={1}>
             <Typography variant="subtitle1">Manufacturer:</Typography>
             <Typography variant="body1">{product?.manufacturer} </Typography>
           </Stack>
         </Grid>
-      ) : null}
+      ) : (
+        ""
+      )}
 
       <Grid item xs={12}>
         <Stack direction={"row"} spacing={1}>
