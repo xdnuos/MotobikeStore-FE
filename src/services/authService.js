@@ -4,18 +4,15 @@ import { BASE_URL } from "../utils/baseURL";
 
 export let authService = {
   register: async (values) => {
-    try {
-      const response = await axios.post(
-        BASE_URL + "/api/v1/auth/register-customer",
-        values
-      );
-      message.success("Register Success");
-      return response.data;
-    } catch (error) {
-      message.error("Register Error");
-      console.log(error);
-    }
+    return await axios.post(
+      BASE_URL + "/api/v1/registration",
+      values
+    );
   },
+  active: async (token) => {
+    return await axios.get(BASE_URL + `/api/v1/registration/activate/${token}`);
+  },
+
 
   registerStore: async (values) => {
     try {

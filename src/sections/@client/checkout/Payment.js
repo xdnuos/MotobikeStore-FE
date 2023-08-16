@@ -10,6 +10,9 @@ import {
   Stack,
   styled,
   FormControlLabel,
+  Collapse,
+  Alert,
+  IconButton,
 } from "@mui/material";
 import Iconify from "../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
@@ -52,13 +55,20 @@ function Payment({ handleBack, handleNext, activeStep }) {
   const idAddress = useSelector((state) => state.order.idAddress);
   const listIdCart = useSelector((state) => state.order.idCartItems);
 
+  const [open, setOpen] = useState(false);
   const [paymentOption, setPaymentOption] = useState("");
 
   const handleChange = (event) => {
     setPaymentOption(event.target.value);
+    setOpen(false);
   };
+  
 
   const handleComplete = async () => {
+    if (paymentOption === "") {
+      setOpen(true);
+      return;
+    }
     await orderService
       .createOrderByCustomer({
         cartProductIDs: listIdCart,
@@ -88,6 +98,26 @@ function Payment({ handleBack, handleNext, activeStep }) {
             <CardContent>
               <RadioGroup value={paymentOption} onChange={handleChange}>
                 <Stack spacing={2}>
+                  <Collapse in={open}>
+                    <Alert
+                     severity="warning"
+                      action={
+                        <IconButton
+                          aria-label="close"
+                          color="inherit"
+                          size="small"
+                          onClick={() => {
+                            setOpen(false);
+                          }}
+                        >
+                          <Iconify icon="eva:close-fill" />
+                        </IconButton>
+                      }
+                      sx={{border: "1px solid #d32f2f"}}
+                    >
+                     Please choose a payment method !!!
+                    </Alert>
+                  </Collapse>
                   {PAYMENTOPTION.map((item) => {
                     return (
                       <StyledFormControlLabel
@@ -122,7 +152,7 @@ function Payment({ handleBack, handleNext, activeStep }) {
           />
 
           <div style={{ marginTop: "24px" }}>
-            {/* Order Summary  */}
+            {/*  Order Summary  */}
             <OrderSummary activeStep={activeStep} totalPrice={totalPrice} />
           </div>
           {/* --------------------------------------- BUTTON --------------------------------------------------- */}

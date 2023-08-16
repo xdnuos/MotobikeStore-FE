@@ -57,11 +57,11 @@ const OrderSuccessDialog = ({ open, handleClose }) => {
                 <Typography>All the best.</Typography>
 
                 <Stack direction={'row'} spacing={2} sx={{ width: '100%', pt: 4,px:1, borderTop: '1px dashed lightgrey' }}>
-                    <Button fullWidth variant="outlined" sx={{ color: '#000', py: '8px' }} onClick={handleClose} to="/order" component={RouterLink}>
+                    <Button fullWidth variant="outlined" sx={{ color: '#000', py: '8px' }} onClick={handleClose} component={RouterLink}>
                         <Iconify icon='ic:outline-keyboard-arrow-left' mr={1} />
                         Continue Shopping
                     </Button>
-                    <StyledButtonGreen onClick={handleClose} to="/order" component={RouterLink}>
+                    <StyledButtonGreen onClick={handleClose} component={RouterLink}>
                         <Iconify icon='ant-design:file-pdf-filled' mr={1} />
                         Download As PDF
                     </StyledButtonGreen>
