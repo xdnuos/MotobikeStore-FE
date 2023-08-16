@@ -45,6 +45,7 @@ import { UserListToolbar } from "../../../sections/@dashboard/user";
 import { useSelector } from "react-redux";
 import { orderService } from "src/services/orderService";
 import { localStorageService } from "src/services/localStorageService";
+import { convertStringToDateTime, getComparator } from "src/helper/table";
 
 message.config({
   top: 100,
@@ -54,25 +55,6 @@ message.config({
   prefixCls: "my-message",
 });
 // ----------------------------------------------------------------------
-function convertStringToDateTime(dateTimeString) {
-  return moment(dateTimeString).format("HH:mm:ss DD/MM/YYYY");
-}
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
 function applySortFilter(array, comparator, query) {
   if (array != null) {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -189,7 +171,8 @@ export default function OrderStorePage() {
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [dialogOpen, setDialogOpen] = useState(false);
-
+  const [open, setOpen] = useState(null);
+  const [orderStatus, setOrderStatus] = useState(null);
   useEffect(() => {
     getAllOrder();
   }, []);
@@ -217,20 +200,7 @@ export default function OrderStorePage() {
         });
     });
   };
-  const getAllOrderByStaff = async (staffID) => {
-    return new Promise((resolve, reject) => {
-      orderService
-        .getOrdersByStaff(staffID)
-        .then((response) => {
-          setOrders(response.sort(compareByCreatedAt));
-          console.log("response", response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
+
   const confirmOrder = async () => {
     return new Promise((resolve, reject) => {
       orderService
@@ -252,7 +222,12 @@ export default function OrderStorePage() {
         });
     });
   };
-
+  // ------------------------------------------------------------------------------------------------
+  const handleOpenMenu = (event, id, status) => {
+    setSelectedOrderID(id);
+    setOrderStatus(status);
+    setOpen(event.currentTarget);
+  };
   const handleOpenDialog = (orderID) => {
     setSelectedOrderID(orderID);
     setDialogOpen(true);
@@ -455,7 +430,9 @@ export default function OrderStorePage() {
                                 <IconButton
                                   size="large"
                                   color="inherit"
-                                  onClick={() => handleOpenDialog(orderID)}
+                                  onClick={(event) =>
+                                    handleOpenMenu(event, orderID, orderStatus)
+                                  }
                                 >
                                   <Iconify icon={"line-md:confirm-circle"} />
                                 </IconButton>
@@ -527,6 +504,7 @@ export default function OrderStorePage() {
           />
         </Card>
       </Container>
+
       <ConfirmationDialog
         open={dialogOpen}
         onClose={handleCloseDialog}

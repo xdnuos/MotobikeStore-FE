@@ -532,3 +532,17 @@ function UserDetail() {
 }
 
 export default UserDetail;
+// const getAllOrderByStaff = async (staffID) => {
+//   return new Promise((resolve, reject) => {
+//     orderService
+//       .getOrdersByStaff(staffID)
+//       .then((response) => {
+//         setOrders(response.sort(compareByCreatedAt));
+//         console.log("response", response);
+//         resolve();
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   });
+// };
