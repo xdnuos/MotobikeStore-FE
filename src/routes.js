@@ -17,7 +17,6 @@ import AdminProductDetails from "./pages/admin/buy/AdminProductDetails";
 import ProductsListPage from "./pages/client/ProductsListPage";
 import Checkout from "./pages/client/CheckoutPage";
 import AdminCheckout from "./pages/admin/buy/CheckoutPage";
-import AddressForm from "./sections/@client/products/checkout/AddressForm";
 import CreateStore from "./pages/admin/store/CreateStore";
 import StorePage from "./pages/admin/store/StorePage";
 import AdminOrder from "./pages/admin/buy/AdminOrder";
@@ -67,7 +66,6 @@ export default function Router() {
         { path: "blog", element: <BlogPage /> },
         { path: "list-products/:id", element: <ProductsListPage /> },
         { path: "checkout", element: <Checkout /> },
-        { path: "address", element: <AddressForm /> },
         { path: "order", element: <OrderPage /> },
       ],
     },

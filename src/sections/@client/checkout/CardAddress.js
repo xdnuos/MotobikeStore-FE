@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Card, CardContent, Grid, IconButton, MenuItem, Popover, Stack, Typography } from '@mui/material'
-import { StyledButtonGreenOutlined } from '../../../../components/custom/CustomButton'
-import Iconify from '../../../../components/iconify/Iconify'
-import Label from '../../../../components/label/Label'
+import { StyledButtonGreenOutlined } from '../../../components/custom/CustomButton'
+import Iconify from '../../../components/iconify/Iconify'
+import Label from '../../../components/label/Label'
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteAddress } from '../../../../redux/address/AddressSlice'
-import { setAddress, setUser } from '../../../../redux/order/OrderSlice'
+import { deleteAddress } from '../../../redux/address/AddressSlice'
+import { setAddress, setUser } from '../../../redux/order/OrderSlice'
 
 function CardAddress({ handleNext, address }) {
   const dispatch = useDispatch();

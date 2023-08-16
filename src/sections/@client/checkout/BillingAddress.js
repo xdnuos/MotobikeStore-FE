@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Card, CardContent, CardHeader, Stack, Typography, Button } from '@mui/material'
-import Iconify from '../../../../components/iconify/Iconify'
+import Iconify from '../../../components/iconify/Iconify'
 
 
 BillingAddress.propTypes = {

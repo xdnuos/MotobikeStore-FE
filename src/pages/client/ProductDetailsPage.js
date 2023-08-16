@@ -230,7 +230,7 @@ function ProductDetailsPage() {
               <Stack direction="row" spacing={2}>
                 {product?.stock <= 0 ? (
                   // Hiện nút "Out of Stock" khi sản phẩm hết hàng
-                  <StyledButtonRed>Out of Stock</StyledButtonRed>
+                  <StyledButtonRed sx={{ color: "#fff" }}>Out of Stock</StyledButtonRed>
                 ) : (
                   // Hiện nút "Add To Cart" và "Buy Now" khi sản phẩm còn hàng
                   <>

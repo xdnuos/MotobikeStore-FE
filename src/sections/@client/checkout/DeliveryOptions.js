@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 
 import {  FormControlLabel, Grid, Radio, RadioGroup, Typography, styled } from '@mui/material';
-import { CustomRadio } from '../../../../components/custom/CustomRadio';
+import { CustomRadio } from '../../../components/custom/CustomRadio';
 
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme, selected }) => ({

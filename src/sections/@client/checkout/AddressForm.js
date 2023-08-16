@@ -16,8 +16,8 @@ import {
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { LoadingButton } from '@mui/lab';
-import { CreateAddress } from '../../../../redux/address/AddressSlice';
-import Iconify from '../../../../components/iconify/Iconify';
+import { CreateAddress } from '../../../redux/address/AddressSlice';
+import Iconify from '../../../components/iconify/Iconify';
 
 const PROVINCES_API_URL = "https://provinces.open-api.vn/api";
 
