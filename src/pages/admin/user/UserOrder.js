@@ -460,7 +460,7 @@ function UserDetail() {
                           </TableCell>
                           <TableCell align="center">{total}</TableCell>
                           <TableCell align="center">
-                            {staffUsers.lastName}
+                            {staffUsers?.lastName}
                           </TableCell>
 
                           <TableCell align="right">

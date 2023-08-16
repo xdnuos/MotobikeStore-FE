@@ -113,7 +113,9 @@ function ProductInfoForm({ product, price }) {
             {product?.categories.map((category, index) => (
               <span key={index}>
                 {category}{" "}
-                {index !== product.tags.length - 1 && <>&nbsp;•&nbsp;&nbsp;</>}
+                {index !== product.categories.length - 1 && (
+                  <>&nbsp;•&nbsp;&nbsp;</>
+                )}
               </span>
             ))}
           </Typography>

@@ -5,7 +5,7 @@ export let categoryService = {
   getAllCategories: async () => {
     try {
       const response = await axios.get(BASE_URL + `/api/v1/categories/get`);
-      return response.data;
+      return response;
     } catch (error) {
       console.log(error);
     }

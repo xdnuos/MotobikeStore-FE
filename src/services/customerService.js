@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/baseURL";
+import { message } from "antd";
 
 export let customersService = {
   getInfo: async (idAccount) => {
@@ -75,6 +76,40 @@ export let customersService = {
       return response.data;
     } catch (error) {
       console.log(error);
+    }
+  },
+  changeState: async (userID) => {
+    try {
+      console.log("reset pass", userID);
+      const response = await axios.put(
+        BASE_URL + `/api/v1/customers/admin/changeState/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  resetPass: async (userID) => {
+    try {
+      console.log("reset pass", userID);
+      const response = await axios.put(
+        BASE_URL + `/api/v1/customers/admin/resetPassword/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
   },
 };
