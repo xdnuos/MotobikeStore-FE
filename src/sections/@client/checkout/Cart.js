@@ -29,25 +29,25 @@ import {
   Alert,
 } from "@mui/material";
 
-import Iconify from "../../../../components/iconify/Iconify";
+import Iconify from "../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
 import OrderSummary from "./OrderSummary";
 // components
-import { StyledButtonGreen } from "../../../../components/custom/CustomButton";
-import Scrollbar from "../../../../components/scrollbar/Scrollbar";
+import { StyledButtonGreen } from "../../../components/custom/CustomButton";
+import Scrollbar from "../../../components/scrollbar/Scrollbar";
 import CartListHead from "./CartListHead";
-import { Quantity } from "../product-details";
-import SvgColor from "../../../../components/svg-color/SvgColor";
+import { Quantity } from "../products/product-details";
+import SvgColor from "../../../components/svg-color/SvgColor";
 import {
   fetchCartItems,
   removeFromCart,
   updateCart,
-} from "../../../../redux/cart/cartSlice";
+} from "../../../redux/cart/cartSlice";
 
-import { getProductById } from "../../../../redux/products/ProductDetail";
-import { productService } from "../../../../services/productService";
-import { cartService } from "../../../../services/cartService";
-import { addToOrder } from "../../../../redux/order/OrderSlice";
+import { getProductById } from "../../../redux/products/ProductDetail";
+import { productService } from "../../../services/productService";
+import { cartService } from "../../../services/cartService";
+import { addToOrder } from "../../../redux/order/OrderSlice";
 
 const TABLE_HEAD = [
   { id: "price", label: "Giá thành", alignRight: false },

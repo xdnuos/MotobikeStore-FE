@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Dialog, Button, useMediaQuery, useTheme, Typography, Box, Stack, Link } from '@mui/material';
-import { StyledButtonGreen } from '../../../../components/custom/CustomButton';
-import Iconify from '../../../../components/iconify/Iconify';
+import { StyledButtonGreen } from '../../../components/custom/CustomButton';
+import Iconify from '../../../components/iconify/Iconify';
 
 
 const OrderSuccessDialog = ({ open, handleClose }) => {

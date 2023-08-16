@@ -11,14 +11,14 @@ import {
   styled,
   FormControlLabel,
 } from "@mui/material";
-import Iconify from "../../../../components/iconify/Iconify";
+import Iconify from "../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
 import BillingAddress from "./BillingAddress";
 import OrderSummary from "./OrderSummary";
-import { StyledButtonGreen } from "../../../../components/custom/CustomButton";
+import { StyledButtonGreen } from "../../../components/custom/CustomButton";
 import { useSelector } from "react-redux";
-import { orderService } from "../../../../services/orderService";
-import { CustomRadio } from "../../../../components/custom/CustomRadio";
+import { orderService } from "../../../services/orderService";
+import { CustomRadio } from "../../../components/custom/CustomRadio";
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ selected }) => ({
   border: "1px solid #919eab3d",
@@ -34,7 +34,6 @@ const PAYMENTOPTION = [
   { lable: "Cash on Checkout/Delivery", value: "COD" },
   { lable: "MoMo Wallet", value: "MOMO" },
   { lable: "Credit / Debit Card", value: "ATM" },
-  { lable: "LE VAL LIVE", value: "LIVE" },
 ];
 
 Payment.propTypes = {

@@ -13,24 +13,24 @@ import {
   Popover,
   IconButton,
 } from "@mui/material";
-import Iconify from "../../../../components/iconify/Iconify";
+import Iconify from "../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
 import {
   StyledButtonGreen,
   StyledButtonGreenOutlined,
   StyledButtonGreenText,
-} from "../../../../components/custom/CustomButton";
+} from "../../../components/custom/CustomButton";
 
-import Label from "../../../../components/label/Label";
+import Label from "../../../components/label/Label";
 import OrderSummary from "./OrderSummary";
 import AddressForm from "./AddressForm";
 import { useDispatch, useSelector } from "react-redux";
-import { customersService } from "../../../../services/customerService";
+import { customersService } from "../../../services/customerService";
 import { Input, Select } from "antd";
 import { useEffect } from "react";
 import axios from "axios";
 import CardAddress from "./CardAddress";
-import { fetchAddressItems } from "../../../../redux/address/AddressSlice";
+import { fetchAddressItems } from "../../../redux/address/AddressSlice";
 
 BillingAndAddress.propTypes = {
   handleBack: PropTypes.func,

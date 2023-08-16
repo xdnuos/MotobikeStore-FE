@@ -15,10 +15,10 @@ import {
 import Iconify from "../../components/iconify/Iconify";
 import PropTypes from "prop-types";
 import { Helmet } from "react-helmet-async";
-import BillingAndAddress from "../../sections/@client/products/checkout/BillingAndAddress";
-import Cart from "../../sections/@client/products/checkout/Cart";
-import Payment from "../../sections/@client/products/checkout/Payment";
-import OrderSuccessDialog from "src/sections/@client/products/checkout/OrderSuccessDialog";
+import BillingAndAddress from "../../sections/@client/checkout/BillingAndAddress";
+import Cart from "../../sections/@client/checkout/Cart";
+import Payment from "../../sections/@client/checkout/Payment";
+import OrderSuccessDialog from "../../sections/@client/checkout/OrderSuccessDialog";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
