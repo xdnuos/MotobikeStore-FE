@@ -19,6 +19,12 @@ import {
   styled,
   ListItem,
   ListItemText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 
 // sections
@@ -41,47 +47,10 @@ import {
 import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
 import { getProductById } from "../../redux/products/ProductDetail";
 import { addToCart } from "../../redux/cart/cartSlice";
+import Label from "../../components/label/Label";
 
-const StyledListItem = styled(ListItem)(({ theme, selected }) => ({
-  border: `1px solid ${selected ? theme.palette.primary.main : "gray"}`,
-  borderRadius: 5,
-  width: "30%",
-  padding: "0 22px 0 15px",
-  backgroundColor: selected ? theme.palette.primary.main : "transparent",
-  color: selected ? "text.secondary" : "inherit",
-  "&:hover": {
-    backgroundColor: selected ? theme.palette.primary.main : "#f5f5f5",
-  },
-  "& .MuiListItemText-primary": {
-    fontWeight: selected ? "bold" : "normal",
-  },
-}));
 
-const StyledTick = styled(Typography)(({ theme }) => ({
-  display: "inline-block",
-  width: 0,
-  height: 0,
-  top: 0,
-  right: 0,
-  borderRadius: "0 10% 0 100%",
-  borderBottom: `28px solid transparent`,
-  borderRight: `28px solid ${theme.palette.primary.main}`,
-  position: "absolute",
-
-  transformOrigin: "100% 0%",
-  "&::before": {
-    content: '""',
-    display: "block",
-    width: 5,
-    height: 10,
-    borderBottom: `2px solid ${theme.palette.background.default}`,
-    borderRight: `2px solid ${theme.palette.background.default}`,
-    transform: "rotate(45deg)",
-    transformOrigin: "180% 260%",
-  },
-}));
-
-function ProductDetails() {
+function ProductDetailsPage() {
   const { id } = useParams();
 
   // const [aaa,setAaa] = useState(1);
@@ -89,46 +58,22 @@ function ProductDetails() {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products.productDetail.product);
   const loading = useSelector((state) => state.products.productDetail.loading);
-  const idAcc = useSelector((state) => state.auth.idAccount);
+  const idAccount = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const [selectedIndex, setSelectedIndex] = useState(
-    product?.units?.length - 1
-  );
+ 
   const [unit, setUnit] = useState(product?.unit);
   const [showAlert, setShowAlert] = useState(false);
   const [showPrice, setShowPrice] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     dispatch(getProductById(id));
-    console.log("selectedIndex", selectedIndex);
-  }, [dispatch, id]);
-  // console.log("product", product);
+    console.log("product", product);
+  }, [dispatch, id,idAccount]);
 
-  const [cartRequest, setCartRequest] = useState({
-    idAccount: idAcc,
-    idProduct: id,
-    idUnit: null,
-    price: null,
-    quantity: 1,
-  });
 
-  const { idAccount, idProduct, idUnit, price, quantity } = cartRequest;
 
-  const handleListItemClick = (event, selected, index, unit, id) => {
-    setSelectedIndex(selected);
-    setUnit(unit);
-    setShowAlert(false);
-    setCartRequest({
-      ...cartRequest,
-      idUnit: id,
-      price: product?.units[index].specifications * product?.price,
-      quantity: 1,
-    });
-    setShowPrice(product?.units[index].specifications * product?.price);
-
-    // console.log("selectedIndex----->", cartRequest);
-  };
 
   // const [open, setOpen] = useState(false);
   const [state, setState] = useState({
@@ -139,29 +84,31 @@ function ProductDetails() {
   const { vertical, horizontal, open } = state;
 
   const handleClickAdd = async () => {
-    if (isLoggedIn) {
-      if (isNaN(selectedIndex)) {
-        setShowAlert(true);
-      } else {
-        await dispatch(addToCart(cartRequest));
-        setState({ ...state, open: true });
-        console.log("cartRequestzzzzzzzzzzzzzzzzzz", cartRequest);
-      }
-    } else {
-      setState({ ...state, open: true });
-    }
+    // if (isLoggedIn) {
+    //   if (isNaN(selectedIndex)) {
+    //     setShowAlert(true);
+    //   } else {
+    //     await dispatch(addToCart(cartRequest));
+    //     setState({ ...state, open: true });
+    //     console.log("cartRequestzzzzzzzzzzzzzzzzzz", cartRequest);
+    //   }
+    // } else {
+    //   setState({ ...state, open: true });
+    // }
+    console.log("showPrice===> ", showPrice);
   };
 
   const handleClickBuyNow = async () => {
     if (isLoggedIn) {
-      if (isNaN(selectedIndex)) {
-        setShowAlert(true);
-      } else {
-        await dispatch(addToCart(cartRequest));
+      await  dispatch(addToCart({
+          productID: id,
+          quantity: quantity,
+          userID: idAccount
+        }));
         setState({ ...state, open: true });
         navigate("/checkout");
-        console.log("cartRequest", cartRequest);
-      }
+      
+      // console.log("is login = true",quantity);
     } else {
       setState({ ...state, open: true });
     }
@@ -173,50 +120,19 @@ function ProductDetails() {
     setState({ ...state, open: false });
   };
 
+
+  // ========== Quantity ========== //
+  const totalPrice = product?.price * quantity;
   const handleIncrement = () => {
-    // setCartRequest({
-    //     ...cartRequest,
-    //     quantity: quantity + 1
-    // })
-
-    if (quantity === 2) {
-      setCartRequest({
-        ...cartRequest,
-
-        price: showPrice * 3,
-        quantity: quantity + 1,
-      });
-
-      // setTotalPrice(showPrice * 3);
-    } else {
-      setCartRequest({
-        ...cartRequest,
-        price: showPrice * quantity + showPrice,
-        quantity: quantity + 1,
-      });
-      // setTotalPrice();
-    }
-
-    console.log("showPrice ===========>", showPrice);
+     setQuantity( quantity + 1);
   };
 
   const handleDecrement = () => {
     if (quantity > 1) {
-      // setCartRequest({
-      //     ...cartRequest,
-      //
-      // });
-
-      console.log("handleDecrement===========>", quantity);
-
-      setCartRequest({
-        ...cartRequest,
-        price: showPrice * quantity - showPrice,
-        quantity: quantity - 1,
-      });
+      setQuantity( quantity - 1);
     }
-    // setTotalPrice(showPrice * quantity - showPrice);
   };
+  
 
   if (loading) {
     return <SkeletonLoading />;
@@ -225,7 +141,7 @@ function ProductDetails() {
   return (
     <>
       <Helmet>
-        <title>Chi tiết sản phẩm</title>
+        <title>Product details</title>
       </Helmet>
 
       <Container>
@@ -236,24 +152,21 @@ function ProductDetails() {
               separator={<StyledSeparator>&nbsp;•&nbsp;</StyledSeparator>}
               aria-label="breadcrumb"
             >
-              <Link underline="hover" color="text.primary" href="/home">
+              <Link underline="hover" color="text.primary" href="/">
                 Trang chủ
               </Link>
-              <Link underline="hover" color="text.primary" href="#">
-                Category1
-              </Link>
-              <Link underline="hover" color="text.primary" href="#">
-                Category2
-              </Link>
-              {/* {loading ? <SkeletonLoading/> : */}
-              <Typography color="inherit">{product?.slug}</Typography>
-              {/* } */}
+              {product?.categories.map((category, index) => (
+
+                <Link key={index} underline="hover" color="text.primary" href="#">
+                  {category}
+                </Link>
+              ))}
             </Breadcrumbs>
           </Grid>
 
           {/* hình ảnh sản phẩm */}
           <Grid item xs={12} md={6} p={"16px 32px"}>
-            <ProductImg data={product?.assets} />
+            <ProductImg data={product?.images} />
           </Grid>
           {/* thông tin sp */}
           <Grid item xs={12} md={6} p={"16px 32px 16px 40px"}>
@@ -261,56 +174,19 @@ function ProductDetails() {
               {/* thông tin tên , giá ,... */}
               <ProductInfoForm
                 product={product}
-                price={showPrice}
-                unit={unit}
+                price={totalPrice}
               />
 
-              {/* option lựa đơn vị bán, số lượng */}
-
-              {/* đơn vị bán */}
-              <Grid container spacing={0}>
-                <Grid item xs={12} md={3}>
-                  <Typography variant="subtitle1">Đơn vị bán</Typography>
-                </Grid>
-
-                <Grid item xs={12} md={9}>
-                  {/* <OptionList data={product?.units} /> */}
-
-                  <List>
-                    <Stack
-                      direction="row"
-                      justifyContent="flex-end"
-                      alignItems="center"
-                      spacing={2}
-                    >
-                      {product?.units?.map((option) => (
-                        <StyledListItem
-                          key={option.rank}
-                          button
-                          selected={selectedIndex === option.rank}
-                          onClick={(event) =>
-                            handleListItemClick(
-                              event,
-                              option.rank,
-                              product?.units.length - 1 - option.rank,
-                              option.name,
-                              option.unitId
-                            )
-                          }
-                        >
-                          <ListItemText primary={option.name} />
-                          {selectedIndex === option.rank && <StyledTick />}
-                        </StyledListItem>
-                      ))}
-                    </Stack>
-                  </List>
-                </Grid>
+              {/* option lựa số lượng */}
+              <Grid item xs={12}>
+              <Label sx={{ fontSize: "14px" }} color={product?.stock > 0 ? "success" : "error"}>
+                {product?.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}
+              </Label>
               </Grid>
 
-              {/* Số lượng */}
               <Grid item xs={12}>
                 <Stack direction="row" justifyContent="space-between">
-                  <Typography variant="subtitle1"> Chọn số lượng </Typography>
+                  <Typography variant="subtitle1"> Quantity </Typography>
                   <Stack>
                     <Quantity
                       countNumber={quantity}
@@ -324,7 +200,7 @@ function ProductDetails() {
                       textAlign={"right"}
                     >
                       {" "}
-                      Có sẵn : {product?.quantity}{" "}
+                      Available : {product?.stock }{" "}
                     </Typography>
                   </Stack>
                 </Stack>
@@ -381,7 +257,7 @@ function ProductDetails() {
             py={3}
           >
             <Typography variant="h5" align="center" textTransform={"uppercase"}>
-              Biker shop cam kết
+              Motobike Store promises
             </Typography>
           </Grid>
           <Grid item xs={4} md={4}>
@@ -401,9 +277,9 @@ function ProductDetails() {
                   icon={"uiw:time"}
                 />
               </Stack>
-              <Typography variant="h6">Đổi trả trong 30 ngày</Typography>
+              <Typography variant="h6">100% Original</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-                kể từ ngày mua hàng
+              without editing, dissection
               </Typography>
             </Stack>
           </Grid>
@@ -425,9 +301,9 @@ function ProductDetails() {
                   icon={"bi:shield-fill-check"}
                 />
               </Stack>
-              <Typography variant="h6">Miễn phí 100%</Typography>
+              <Typography variant="h6">10 Day Replacement</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-                đổi thuốc
+              if the proposal is rejected
               </Typography>
             </Stack>
           </Grid>
@@ -448,9 +324,9 @@ function ProductDetails() {
                   icon={"material-symbols:local-shipping-rounded"}
                 />
               </Stack>
-              <Typography variant="h6">Miễn phí vận chuyển</Typography>
+              <Typography variant="h6">Year Warranty</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-                theo chính sách giao hàng
+              hungskr cuacoem thaooongannnnn
               </Typography>
             </Stack>
           </Grid>
@@ -468,7 +344,7 @@ function ProductDetails() {
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
-          autoHideDuration={3000}
+          // autoHideDuration={3000}
           onClose={handleClose}
         >
           {isLoggedIn ? (
@@ -481,9 +357,21 @@ function ProductDetails() {
             </Alert>
           )}
         </Snackbar>
+        <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add to Cart</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please login to add products to the cart.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Continue</Button>
+          <Button onClick={() => navigate("/login")}>Login</Button>
+        </DialogActions>
+      </Dialog>
       </Container>
     </>
   );
 }
 
-export default ProductDetails;
+export default ProductDetailsPage;

@@ -41,15 +41,16 @@ export default function CartWidget() {
   const location = useLocation();
 
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.cart.cartItems);
+  const cart = useSelector((state) => state.cart.cart);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const email = useSelector((state) => state.auth.email);
+  
+  const idAccount = useSelector((state) => state.auth.idAccount);
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(fetchCartItems(email));
+      dispatch(fetchCartItems(idAccount));
     }
-  }, [dispatch, isLoggedIn, email, location]);
+  }, [dispatch, isLoggedIn, idAccount, location]);
 
   return location.pathname === "/checkout" ? (
     <></>

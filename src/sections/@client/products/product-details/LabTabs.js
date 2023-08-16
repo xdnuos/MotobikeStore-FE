@@ -79,7 +79,9 @@ function TabDescriptionAndReview({ product }) {
           <Typography>{product?.fullDescription}</Typography>
         </TabPanel>
       )}
-      {selectedTab === 1 && <TabPanel>This is the review tab.</TabPanel>}
+      {selectedTab === 1 && <TabPanel>
+        
+        </TabPanel>}
     </Root>
   );
 }

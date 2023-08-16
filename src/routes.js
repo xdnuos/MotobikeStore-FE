@@ -11,10 +11,10 @@ import ProductsPage from "./pages/admin/product/ProductsPage";
 import DashboardAppPage from "./pages/admin/DashboardAppPage";
 import CreateProduct from "./pages/admin/product/CreateProduct";
 import EditProduct from "./pages/admin/product/EditProduct";
-import Home from "./pages/client/Home";
-import ProductDetails from "./pages/client/ProductDetails";
+import HomePage from "./pages/client/HomePage";
+import ProductDetailsPage from "./pages/client/ProductDetailsPage";
 import AdminProductDetails from "./pages/admin/buy/AdminProductDetails";
-import ProductsList from "./pages/client/ProductsListPage";
+import ProductsListPage from "./pages/client/ProductsListPage";
 import Checkout from "./pages/client/CheckoutPage";
 import AdminCheckout from "./pages/admin/buy/CheckoutPage";
 import AddressForm from "./sections/@client/products/checkout/AddressForm";
@@ -62,11 +62,10 @@ export default function Router() {
       path: "/",
       element: <ClientLayout />,
       children: [
-        { element: <Navigate to="/home" />, index: true },
-        { path: "home", element: <Home /> },
-        { path: "product-details/:id", element: <ProductDetails /> },
+        { element:  <HomePage />, index: true },
+        { path: "product-details/:id", element: <ProductDetailsPage /> },
         { path: "blog", element: <BlogPage /> },
-        { path: "list-products/:id", element: <ProductsList /> },
+        { path: "list-products/:id", element: <ProductsListPage /> },
         { path: "checkout", element: <Checkout /> },
         { path: "address", element: <AddressForm /> },
         { path: "order", element: <OrderPage /> },
@@ -80,7 +79,7 @@ export default function Router() {
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/home" />, index: true },
+        { element: <Navigate to="/" />, index: true },
         { path: "404", element: <Page404 /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],

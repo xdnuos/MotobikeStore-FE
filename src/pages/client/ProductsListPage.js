@@ -45,7 +45,7 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
   },
 }));
 
-function ProductsList() {
+function ProductsListPage() {
   const { id } = useParams();
 
   const theme = useTheme();
@@ -224,4 +224,4 @@ function ProductsList() {
   );
 }
 
-export default ProductsList;
+export default ProductsListPage;

@@ -35,18 +35,20 @@ import Scrollbar from "../../components/scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
 // mock
-import USERLIST from "../../_mock/user";
-import { storeService } from "../../services/storeService";
-import { customersService } from "src/services/customerService";
+// import USERLIST from "../../_mock/user";
+// import { storeService } from "../../services/storeService";
+import { orderService } from "../../services/orderService";
 import { useSelector } from "react-redux";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "name", label: "Quantity Ordered", alignRight: false },
-  { id: "address", label: "Address", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
-  { id: "total", label: "Total Price", alignRight: false },
+  { id: "" },
+  { id: "1", label: "Quantity Ordered", alignRight: false },
+  { id: "2", label: "Name Receiver", alignRight: false },
+  { id: "3", label: "Payment methods", alignRight: false },
+  { id: "4", label: "Status", alignRight: false },
+  { id: "5", label: "Total Price", alignRight: false },
   { id: "" },
 ];
 
@@ -88,24 +90,17 @@ export default function OrderPage() {
   const [orders, setOrders] = useState([]);
 
   const idAccount = useSelector((state) => state.auth.idAccount);
-  const getAllOrder = async (idAcc) => {
-    return new Promise((resolve, reject) => {
-      customersService
-        .getAllOrder(idAcc)
-        .then((response) => {
-          setOrders(response);
-          console.log("response", response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   useEffect(() => {
-    getAllOrder(idAccount);
-  }, [idAccount]);
+    if (isLoggedIn) {
+      orderService.getOrderByCustomer(idAccount).then((response) => {
+        return setOrders(response);
+      }).catch((error) => {
+        return error;
+      });
+    }
+  }, [idAccount, isLoggedIn]);
 
   const [open, setOpen] = useState(null);
 
@@ -212,37 +207,37 @@ export default function OrderPage() {
             onFilterName={handleFilterByName}
           />
 
-          <Scrollbar>
+          
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <TableHead>
-                  <div style={{ width: "100%" }}>
+                  {/* <div style={{ width: "100%" }}> */}
                     <TableRow>
-                      <TableCell align="left" sx={{ width: "4%" }}>
-                        {" "}
-                        &nbsp;
-                      </TableCell>
-                      {TABLE_HEAD.map((headCell) => (
+                      
+                    <TableCell>{" "}</TableCell>
+                    <TableCell align="left">sssssssssssssssssssssss</TableCell>
+                    <TableCell>sssssssssssssssssssssss</TableCell>
+                    <TableCell>sssssssssssssssssssssss</TableCell>
+                      {/* {TABLE_HEAD.map((headCell) => (
                         <TableCell
                           key={headCell.id}
                           align={headCell.alignRight ? "right" : "left"}
                           sortDirection={
                             orderBy === headCell.id ? order : false
                           }
-                          sx={{ width: "24%" }}
+                          // sx={{ width: "24%" }}
                         >
                           {headCell.label}
                         </TableCell>
-                      ))}
+                      ))} */}
                     </TableRow>
-                  </div>
+                  {/* </div> */}
                 </TableHead>
                 <TableBody>
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { orderId, orderItems, status, total, address } =
-                        row;
+                      const { orderID, orderItems, orderStatus, total, payment ,fullname} =  row;
                       const selectedUser = selected.indexOf(orderItems) !== -1;
 
                       return (
@@ -254,7 +249,7 @@ export default function OrderPage() {
                           >
                             <TableRow
                               hover
-                              key={orderId}
+                              key={orderID}
                               tabIndex={-1}
                               sx={{ width: "100%" }}
                               role="checkbox"
@@ -283,11 +278,14 @@ export default function OrderPage() {
                               </TableCell>
 
                               <TableCell align="left" sx={{ width: "23%" }}>
-                                {address}
+                                {fullname}
+                              </TableCell>
+                              <TableCell align="left" sx={{ width: "23%" }}>
+                                {payment}
                               </TableCell>
 
                               <TableCell align="left" sx={{ width: "23%" }}>
-                                <Label color={"success"}>{status}</Label>
+                                <Label color={"success"}>{orderStatus}</Label>
                               </TableCell>
 
                               <TableCell align="center" sx={{ width: "23%" }}>
@@ -356,7 +354,7 @@ export default function OrderPage() {
                 )}
               </Table>
             </TableContainer>
-          </Scrollbar>
+          
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
