@@ -114,7 +114,7 @@ function OrderItemsTable({ orderItems }) {
     </TableContainer>
   );
 }
-function OrderInfoCard({ fullname, phone, note, address, orderItems }) {
+function OrderInfoCard({ fullname, phone, note, address }) {
   return (
     <Card>
       <CardContent>
@@ -415,14 +415,22 @@ export default function OrderStorePage() {
                               </TableCell>
 
                               <TableCell align="center" sx={{ width: "15%" }}>
-                                <Label color={"success"}>{orderStatus}</Label>
+                                <Label
+                                  color={
+                                    orderStatus === "SUCCESS"
+                                      ? "success"
+                                      : "warning"
+                                  }
+                                >
+                                  {orderStatus}
+                                </Label>
                               </TableCell>
 
                               <TableCell align="center" sx={{ width: "15%" }}>
                                 {total}
                               </TableCell>
                               <TableCell align="center" sx={{ width: "15%" }}>
-                                {staffUsers.lastName}
+                                {staffUsers?.lastName}
                               </TableCell>
                               <TableCell align="right" sx={{ width: "15%" }}>
                                 <IconButton
