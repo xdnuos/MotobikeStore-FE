@@ -55,8 +55,6 @@ const TABLE_HEAD = [
   { id: "" },
 ];
 
-// const productEmpty = [];
-
 Cart.propTypes = {
   handleNext: PropTypes.func,
   activeStep: PropTypes.number,
@@ -79,8 +77,6 @@ function Cart({ handleNext, activeStep }) {
   const emptyCart = useSelector((state) => state.cart.emptyCart);
   const idAccount = useSelector((state) => state.auth.idAccount);
 
-
-
   const [state, setState] = useState({
     open: false,
     vertical: "bottom",
@@ -91,13 +87,15 @@ function Cart({ handleNext, activeStep }) {
   const handleRemoveItem = async (idCartItem) => {
     try {
       if (!!idCartItem) {
-        await dispatch(removeFromCart({
-          "cartProductID":idCartItem,
-          "userID": idAccount
-      }));
-      // dispatch(fetchCartItems(idAccount));
-      setSelected([]);
-      setPriceOrder(0);
+        await dispatch(
+          removeFromCart({
+            cartProductID: idCartItem,
+            userID: idAccount,
+          })
+        );
+        // dispatch(fetchCartItems(idAccount));
+        setSelected([]);
+        setPriceOrder(0);
         // console.log("Product deleted successfullyyyyyyyyyyyyyyyyy");
       } else {
         console.log("idCartItem is undefined", idCartItem);
@@ -110,7 +108,6 @@ function Cart({ handleNext, activeStep }) {
   useEffect(() => {
     setTotalPrice(quantity * price);
   }, [quantity]);
-
 
   const handleIncrement = () => {
     setQuantity(quantity + 1);
@@ -136,7 +133,7 @@ function Cart({ handleNext, activeStep }) {
           updateCart({
             cartProductID: idCart,
             quantity: quantity,
-            userID: idAccount
+            userID: idAccount,
           })
         );
         setState({ ...state, open: true });
@@ -150,7 +147,7 @@ function Cart({ handleNext, activeStep }) {
   };
 
   const handleCheckout = async () => {
-   await dispatch(addToOrder({ id:selected, price:priceOrder }));
+    await dispatch(addToOrder({ id: selected, price: priceOrder }));
     handleNext();
   };
 
@@ -262,7 +259,8 @@ function Cart({ handleNext, activeStep }) {
                         {cart?.map((product, index) => {
                           // ========== Quantity ========== //
 
-                          const basePrice = (product?.productPrice * product?.quantity);
+                          const basePrice =
+                            product?.productPrice * product?.quantity;
 
                           const selectedProduct =
                             selected.indexOf(product?.cartProductID) !== -1;
@@ -296,8 +294,9 @@ function Cart({ handleNext, activeStep }) {
                                 scope="row"
                                 padding="none"
                               >
-                                <Link to={`/product-details/${product?.productID}`}>
-
+                                <Link
+                                  to={`/product-details/${product?.productID}`}
+                                >
                                   <Stack
                                     direction="row"
                                     alignItems="center"
@@ -331,15 +330,15 @@ function Cart({ handleNext, activeStep }) {
 
                               {/* Giá thành */}
                               <TableCell align="center">
-                                {isEdited === product?.cartProductID ?
-                                  totalPrice.toLocaleString("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  }) :
-                                  basePrice.toLocaleString("vi-VN", {
-                                    style: "currency",
-                                    currency: "VND",
-                                  })}
+                                {isEdited === product?.cartProductID
+                                  ? totalPrice.toLocaleString("vi-VN", {
+                                      style: "currency",
+                                      currency: "VND",
+                                    })
+                                  : basePrice.toLocaleString("vi-VN", {
+                                      style: "currency",
+                                      currency: "VND",
+                                    })}
                               </TableCell>
 
                               {/* Số lượng */}
@@ -357,34 +356,71 @@ function Cart({ handleNext, activeStep }) {
 
                               <TableCell align="right">
                                 <Stack direction={"row"} spacing={0.5}>
-                                  {(isEdited === product?.cartProductID) ? (
+                                  {isEdited === product?.cartProductID ? (
                                     <>
                                       {/*  ================ Button save  ================ */}
-                                      <IconButton color="inherit" size="small" onClick={() => handleSaveUpdate(product?.cartProductID)}>
-                                        <Iconify icon={"humbleicons:save"} sx={{ height: "18px", width: "18px" }} />
+                                      <IconButton
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() =>
+                                          handleSaveUpdate(
+                                            product?.cartProductID
+                                          )
+                                        }
+                                      >
+                                        <Iconify
+                                          icon={"humbleicons:save"}
+                                          sx={{ height: "18px", width: "18px" }}
+                                        />
                                       </IconButton>
                                       {/* ================ Button cancel  ================ */}
-                                      <IconButton sx={{ color: "error.main" }} size="small" onClick={() => setIsEdited(NaN)}>
-                                        <Iconify icon={"ic:round-cancel"} sx={{ height: "18px", width: "18px" }} />
+                                      <IconButton
+                                        sx={{ color: "error.main" }}
+                                        size="small"
+                                        onClick={() => setIsEdited(NaN)}
+                                      >
+                                        <Iconify
+                                          icon={"ic:round-cancel"}
+                                          sx={{ height: "18px", width: "18px" }}
+                                        />
                                       </IconButton>
                                     </>
                                   ) : (
                                     <>
                                       {/* ================  Button edit  ================ */}
-                                      <IconButton color="inherit" size="small" onClick={() => handleEditCartItem(
-                                        product?.cartProductID,
-                                        product?.productPrice,
-                                        product?.quantity,
-                                      )}>
-                                        <Iconify icon={"eva:edit-fill"} sx={{ height: "18px", width: "18px" }} />
+                                      <IconButton
+                                        color="inherit"
+                                        size="small"
+                                        onClick={() =>
+                                          handleEditCartItem(
+                                            product?.cartProductID,
+                                            product?.productPrice,
+                                            product?.quantity
+                                          )
+                                        }
+                                      >
+                                        <Iconify
+                                          icon={"eva:edit-fill"}
+                                          sx={{ height: "18px", width: "18px" }}
+                                        />
                                       </IconButton>
                                       {/* ================  Button delete  ================ */}
-                                      <IconButton sx={{ color: "error.main" }} size="small" onClick={() => handleRemoveItem(product?.cartProductID)}>
-                                        <Iconify icon={"eva:trash-2-outline"} sx={{ height: "18px", width: "18px" }} />
+                                      <IconButton
+                                        sx={{ color: "error.main" }}
+                                        size="small"
+                                        onClick={() =>
+                                          handleRemoveItem(
+                                            product?.cartProductID
+                                          )
+                                        }
+                                      >
+                                        <Iconify
+                                          icon={"eva:trash-2-outline"}
+                                          sx={{ height: "18px", width: "18px" }}
+                                        />
                                       </IconButton>
                                     </>
                                   )}
-
                                 </Stack>
                               </TableCell>
                             </TableRow>
@@ -421,17 +457,6 @@ function Cart({ handleNext, activeStep }) {
           </StyledButtonGreen>
         </Grid>
       </Grid>
-
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={open}
-        autoHideDuration={3000}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} variant="filled" severity="success">
-          Update cart xong roi ne
-        </Alert>
-      </Snackbar>
     </Container>
   );
 }

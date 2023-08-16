@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import {
   Typography,
   Grid,
@@ -31,9 +31,9 @@ ProductInfoForm.propTypes = {
  */
 
 const StyledRating = styled(Rating)({
-  '& .MuiRating-iconFilled': {
-    color: '#faaf00',
-  }
+  "& .MuiRating-iconFilled": {
+    color: "#faaf00",
+  },
 });
 
 function ProductInfoForm({ product, price }) {
@@ -42,9 +42,7 @@ function ProductInfoForm({ product, price }) {
     const starColor = isFilled ? "#faaf00" : "#cad1d7";
 
     return (
-      <span style={{ color: starColor }}>
-        {isFilled ? "\u2605" : "\u2606"}
-      </span>
+      <span style={{ color: starColor }}>{isFilled ? "\u2605" : "\u2606"}</span>
     );
   };
 
@@ -53,16 +51,18 @@ function ProductInfoForm({ product, price }) {
       {/* Brand */}
 
       <Grid container spacing={0}>
-
-
-
         <Grid item xs={12}>
-          <Stack direction={"row"} justifyContent={"left"} alignItems={"center"} spacing={1}>
-            {product?.arrival !== "" && product?.arrival !== null && product?.arrival !== undefined &&
-              <Label color="success">
-                🔥 {product?.arrival}
-              </Label>
-            }
+          <Stack
+            direction={"row"}
+            justifyContent={"left"}
+            alignItems={"center"}
+            spacing={1}
+          >
+            {product?.arrival !== "" &&
+              product?.arrival !== null &&
+              product?.arrival !== undefined && (
+                <Label color="success">🔥 {product?.arrival}</Label>
+              )}
             <Typography color={"#022864"} variant="h4">
               {product?.name}
             </Typography>
@@ -71,14 +71,23 @@ function ProductInfoForm({ product, price }) {
 
         <Grid item xs={12} py={1.5}>
           <div style={{ display: "flex", direction: "row", alignItems: "end" }}>
-          <Rate allowHalf disabled  style={{ color: "#faaf00" }}   defaultValue={product?.rating} /> 
-            <Typography color='#808384' variant="body2" textAlign={"end"} sx={{ ml: 1 }}>
+            <Rate
+              allowHalf
+              disabled
+              style={{ color: "#faaf00" }}
+              defaultValue={product?.rating}
+            />
+            <Typography
+              color="#808384"
+              variant="body2"
+              textAlign={"end"}
+              sx={{ ml: 1 }}
+            >
               (9.12k reviews)
             </Typography>
             {/* <Iconify icon="bi:star-fill" sx={{ ml: 1 }} /> */}
           </div>
         </Grid>
-
       </Grid>
 
       {/* Price */}
@@ -86,16 +95,14 @@ function ProductInfoForm({ product, price }) {
         <Typography variant="h3">
           {!price
             ? product?.price.toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })
+                style: "currency",
+                currency: "VND",
+              })
             : price.toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}
-
+                style: "currency",
+                currency: "VND",
+              })}
         </Typography>
-
       </Grid>
 
       {/* Category */}
@@ -104,23 +111,32 @@ function ProductInfoForm({ product, price }) {
           <Typography variant="subtitle1">Category: </Typography>
           <Typography variant="body1">
             {product?.categories.map((category, index) => (
-              <span key={index}>
-                {index !== 0 && " • "}
-                {category}
-              </span>
+              <span key={index}>{category} &nbsp;• &nbsp;</span>
             ))}
           </Typography>
         </Stack>
       </Grid>
 
       {/* Manufacturer */}
-      {product?.manufacturer !== null && product?.manufacturer !== "" &&
+      {product?.manufacturer !== "" ? (
         <Grid item xs={12}>
           <Stack direction={"row"} spacing={1}>
             <Typography variant="subtitle1">Manufacturer:</Typography>
-            <Label sx={{ fontSize: "15px" }} color="info">{product?.manufacturer}</Label>
+            <Typography variant="body1">{product?.manufacturer} </Typography>
           </Stack>
-        </Grid>}
+        </Grid>
+      ) : null}
+
+      <Grid item xs={12}>
+        <Stack direction={"row"} spacing={1}>
+          <Typography variant="subtitle1">Tag: </Typography>
+          <Typography variant="body1">
+            {product?.tags.map((category, index) => (
+              <span key={index}>{category} &nbsp;• &nbsp;</span>
+            ))}
+          </Typography>
+        </Stack>
+      </Grid>
 
       {/* short_description */}
       <Grid item xs={12}>
