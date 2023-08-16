@@ -41,7 +41,7 @@ function UserInfo({ handleBack, firstName, lastName, phone }) {
         <Stack>
           <Typography variant="h6" gutterBottom>
             {" "}
-            {firstName ? firstName : "" + " " + lastName ? lastName : ""}{" "}
+            {firstName ? firstName + " " : ""} {lastName ? lastName : ""}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {" "}

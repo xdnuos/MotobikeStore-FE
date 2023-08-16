@@ -4,7 +4,7 @@ import DashboardLayout from "./layouts/dashboard";
 import SimpleLayout from "./layouts/simple";
 import ClientLayout from "./layouts/client/ClientLayout";
 import BlogPage from "./pages/admin/BlogPage";
-import UserPage from "./pages/admin/UserPage";
+import UserPage from "./pages/admin/user/UserPage";
 import LoginPage from "./pages/admin/LoginPage";
 import Page404 from "./pages/admin/Page404";
 import ProductsPage from "./pages/admin/product/ProductsPage";
@@ -13,19 +13,24 @@ import CreateProduct from "./pages/admin/product/CreateProduct";
 import EditProduct from "./pages/admin/product/EditProduct";
 import Home from "./pages/client/Home";
 import ProductDetails from "./pages/client/ProductDetails";
-import AdminProductDetails from "./pages/admin/AdminProductDetails";
+import AdminProductDetails from "./pages/admin/buy/AdminProductDetails";
 import ProductsList from "./pages/client/ProductsListPage";
 import Checkout from "./pages/client/CheckoutPage";
-import AdminCheckout from "./pages/admin/CheckoutPage";
+import AdminCheckout from "./pages/admin/buy/CheckoutPage";
 import AddressForm from "./sections/@client/products/checkout/AddressForm";
-import CreateStore from "./pages/admin/CreateStore";
-import StorePage from "./pages/admin/StorePage";
-import AdminOrder from "./pages/admin/AdminOrder";
+import CreateStore from "./pages/admin/store/CreateStore";
+import StorePage from "./pages/admin/store/StorePage";
+import AdminOrder from "./pages/admin/buy/AdminOrder";
 import OrderPage from "./pages/client/OrderPage";
-import OrdersPage from "./pages/admin/OrdersPage";
+import OrdersPage from "./pages/admin/order/OrdersPage";
 import InventoryManagement from "./pages/admin/InventoryManagementPage";
 import CreateReceipt from "./sections/@dashboard/products/CreateReceipt";
-// import FunctionalFoodsList from './pages/client/FunctionalFoodsList';
+import Staff from "./pages/admin/staff/StaffPage";
+import CreateStaff from "./pages/admin/staff/CreateStaff";
+import EditStaff from "./pages/admin/staff/EditStaff";
+import Invoice from "./pages/admin/buy/InvoicePage";
+import UserDetail from "./pages/admin/user/UserOrder";
+import OrderDetail from "./pages/admin/order/OrderDetail";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -38,14 +43,19 @@ export default function Router() {
         { path: "app", element: <DashboardAppPage /> },
         { path: "checkout", element: <AdminCheckout /> },
         { path: "orders", element: <OrdersPage /> },
+        { path: "orders/:orderID", element: <OrderDetail /> },
         { path: "buy", element: <AdminOrder /> },
         { path: "users", element: <UserPage /> },
+        { path: "users/:userID", element: <UserDetail /> },
         { path: "products", element: <ProductsPage /> },
         { path: "products/new", element: <CreateProduct /> },
         { path: "products/edit/:productID", element: <EditProduct /> },
         { path: "product/:id", element: <AdminProductDetails /> },
         { path: "stock", element: <InventoryManagement /> },
         { path: "stock/new", element: <CreateReceipt /> },
+        { path: "staff", element: <Staff /> },
+        { path: "staff/new", element: <CreateStaff /> },
+        { path: "staff/edit/:staffID", element: <EditStaff /> },
       ],
     },
     {
@@ -66,6 +76,7 @@ export default function Router() {
       path: "/login",
       element: <LoginPage />,
     },
+    { path: "/dashboard/invoice/:orderID", element: <Invoice /> },
     {
       element: <SimpleLayout />,
       children: [

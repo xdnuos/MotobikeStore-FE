@@ -26,7 +26,7 @@ export let cartService = {
         //   ...getAuthConfig(),
         // }
       );
-      message.success(response.data);
+      message.success(response.data.message);
       console.log(response);
       return response.data;
     } catch (error) {
@@ -36,23 +36,27 @@ export let cartService = {
   },
   updateToCart: async (UpdateCartItemRequest) => {
     try {
+      console.log("updateCarrt", UpdateCartItemRequest);
       const response = await axios.put(
         BASE_URL + `/api/v1/carts/edit`,
         UpdateCartItemRequest
       );
-      console.log(response);
-      return response;
+      message.success(response.data.message);
+      return response.data;
     } catch (error) {
       console.log(error);
     }
   },
-  deleteToCart: async (idCartItem) => {
+  deleteToCart: async (request) => {
+    console.log("xoa cart ne", request);
     try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/carts/delete/${idCartItem}`
+      const response = await axios.put(
+        BASE_URL + `/api/v1/carts/delete`,
+        request
       );
       console.log(response);
-      return response;
+      message.success(response.data.message);
+      return response.data;
     } catch (error) {
       console.log(error);
     }

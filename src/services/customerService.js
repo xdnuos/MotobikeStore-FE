@@ -17,7 +17,7 @@ export let customersService = {
     try {
       console.log("phone:", phone);
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/get/${phone}`
+        BASE_URL + `/api/v1/customers/get/phone/${phone}`
       );
       return response;
     } catch (error) {
@@ -27,7 +27,29 @@ export let customersService = {
   },
   getAllCustomers: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/customers`);
+      const response = await axios.get(
+        BASE_URL + `/api/v1/customers/get/admin`
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getCustomersInfoWithStatisticByUserID: async (userID) => {
+    try {
+      const response = await axios.get(
+        BASE_URL + `/api/v1/customers/get/admin/userID/${userID}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  getCustomersInfoByCustomerID: async (customerID) => {
+    try {
+      const response = await axios.get(
+        BASE_URL + `/api/v1/customers/get/admin/${customerID}`
+      );
       return response.data;
     } catch (error) {
       console.log(error);

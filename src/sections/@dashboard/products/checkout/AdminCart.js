@@ -28,7 +28,7 @@ import OrderSummary from "./OrderSummary";
 import { StyledButtonGreen } from "../../../../components/custom/CustomButton";
 import Scrollbar from "../../../../components/scrollbar/Scrollbar";
 import CartListHead from "./CartListHead";
-import { Quantity } from "../product-details";
+import { Quantity } from "src/sections/@client/products/product-details";
 import SvgColor from "../../../../components/svg-color/SvgColor";
 import {
   removeFromCart,
@@ -55,8 +55,7 @@ function getTotalPrice(price, quantity) {
 function AdminCart({ handleNext, activeStep }) {
   // const history = useHistory();
 
-  // lấy id của sản phẩm trong bảng
-  // const [idRowProduct, setIdRowProduct] = useState(-1)
+  const userID = useSelector((state) => state.auth.idAccount);
 
   //  lấy id của sản phẩm đã checked
   const [selected, setSelected] = useState([]);
@@ -78,7 +77,10 @@ function AdminCart({ handleNext, activeStep }) {
   const cart = useSelector((state) => state.cart.cart);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const emptyCart = useSelector((state) => state.cart.emptyCart);
-
+  const [cartItemDelete, setCartItemDelete] = useState({
+    cartProductID: "",
+    userID: userID,
+  });
   const [state, setState] = useState({
     open: false,
     vertical: "bottom",
@@ -136,15 +138,13 @@ function AdminCart({ handleNext, activeStep }) {
           updateQuantity({
             cartProductID: cartProductID,
             quantity: quantity,
+            userID: userID,
           })
         );
         setState({ ...state, open: true });
         setIsEdited(NaN);
         console.log("Cart quantity updated successfully", updateCartRequest);
         console.log(response);
-        if (response.payload.status === 200) {
-          message.success(response.payload.data);
-        }
       } catch (error) {
         console.error("Failed to update cart quantity:", error);
       }
@@ -155,10 +155,10 @@ function AdminCart({ handleNext, activeStep }) {
   const handleRemoveItem = async (idCartItem) => {
     try {
       if (idCartItem) {
-        const response = await dispatch(removeFromCart(idCartItem));
-        if (response.payload.status === 200) {
-          message.success(response.payload.data);
-        }
+        setCartItemDelete({ ...cartItemDelete, cartProductID: idCartItem });
+        await dispatch(
+          removeFromCart({ cartProductID: idCartItem, userID: userID })
+        );
       } else {
         console.log("idCartItem is undefined", idCartItem);
       }

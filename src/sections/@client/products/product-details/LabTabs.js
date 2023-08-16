@@ -70,8 +70,8 @@ function TabDescriptionAndReview({ product }) {
         textColor="primary"
         aria-label="description and review tabs"
       >
-        <StyledTab label="Mô Tả Sản Phẩm" />
-        <StyledTab label="Đánh Giá & Nhận Xét" />
+        <StyledTab label="Product information" />
+        <StyledTab label="Reviews" />
       </StyledTabs>
 
       {selectedTab === 0 && (

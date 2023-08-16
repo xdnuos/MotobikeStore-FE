@@ -6,7 +6,7 @@ import { Stack, Container, Typography } from "@mui/material";
 import ShopSidebar from "src/sections/@dashboard/products/ShopSidebar";
 import ShopTopbar from "src/sections/@dashboard/products/ShopTopbar";
 import ShopProducts from "./ShopProducts";
-import { getSortedProducts } from "../../helper/product";
+import { getSortedProducts } from "../../../helper/product";
 import { useOutletContext } from "react-router-dom";
 
 function AdminOrder() {

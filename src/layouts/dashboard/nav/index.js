@@ -51,6 +51,7 @@ export default function Nav({ openNav, onCloseNav }) {
   useEffect(() => {
     if (isLoggedIn) {
       const storedUser = localStorageService.get("USER");
+      console.log("account", account);
       setAccount(storedUser);
     } else {
       navigate("/login");
@@ -59,7 +60,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
   useEffect(() => {
     const role = localStorageService.get("USER")?.roles[0];
-    if (role === "ADMIN") {
+    if ((role === "ADMIN") | (role === "MASTER")) {
       setNav(navConfig);
     } else if (role === "STAFF") {
       setNav(navConfigStore);
@@ -84,10 +85,7 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 1, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar
-              src="/assets/images/avatars/avatar_default.jpg"
-              alt="photoURL"
-            />
+            <Avatar src={account.avatarUrl} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
                 {account.firstName + " " + account.lastName}

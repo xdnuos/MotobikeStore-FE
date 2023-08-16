@@ -12,11 +12,15 @@ import {
 } from "@mui/material";
 import { StyledButtonGreen } from "../../../../components/custom/CustomButton";
 import Iconify from "../../../../components/iconify/Iconify";
+import { useSelector } from "react-redux";
 
 const OrderSuccessDialog = ({ open, handleClose }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
+  const orderInvoice = useSelector((state) => state.invoice);
+  const handlePDF = () => {
+    window.open(`/dashboard/invoice/${orderInvoice.orderID}`, "_blank");
+  };
   return (
     <Dialog
       open={open}
@@ -85,7 +89,7 @@ const OrderSuccessDialog = ({ open, handleClose }) => {
             <Iconify icon="ic:outline-keyboard-arrow-left" mr={1} />
             Continue Shopping
           </Button>
-          <StyledButtonGreen onClick={handleClose} to="" component={RouterLink}>
+          <StyledButtonGreen onClick={handlePDF}>
             <Iconify icon="ant-design:file-pdf-filled" mr={1} />
             Download As PDF
           </StyledButtonGreen>

@@ -248,7 +248,7 @@ export default function InventoryManagement() {
   return (
     <>
       <Helmet>
-        <title> Store | Medicine Dashboard </title>
+        <title> Store | Biker Dashboard </title>
       </Helmet>
 
       <Container>

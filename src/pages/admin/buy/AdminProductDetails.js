@@ -27,19 +27,19 @@ import {
   ProductInfoForm,
   TabDescriptionAndReview,
   Quantity,
-} from "../../sections/@client/products/product-details";
+} from "../../../sections/@client/products/product-details";
 
 // components
-import Iconify from "../../components/iconify";
+import Iconify from "../../../components/iconify";
 
-import { StyledSeparator } from "../../components/custom/CustomSpan";
+import { StyledSeparator } from "../../../components/custom/CustomSpan";
 import {
   StyledButtonYellow,
   StyledButtonGreen,
-} from "../../components/custom/CustomButton";
-import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
-import { getProductById } from "../../redux/products/ProductDetail";
-import { addToCart } from "../../redux/cart/cartSlice";
+} from "../../../components/custom/CustomButton";
+import SkeletonLoading from "../../../components/skeleton/SkeletonLoading";
+import { getProductById } from "../../../redux/products/ProductDetail";
+import { addToCart } from "../../../redux/cart/cartSlice";
 import { getProductCartQuantity } from "src/helper/product";
 import { message } from "antd";
 import { ProductCartWidget } from "src/sections/@dashboard/products";
@@ -51,7 +51,7 @@ function AdminProductDetails() {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products.productDetail.product);
   const loading = useSelector((state) => state.products.productDetail.loading);
-  const email = useSelector((state) => state.auth.email);
+  const userID = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [showPrice, setShowPrice] = useState(null);
   const cartItems = useSelector((state) => state.cart.cart);
@@ -64,7 +64,7 @@ function AdminProductDetails() {
   }, [dispatch, id]);
 
   const [cartRequest, setCartRequest] = useState({
-    email: email,
+    userID: userID,
     productID: id,
     quantity: 1,
   });
@@ -75,8 +75,9 @@ function AdminProductDetails() {
     if (isLoggedIn) {
       console.log(cartRequest);
       const response = await dispatch(addToCart(cartRequest));
+      console.log("testtttttttttttt", response);
       if (response.status === 200) {
-        message.success(response.data);
+        message.success(response.data.message);
       } else {
         message.error(response.response.data);
       }
@@ -160,7 +161,7 @@ function AdminProductDetails() {
               {/* Số lượng */}
               <Grid item xs={12}>
                 <Stack direction="row" justifyContent="flex-start">
-                  <Typography variant="subtitle1"> Chọn số lượng </Typography>
+                  <Typography variant="subtitle1"> Select quantity </Typography>
                   <Quantity
                     countNumber={quantity}
                     handleDecrement={handleDecrement}

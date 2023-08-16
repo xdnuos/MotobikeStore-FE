@@ -28,9 +28,9 @@ export const addToCart = createAsyncThunk(
 
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
-  async (idCartItem) => {
+  async (request) => {
     try {
-      const response = await cartService.deleteToCart(idCartItem);
+      const response = await cartService.deleteToCart(request);
       return response;
     } catch (error) {
       throw new Error(error);
@@ -89,7 +89,7 @@ const cartSlice = createSlice({
       .addCase(addToCart.fulfilled, (state, { payload }) => {
         state.cart = payload.cart;
         state.loading = false;
-        state.loadOk = false;
+        state.emptyCart = state.cart?.length === 0;
       })
       .addCase(addToCart.rejected, (state, { error }) => {
         state.loading = false;
@@ -103,7 +103,7 @@ const cartSlice = createSlice({
         state.cart = payload.cart;
         state.loading = false;
         state.emptyCart = state.cart?.length === 0;
-        state.loadOk = false;
+        // state.loadOk = false;
       })
       .addCase(removeFromCart.rejected, (state, { error }) => {
         state.loading = false;
@@ -116,7 +116,7 @@ const cartSlice = createSlice({
       .addCase(updateQuantity.fulfilled, (state, { payload }) => {
         state.cart = payload.cart;
         state.loading = false;
-        state.loadOk = false;
+        state.emptyCart = state.cart?.length === 0;
       })
       .addCase(updateQuantity.rejected, (state, { error }) => {
         state.loading = false;

@@ -381,7 +381,7 @@ function ProductDetails() {
             py={3}
           >
             <Typography variant="h5" align="center" textTransform={"uppercase"}>
-              Medicine shop cam kết
+              Biker shop cam kết
             </Typography>
           </Grid>
           <Grid item xs={4} md={4}>

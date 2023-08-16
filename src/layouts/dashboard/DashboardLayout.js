@@ -7,7 +7,10 @@ import { styled } from "@mui/material/styles";
 import Header from "./header";
 import Nav from "./nav";
 import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
-import { getAllProduct } from "src/redux/products/productList";
+import {
+  getAllProduct,
+  getAllProductAdmin,
+} from "src/redux/products/productList";
 import { getAllCategories } from "src/redux/productProperties/categorySlice";
 import { getAllTags } from "src/redux/productProperties/tagSlice";
 import { getAllManufacturer } from "src/redux/productProperties/manufacturerSlice";
@@ -66,19 +69,19 @@ function DashboardLayout() {
   const loadOk = useSelector((state) => state.cart.loadOk);
   console.log("loading cart", loadCart);
   useEffect(() => {
-    dispatch(getAllProduct());
+    dispatch(getAllProductAdmin());
     dispatch(getAllCategories());
     dispatch(getAllTags());
     dispatch(getAllManufacturer());
     dispatch(fetchCartItems(userID));
     if (getProducts) {
       console.log("Get lai product");
-      dispatch(getAllProduct());
+      dispatch(getAllProductAdmin());
     }
-    if (!loadOk) {
-      console.log("Get lai cart");
-      dispatch(fetchCartItems(userID));
-    }
+    // if (!loadOk) {
+    //   console.log("Get lai cart");
+    //   dispatch(fetchCartItems(userID));
+    // }
   }, [dispatch, getProducts, loadOk, userID]);
 
   if (

@@ -24,21 +24,29 @@ import {
   TablePagination,
 } from "@mui/material";
 // components
-import Label from "../../components/label";
-import Iconify from "../../components/iconify";
-import Scrollbar from "../../components/scrollbar";
+import Label from "../../../components/label";
+import Iconify from "../../../components/iconify";
+import Scrollbar from "../../../components/scrollbar";
 // sections
-import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
+import {
+  UserListHead,
+  UserListToolbar,
+} from "../../../sections/@dashboard/user";
 // mock
-import { customersService } from "../../services/customerService";
+import { customersService } from "../../../services/customerService";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "name", label: "Name Store", alignRight: false },
+  { id: "name", label: "Name", alignRight: false },
   { id: "phone", label: "Phone Number", alignRight: false },
   { id: "email", label: "Email", alignRight: false },
   { id: "status", label: "Status", alignRight: false },
+  { id: "order", label: "Total Order", alignRight: false },
+  { id: "product", label: "Total Product Buy", alignRight: false },
+  { id: "puscharsed", label: "Total Purchased", alignRight: false },
+  { id: "ratio", label: "Ratio", alignRight: false },
+
   { id: "" },
 ];
 
@@ -70,7 +78,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      (_user) => _user.phone.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -181,7 +189,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Medicine Dashboard </title>
+        <title> User | Biker Dashboard </title>
       </Helmet>
 
       <Container>
@@ -219,13 +227,25 @@ export default function UserPage() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, email, phoneNumber } = row;
-                      const selectedUser = selected.indexOf(name) !== -1;
+                      const {
+                        userID,
+                        fullName,
+                        email,
+                        isActive,
+                        phone,
+                        createDate,
+                        totalOrders,
+                        totalProductBuy,
+                        totalPurchased,
+                        ratioOrder,
+                        avatarUrl,
+                      } = row;
+                      const selectedUser = selected.indexOf(phone) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={userID}
                           tabIndex={-1}
                           role="checkbox"
                           selected={selectedUser}
@@ -233,7 +253,7 @@ export default function UserPage() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={selectedUser}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, phone)}
                             />
                           </TableCell>
 
@@ -243,28 +263,46 @@ export default function UserPage() {
                               alignItems="center"
                               spacing={2}
                             >
-                              <Avatar
-                                alt={name}
-                                src={`/assets/images/avatars/avatar_${
-                                  Math.floor(Math.random() * 24) + 1
-                                }.jpg`}
-                              />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
+                              <Avatar alt={userID} src={avatarUrl} />
+                              <Typography
+                                variant="subtitle2"
+                                noWrap
+                                component={RouterLink}
+                                to={`/dashboard/users/${userID}`}
+                              >
+                                {fullName}
                               </Typography>
                             </Stack>
                           </TableCell>
 
-                          <TableCell align="left">{phoneNumber}</TableCell>
+                          <TableCell align="left">{phone}</TableCell>
 
                           <TableCell align="left">
-                            {email === null ? "support@medicine.com" : email}
+                            {email === null ? "Unregistered" : email}
                           </TableCell>
 
                           <TableCell align="left">
-                            <Label color={"success"}>Active</Label>
+                            <Label color={isActive ? "success" : "warning"}>
+                              {isActive
+                                ? "Active"
+                                : email !== null
+                                ? "Locked"
+                                : "Unregistered"}
+                            </Label>
                           </TableCell>
-
+                          <TableCell align="center">{totalOrders}</TableCell>
+                          <TableCell align="center">
+                            {totalProductBuy}
+                          </TableCell>
+                          <TableCell align="center">
+                            {totalPurchased.toLocaleString("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
+                          </TableCell>
+                          <TableCell align="center">
+                            {ratioOrder * 100} %
+                          </TableCell>
                           <TableCell align="right">
                             <IconButton
                               size="large"

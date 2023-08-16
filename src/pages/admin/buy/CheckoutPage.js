@@ -12,15 +12,17 @@ import {
   styled,
   Grid,
 } from "@mui/material";
-import Iconify from "../../components/iconify/Iconify";
+import Iconify from "../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
 import { Helmet } from "react-helmet-async";
-import BillingAndAddress from "../../sections/@dashboard/products/checkout/BillingAndAddress";
-import Cart from "../../sections/@dashboard/products/checkout/AdminCart";
-import Summary from "../../sections/@dashboard/products/checkout/Summary";
+import BillingAndAddress from "../../../sections/@dashboard/products/checkout/BillingAndAddress";
+import Cart from "../../../sections/@dashboard/products/checkout/AdminCart";
+import Summary from "../../../sections/@dashboard/products/checkout/Summary";
 import OrderSuccessDialog from "src/sections/@dashboard/products/checkout/OrderSuccessDialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "src/redux/products/productList";
+import { setUser } from "src/redux/order/OrderSlice";
+import { fetchCartItems } from "src/redux/cart/cartSlice";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -105,7 +107,6 @@ const steps = ["Cart", "Billing and Address", "Summary"];
 
 const AdminCheckout = () => {
   const [activeStep, setActiveStep] = useState(0);
-
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const handleClose = () => {
