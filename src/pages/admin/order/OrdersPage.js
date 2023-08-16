@@ -114,19 +114,35 @@ function OrderItemsTable({ orderItems }) {
     </TableContainer>
   );
 }
-function OrderInfoCard({ fullname, phone, note, address }) {
+function OrderInfoCard({ fullname, phone, note, address, payment }) {
   return (
     <Card>
       <CardContent>
         <Typography variant="h6">Buyer Information</Typography>
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <Typography>{fullname}</Typography>
-            <Typography>{note}</Typography>
+            <Stack direction={"row"} spacing={1}>
+              <Iconify icon="wpf:name"></Iconify>
+              <Typography variant="h7">{fullname}</Typography>
+            </Stack>
+            <Stack direction={"row"} spacing={1}>
+              <Iconify icon="fluent:payment-32-regular"></Iconify>
+              <Typography variant="h7">{payment}</Typography>
+            </Stack>
+            <Stack direction={"row"} spacing={1}>
+              <Iconify icon="ph:note-light"></Iconify>
+              <Typography variant="h7">{note}</Typography>
+            </Stack>
           </Grid>
           <Grid item xs={6}>
-            <Typography>{phone}</Typography>
-            <Typography>{address}</Typography>
+            <Stack direction={"row"} spacing={1}>
+              <Iconify icon="ph:phone"></Iconify>
+              <Typography variant="h7">{phone}</Typography>
+            </Stack>
+            <Stack direction={"row"} spacing={1}>
+              <Iconify icon="mdi:address-marker-outline"></Iconify>
+              <Typography variant="h7">{address}</Typography>
+            </Stack>
           </Grid>
         </Grid>
       </CardContent>
@@ -427,7 +443,10 @@ export default function OrderStorePage() {
                               </TableCell>
 
                               <TableCell align="center" sx={{ width: "15%" }}>
-                                {total}
+                                {total.toLocaleString("vi-VN", {
+                                  style: "currency",
+                                  currency: "VND",
+                                })}
                               </TableCell>
                               <TableCell align="center" sx={{ width: "15%" }}>
                                 {staffUsers?.lastName}
@@ -451,6 +470,7 @@ export default function OrderStorePage() {
                                   phone={phone}
                                   note={note}
                                   address={address}
+                                  payment={payment}
                                 />
                               </Grid>
                               <Grid item xs={6}>

@@ -9,7 +9,7 @@ import {
   RadioGroup,
   Stack,
   styled,
-  FormControlLabel
+  FormControlLabel,
 } from "@mui/material";
 import Iconify from "../../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
@@ -20,20 +20,14 @@ import { useSelector } from "react-redux";
 import { orderService } from "../../../../services/orderService";
 import { CustomRadio } from "../../../../components/custom/CustomRadio";
 
-
-
-
 const StyledFormControlLabel = styled(FormControlLabel)(({ selected }) => ({
-
-  border: '1px solid #919eab3d',
-  borderRadius: '8px',
-  padding: '20px 10px ',
-  width: '100%',
+  border: "1px solid #919eab3d",
+  borderRadius: "8px",
+  padding: "20px 10px ",
+  width: "100%",
   margin: 0,
-  transition: selected
-    ? 'all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
-    : 'none',
-  boxShadow: selected ? '0px 20px 40px -4px #919eab29' : 'none',
+  transition: selected ? "all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms" : "none",
+  boxShadow: selected ? "0px 20px 40px -4px #919eab29" : "none",
 }));
 
 const PAYMENTOPTION = [
@@ -42,7 +36,6 @@ const PAYMENTOPTION = [
   { lable: "Credit / Debit Card", value: "ATM" },
   { lable: "LE VAL LIVE", value: "LIVE" },
 ];
-
 
 Payment.propTypes = {
   handleBack: PropTypes.func,
@@ -60,32 +53,30 @@ function Payment({ handleBack, handleNext, activeStep }) {
   const idAddress = useSelector((state) => state.order.idAddress);
   const listIdCart = useSelector((state) => state.order.idCartItems);
 
-
-  const [paymentOption, setPaymentOption] = useState('');
+  const [paymentOption, setPaymentOption] = useState("");
 
   const handleChange = (event) => {
     setPaymentOption(event.target.value);
   };
 
-
-
   const handleComplete = async () => {
-    await orderService.createOrderByCustomer({
-      cartProductIDs: listIdCart,
-      userID: idAccount,
-      addressID: idAddress,
-      payment: paymentOption
-    }).then((response) => {
-      handleNext();
-      return response;
-    }).catch((error) => {
-      console.log(error);
-    });
+    await orderService
+      .createOrderByCustomer({
+        cartProductIDs: listIdCart,
+        userID: idAccount,
+        addressID: idAddress,
+        payment: paymentOption,
+      })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
     if (isLoggedIn) {
-
     }
   }, [isLoggedIn, idAccount]);
 
@@ -93,12 +84,11 @@ function Payment({ handleBack, handleNext, activeStep }) {
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <Card >
+          <Card>
             <CardHeader title="Payment Options" />
             <CardContent>
-              <RadioGroup value={paymentOption} onChange={handleChange} >
+              <RadioGroup value={paymentOption} onChange={handleChange}>
                 <Stack spacing={2}>
-
                   {PAYMENTOPTION.map((item) => {
                     return (
                       <StyledFormControlLabel
@@ -106,15 +96,13 @@ function Payment({ handleBack, handleNext, activeStep }) {
                         value={item.value}
                         control={<CustomRadio />}
                         label={
-                          <div style={{ marginLeft: "10px" }}>
-                            {item.lable}
-                          </div>}
+                          <div style={{ marginLeft: "10px" }}>{item.lable}</div>
+                        }
                         labelPlacement="end"
                         selected={paymentOption === item.value}
                       />
-                    )
-                  }
-                  )}
+                    );
+                  })}
                 </Stack>
               </RadioGroup>
             </CardContent>

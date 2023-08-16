@@ -111,7 +111,10 @@ function ProductInfoForm({ product, price }) {
           <Typography variant="subtitle1">Category: </Typography>
           <Typography variant="body1">
             {product?.categories.map((category, index) => (
-              <span key={index}>{category} &nbsp;• &nbsp;</span>
+              <span key={index}>
+                {category}{" "}
+                {index !== product.tags.length - 1 && <>&nbsp;•&nbsp;&nbsp;</>}
+              </span>
             ))}
           </Typography>
         </Stack>
@@ -131,8 +134,11 @@ function ProductInfoForm({ product, price }) {
         <Stack direction={"row"} spacing={1}>
           <Typography variant="subtitle1">Tag: </Typography>
           <Typography variant="body1">
-            {product?.tags.map((category, index) => (
-              <span key={index}>{category} &nbsp;• &nbsp;</span>
+            {product?.tags.map((tag, index) => (
+              <span key={index}>
+                {tag}{" "}
+                {index !== product.tags.length - 1 && <>&nbsp;•&nbsp;&nbsp;</>}
+              </span>
             ))}
           </Typography>
         </Stack>
