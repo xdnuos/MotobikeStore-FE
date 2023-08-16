@@ -12,6 +12,14 @@ export let productService = {
       console.log(error);
     }
   },
+  getAllProductAdmin: async () => {
+    try {
+      const response = await axios.get(BASE_URL + "/api/v1/products/get/admin");
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   getProductById: async (id) => {
     try {
       const response = await axios.get(BASE_URL + `/api/v1/products/get/${id}`);

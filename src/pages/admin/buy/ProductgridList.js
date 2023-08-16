@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import ProductGridListSingle from "../../components/product/ProductGridListSingle";
+import ProductGridListSingle from "../../../components/product/ProductGridListSingle";
 import { addToCart } from "src/redux/cart/cartSlice";
 
 const ProductGrid = ({

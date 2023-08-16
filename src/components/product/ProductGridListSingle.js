@@ -13,11 +13,11 @@ const ProductGridListSingle = ({
   sliderClassName,
   spaceBottomClass,
 }) => {
-  const email = useSelector((state) => state.auth.email);
+  const userID = useSelector((state) => state.auth.idAccount);
   const [modalShow, setModalShow] = useState(false);
 
   const handleListItemClick = (event, quantity, productID) => {
-    addToCart({ email, productID, quantity });
+    addToCart({ userID, productID, quantity });
   };
 
   const discountedPrice = getDiscountPrice(product.price, product.discount);
@@ -279,7 +279,7 @@ const ProductGridListSingle = ({
       </div>
       {/* product modal */}
       <ProductModal
-        email={email}
+        userID={userID}
         show={modalShow}
         onHide={() => setModalShow(false)}
         product={product}

@@ -30,6 +30,7 @@ export let cartService = {
   },
   updateToCart: async (UpdateCartItemRequest) => {
     try {
+      console.log("updateCarrt", UpdateCartItemRequest);
       const response = await axios.put(
         BASE_URL + `/api/v1/carts/edit`,
         UpdateCartItemRequest,
@@ -39,8 +40,8 @@ export let cartService = {
           },
         }
       );
-      console.log(response);
-      return response;
+      message.success(response.data.message);
+      return response.data;
     } catch (error) {
       console.log(error);
     }

@@ -91,26 +91,35 @@ export default function DashboardAppPage() {
     }
     return total;
   }, 0);
+  const revenueBy3Days = {};
+  orders.forEach((order) => {
+    const orderTime = new Date(order.orderTime);
+    const dayGroup = Math.floor(orderTime.getDate() / 3); // Chia theo 3 ngày
+    const dayGroupKey = `${orderTime.getFullYear()}-${orderTime.getMonth()}-${dayGroup}`;
 
-  const thirtyDaysAgo = new Date(currentDate.getTime() - 30 * oneDay);
+    if (!revenueBy3Days[dayGroupKey]) {
+      revenueBy3Days[dayGroupKey] = 0;
+    }
 
-  const revenuesLast30Days = [];
-  for (let i = 0; i < 10; i++) {
-    const endDate = new Date(thirtyDaysAgo.getTime() + (i + 1) * 3 * oneDay);
-    const startDate = new Date(endDate.getTime() - 3 * oneDay);
+    revenueBy3Days[dayGroupKey] += order.total;
+  });
 
-    const revenue = orders.reduce((total, order) => {
-      if (
-        order.orderStatus === "SUCCESS" &&
-        new Date(order.orderTime) >= startDate &&
-        new Date(order.orderTime) <= endDate
-      ) {
-        return total + order.total;
-      }
-      return total;
-    }, 0);
+  // Chia tổng doanh thu của tháng thành 10 lần
+  const monthKeys = Object.keys(revenueBy3Days);
+  const numberOfChunks = 10;
+  const chunkSize = Math.ceil(monthKeys.length / numberOfChunks);
 
-    revenuesLast30Days.push(revenue);
+  const monthlyRevenueChunks = [];
+  for (let i = 0; i < numberOfChunks; i++) {
+    const chunkStart = i * chunkSize;
+    const chunkEnd = (i + 1) * chunkSize;
+    const chunkKeys = monthKeys.slice(chunkStart, chunkEnd);
+
+    const chunkTotalRevenue = chunkKeys.reduce(
+      (acc, key) => acc + revenueBy3Days[key],
+      0
+    );
+    monthlyRevenueChunks.push(chunkTotalRevenue);
   }
 
   const chartData = [
@@ -118,7 +127,7 @@ export default function DashboardAppPage() {
       name: "Revenue",
       type: "area",
       fill: "gradient",
-      data: revenuesLast30Days,
+      data: monthlyRevenueChunks,
     },
   ];
 
@@ -154,15 +163,26 @@ export default function DashboardAppPage() {
     return total;
   }, 0);
 
-  let revenueRatio = 0;
+  let revenueComparison = "";
+
   if (lastMonthRevenue === 0) {
-    revenueRatio = 100;
+    revenueComparison = "+100"; // Không thể chia cho 0
   } else {
-    revenueRatio = currentMonthRevenue / lastMonthRevenue;
+    const revenueRatio =
+      ((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100;
+
+    if (revenueRatio > 0) {
+      revenueComparison = `+${revenueRatio.toFixed(2)}%`;
+    } else if (revenueRatio < 0) {
+      revenueComparison = `${revenueRatio.toFixed(2)}%`;
+    } else {
+      revenueComparison = "0%";
+    }
   }
+
   const formattedLatestOrders = latestOrders.map((order, index) => ({
     id: order.orderID,
-    title: `Order #${order.orderID} from ${new Date(
+    title: `Order by ${order.phone} from ${new Date(
       order.orderTime
     ).toLocaleDateString()}, ${order.total.toLocaleString("vi-VN", {
       style: "currency",
@@ -215,7 +235,7 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Medicine Dashboard </title>
+        <title> Dashboard | Biker Dashboard </title>
       </Helmet>
 
       <Container maxWidth="xl">
@@ -228,7 +248,7 @@ export default function DashboardAppPage() {
             <AppWidgetSummary
               title="Weekly Sales"
               total={totalQuantitySoldLast7Days}
-              icon={"ant-design:android-filled"}
+              icon={"iconoir:home-sale"}
             />
           </Grid>
 
@@ -237,7 +257,7 @@ export default function DashboardAppPage() {
               title="Product"
               total={products.length}
               color="info"
-              icon={"ant-design:apple-filled"}
+              icon={"icon-park-outline:ad-product"}
             />
           </Grid>
 
@@ -246,7 +266,7 @@ export default function DashboardAppPage() {
               title="Orders"
               total={orders.length}
               color="warning"
-              icon={"ant-design:windows-filled"}
+              icon={"icon-park-outline:order"}
             />
           </Grid>
 
@@ -255,14 +275,14 @@ export default function DashboardAppPage() {
               title="Weekly Revenue"
               total={revenueLastWeek}
               color="error"
-              icon={"ant-design:bug-filled"}
+              icon={"solar:hand-money-linear"}
             />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Revenue"
-              subheader={revenueRatio + " % than last month"}
+              subheader={revenueComparison + " % than last month"}
               chartLabels={chartLabels}
               chartData={chartData}
             />

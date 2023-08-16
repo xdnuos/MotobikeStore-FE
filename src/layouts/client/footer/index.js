@@ -1,19 +1,12 @@
 import React from "react";
 // @mui
-import {
-  Grid,
-  Link,
-  Stack,
-  Button,
-  ListItem,
-  Typography
-} from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Grid, Link, Stack, Button, ListItem, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 // Icon
 import Iconify from "../../../components/iconify/Iconify";
-import Logo from '../../../components/logoHome';
+import Logo from "../../../components/logoHome";
 
-const COPYRIGHT = '©2023 Medicine® by Giang~Đình, lnc.';
+const COPYRIGHT = "©2023 Biker® by Giang~Đình, lnc.";
 
 const AboutUs = [
   { title: 'Introduce', href: "/" },
@@ -46,32 +39,28 @@ const FunctionalFoods = [
   { title: 'Chính sách bảo mật', href: "/" }
 ];
 
-const StyledFooter = styled('footer')(() => ({
+const StyledFooter = styled("footer")(() => ({
   position: "absolute",
   width: "100%",
   left: 0,
-  marginTop: '24px',
-  background: '#fff',
+  marginTop: "24px",
+  background: "#fff",
   display: "flex",
-  flexDirection: 'column',
-  alignItems: 'center',
-
+  flexDirection: "column",
+  alignItems: "center",
 }));
 
-
-const StyledRoot = styled('div')(({ theme }) => ({
-
-  width: '100%',
+const StyledRoot = styled("div")(({ theme }) => ({
+  width: "100%",
   paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(2),
-  [theme.breakpoints.up('lg')]: {
-
-    width: "1200px"
+  [theme.breakpoints.up("lg")]: {
+    width: "1200px",
   },
 }));
 
 const StyledGridItem = styled(Grid)(({ theme }) => ({
-  [theme.breakpoints.down('md')]: {
+  [theme.breakpoints.down("md")]: {
     marginLeft: theme.spacing(3),
     paddingBottom: theme.spacing(2),
     borderTop: `1px solid ${theme.palette.divider}`,
@@ -80,8 +69,7 @@ const StyledGridItem = styled(Grid)(({ theme }) => ({
 
 function Footer() {
   return (
-    <StyledFooter >
-
+    <StyledFooter>
       {/* Link hệ thống nhà thuốc toàn quốc */}
       <div style={{
         background: '#4c83d9',
@@ -103,27 +91,34 @@ function Footer() {
 
       {/* footer body */}
       <StyledRoot>
-
         <Grid
           container
           direction="row"
           justifyContent="space-between"
-          spacing={2} sx={{ py: 3 }}
+          spacing={2}
+          sx={{ py: 3 }}
         >
-          
           {/* Cột đầu tiên logo + COPYRIGHT */}
-          <Grid item container
+          <Grid
+            item
+            container
             direction="column"
-            justifyContent='space-between'
-
-            xs={12} md={3} ml={3} pb={2} >
+            justifyContent="space-between"
+            xs={12}
+            md={3}
+            ml={3}
+            pb={2}
+          >
             <Logo sx={{ width: 100, height: 100 }} />
-            <Typography variant="body2" color={'text.secondary'} >{COPYRIGHT}
-              <br />ĐKKD 0394366313 cấp ngày 17/09/2018 tại Sở Kế hoạch Đầu tư TPHCM</Typography>
+            <Typography variant="body2" color={"text.secondary"}>
+              {COPYRIGHT}
+              <br />
+              ĐKKD 0394366313 cấp ngày 17/09/2018 tại Sở Kế hoạch Đầu tư TPHCM
+            </Typography>
           </Grid>
 
           {/* Cột VỀ CHÚNG TÔI */}
-          <StyledGridItem item xs={12} md={2} >
+          <StyledGridItem item xs={12} md={2}>
             <Stack spacing={1}>
               <Typography variant="subtitle2" >ABOUT US</Typography>
 
@@ -131,7 +126,9 @@ function Footer() {
                 return (
                   <ListItem key={index} sx={{ p: 0 }}>
                     <Link href={data.href} underline="hover">
-                      <Typography variant="body2" color={'text.secondary'}>{data.title}</Typography>
+                      <Typography variant="body2" color={"text.secondary"}>
+                        {data.title}
+                      </Typography>
                     </Link>
                   </ListItem>
                 );
@@ -140,14 +137,16 @@ function Footer() {
           </StyledGridItem>
 
           {/* DANH MỤC */}
-          <StyledGridItem item xs={12} md={2} >
+          <StyledGridItem item xs={12} md={2}>
             <Stack spacing={1}>
               <Typography variant="subtitle2">CATEGORY</Typography>
               {Category.map((data, index) => {
                 return (
                   <ListItem key={index} sx={{ p: 0 }}>
                     <Link href={data.href} underline="hover">
-                      <Typography variant="body2" color={'text.secondary'}>{data.title}</Typography>
+                      <Typography variant="body2" color={"text.secondary"}>
+                        {data.title}
+                      </Typography>
                     </Link>
                   </ListItem>
                 );
@@ -156,14 +155,16 @@ function Footer() {
           </StyledGridItem>
 
           {/* THỰC PHẨM CHỨC NĂNG */}
-          <StyledGridItem item xs={12} md={2} >
-            <Stack spacing={1} >
+          <StyledGridItem item xs={12} md={2}>
+            <Stack spacing={1}>
               <Typography variant="subtitle2">THỰC PHẨM CHỨC NĂNG</Typography>
               {FunctionalFoods.map((data, index) => {
                 return (
                   <ListItem key={index} sx={{ p: 0 }}>
                     <Link href={data.href} underline="hover">
-                      <Typography variant="body2" color={'text.secondary'}>{data.title}</Typography>
+                      <Typography variant="body2" color={"text.secondary"}>
+                        {data.title}
+                      </Typography>
                     </Link>
                   </ListItem>
                 );
@@ -172,20 +173,36 @@ function Footer() {
           </StyledGridItem>
 
           {/* hotline */}
-          <StyledGridItem item xs={12} md={2} >
-            <Stack spacing={1.5} >
+          <StyledGridItem item xs={12} md={2}>
+            <Stack spacing={1.5}>
               <Typography variant="subtitle2">KẾT NỐI VỚI CHÚNG TÔI</Typography>
 
               <Stack>
-                <Typography variant="body2" color={'text.secondary'}>Tư vấn mua hàng (Miễn Phí)</Typography>
-                <Link href='#' underline="none">
-                  <Typography fontWeight={'bold'} fontSize={'h3.fontSize'} variant="body2">1800 2801</Typography>
+                <Typography variant="body2" color={"text.secondary"}>
+                  Tư vấn mua hàng (Miễn Phí)
+                </Typography>
+                <Link href="#" underline="none">
+                  <Typography
+                    fontWeight={"bold"}
+                    fontSize={"h3.fontSize"}
+                    variant="body2"
+                  >
+                    1800 2801
+                  </Typography>
                 </Link>
               </Stack>
               <Stack>
-                <Typography variant="body2" color={'text.secondary'}>Góp ý, khiếu nại (8h00 - 22h00)</Typography>
-                <Link href='#' underline="none">
-                  <Typography fontWeight={'bold'} fontSize={'h3.fontSize'} variant="body2">1800 0204</Typography>
+                <Typography variant="body2" color={"text.secondary"}>
+                  Góp ý, khiếu nại (8h00 - 22h00)
+                </Typography>
+                <Link href="#" underline="none">
+                  <Typography
+                    fontWeight={"bold"}
+                    fontSize={"h3.fontSize"}
+                    variant="body2"
+                  >
+                    1800 0204
+                  </Typography>
                 </Link>
               </Stack>
               <Stack direction={'row'} spacing={3} pt={3}>
@@ -196,9 +213,7 @@ function Footer() {
             </Stack>
           </StyledGridItem>
         </Grid>
-
       </StyledRoot>
-
     </StyledFooter>
   );
 }

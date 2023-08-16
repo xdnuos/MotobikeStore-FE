@@ -70,8 +70,8 @@ function TabDescriptionAndReview({ product }) {
         textColor="primary"
         aria-label="description and review tabs"
       >
-        <StyledTab label="Description" />
-        <StyledTab label="Review product" />
+        <StyledTab label="Product information" />
+        <StyledTab label="Reviews" />
       </StyledTabs>
 
       {selectedTab === 0 && (

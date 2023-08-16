@@ -64,7 +64,6 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  // const idAccount = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const idAccount = useSelector((state) => state.auth.idAccount);
 

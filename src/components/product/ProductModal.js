@@ -14,7 +14,7 @@ function ProductModal(props) {
   const { finalproductprice } = props;
   // eslint-disable-next-line react/prop-types
   const { finaldiscountedprice } = props;
-  const { email } = props;
+  const { userID } = props;
   const [gallerySwiper, getGallerySwiper] = useState(null);
   const [thumbnailSwiper, getThumbnailSwiper] = useState(null);
   const [selectedProductColor, setSelectedProductColor] = useState(
@@ -31,7 +31,7 @@ function ProductModal(props) {
   const addToCart = props.addtocart;
 
   const handleListItemClick = (event, quantity, productID) => {
-    addToCart({ productID, quantity, email });
+    addToCart({ productID, quantity, userID });
   };
   const cartItem = props.cartitem;
 
@@ -308,7 +308,7 @@ function ProductModal(props) {
 ProductModal.propTypes = {
   addtoast: PropTypes.func,
   addtocart: PropTypes.func,
-  cartitem: PropTypes.array,
+  cartitem: PropTypes.object,
   discountedprice: PropTypes.number,
   finaldiscountedprice: PropTypes.string,
   finalproductprice: PropTypes.string,

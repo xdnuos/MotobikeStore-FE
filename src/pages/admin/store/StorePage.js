@@ -24,14 +24,17 @@ import {
   TablePagination,
 } from "@mui/material";
 // components
-import Label from "../../components/label";
-import Iconify from "../../components/iconify";
-import Scrollbar from "../../components/scrollbar";
+import Label from "../../../components/label";
+import Iconify from "../../../components/iconify";
+import Scrollbar from "../../../components/scrollbar";
 // sections
-import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
+import {
+  UserListHead,
+  UserListToolbar,
+} from "../../../sections/@dashboard/user";
 // mock
-import USERLIST from "../../_mock/user";
-import { storeService } from "../../services/storeService";
+import USERLIST from "../../../_mock/user";
+import { storeService } from "../../../services/storeService";
 
 // ----------------------------------------------------------------------
 
@@ -182,7 +185,7 @@ export default function StorePage() {
   return (
     <>
       <Helmet>
-        <title> Store | Medicine Dashboard </title>
+        <title> Store | Biker Dashboard </title>
       </Helmet>
 
       <Container>

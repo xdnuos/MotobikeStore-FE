@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
@@ -44,12 +44,12 @@ function convertValue(value) {
     return value;
   } else return "";
 }
-function imageMap(images) {
-  if (images == null) {
-    return;
-  }
-  return images.map((image) => image.file);
-}
+// function imageMap(images) {
+//   if (images == null) {
+//     return;
+//   }
+//   return images.map((image) => image.file);
+// }
 function getIDByName(arr, name) {
   if (
     arr.length === 0 ||
@@ -107,11 +107,12 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     // manufacturer: "",
     // categories: "",
     // tags: "",
+    imageFiles: imageFiles,
   };
 
   let isEdit = false;
 
-  if (product != null) {
+  if (product?.name != undefined) {
     isEdit = true;
     initialValues = {
       name: product.name,
@@ -158,8 +159,9 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     const isValid = await validationSchema.isValid(values);
     if (isValid) {
       const formData = new FormData();
-      imageMap(imageFiles).forEach((file, index) => {
-        console.log("Add image");
+      console.log("imageFiles", imageFiles);
+      imageFiles.forEach((file) => {
+        console.log("Add image", file);
         const newFile = blobToFile(file, file.name);
         console.log(newFile);
         formData.append(`imageFiles`, newFile);
@@ -218,6 +220,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
       console.log("Form data is invalid");
     }
   };
+
   return (
     <Formik
       enableReinitialize={true}
@@ -225,7 +228,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ values, touched, errors, handleChange }) => (
+      {({ values, touched, errors, handleChange, form }) => (
         <Form>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8}>
@@ -306,18 +309,19 @@ function ProductForm({ product, categories, tags, manufacturer }) {
                     }
                   />
                 </Stack>
-
-                <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
-                  Images
-                </Typography>
-                <FilePond
-                  allowMultiple={true}
-                  allowFileTypeValidation={true}
-                  acceptedFileTypes={["image/png", "image/jpeg"]}
-                  files={values.imageFiles}
-                  onupdatefiles={setImageFiles}
-                />
               </Paper>
+              <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
+                Images
+              </Typography>
+              <FilePond
+                allowMultiple={true}
+                allowFileTypeValidation={true}
+                acceptedFileTypes={["image/png", "image/jpeg"]}
+                files={values.imageFiles}
+                onupdatefiles={(files) =>
+                  setImageFiles(files.map((f) => f.file))
+                }
+              />
             </Grid>
 
             <Grid item xs={12} md={4}>

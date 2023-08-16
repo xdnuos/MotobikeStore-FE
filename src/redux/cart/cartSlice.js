@@ -90,7 +90,7 @@ const cartSlice = createSlice({
       .addCase(addToCart.fulfilled, (state, { payload }) => {
         state.cart = payload?.cart;
         state.loading = false;
-        state.loadOk = false;
+        state.emptyCart = state.cart?.length === 0;
       })
       .addCase(addToCart.rejected, (state, { error }) => {
         state.loading = false;
@@ -116,7 +116,7 @@ const cartSlice = createSlice({
       .addCase(updateCart.fulfilled, (state, { payload }) => {
         state.cart = payload.cart;
         state.loading = false;
-        state.loadOk = false;
+        state.emptyCart = state.cart?.length === 0;
       })
       .addCase(updateCart.rejected, (state, { error }) => {
         state.loading = false;

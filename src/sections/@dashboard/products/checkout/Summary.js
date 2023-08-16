@@ -25,6 +25,7 @@ import { orderService } from "../../../../services/orderService";
 import { Avatar, message } from "antd";
 import UserInfo from "./UserInfo";
 import { setUser } from "src/redux/order/OrderSlice";
+import { setInvoice } from "src/redux/order/OrderInvoice";
 import { fetchCartItems } from "src/redux/cart/cartSlice";
 import { getAllProduct } from "src/redux/products/productList";
 Summary.propTypes = {
@@ -43,7 +44,6 @@ function Summary({ handleBack, handleNext, activeStep, handleReset }) {
   });
   const userID = useSelector((state) => state.auth.idAccount);
   const cart = useSelector((state) => state.cart.cart);
-  console.log(cart);
   const order = useSelector((state) => state.order);
   console.log(order);
   const data = cart?.filter((cartItem) =>
@@ -75,6 +75,11 @@ function Summary({ handleBack, handleNext, activeStep, handleReset }) {
       const response = await orderService.createOrder({ ...request });
       console.log(response);
       if (response?.status === 200) {
+        dispatch(
+          setInvoice({
+            orderID: response.data.orderID,
+          })
+        );
         dispatch(
           setUser({
             firstName: "",

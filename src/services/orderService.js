@@ -51,6 +51,30 @@ export let orderService = {
       throw error;
     }
   },
+  getOrdersID: async (orderID) => {
+    try {
+      const response = await axios.get(
+        BASE_URL + `/api/v1/order/get/orderDetail/${orderID}`
+      );
+      console.log("Response: ", response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  getOrdersByCustomer: async (userID) => {
+    try {
+      const response = await axios.get(
+        BASE_URL + `/api/v1/order/get/${userID}`
+      );
+      console.log("Response: ", response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
   confirmOrder: async (confirmOrderRequest) => {
     try {
       const response = await axios.put(

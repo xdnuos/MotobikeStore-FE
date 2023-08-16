@@ -36,11 +36,11 @@ import {
   Snackbar,
 } from "@mui/material";
 // components
-import Label from "../../components/label";
-import Iconify from "../../components/iconify";
-import Scrollbar from "../../components/scrollbar";
+import Label from "../../../components/label";
+import Iconify from "../../../components/iconify";
+import Scrollbar from "../../../components/scrollbar";
 // sections
-import { UserListToolbar } from "../../sections/@dashboard/user";
+import { UserListToolbar } from "../../../sections/@dashboard/user";
 // mock
 import { useSelector } from "react-redux";
 import { orderService } from "src/services/orderService";
@@ -302,7 +302,7 @@ export default function OrderStorePage() {
   return (
     <>
       <Helmet>
-        <title> Store | Medicine Dashboard </title>
+        <title> Store | Biker Dashboard </title>
       </Helmet>
 
       <Container>

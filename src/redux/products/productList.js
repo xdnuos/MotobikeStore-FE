@@ -12,6 +12,13 @@ export const getAllProduct = createAsyncThunk("product/list", async () => {
   const response = await productService.getAllProduct();
   return response;
 });
+export const getAllProductAdmin = createAsyncThunk(
+  "product/listAdmin",
+  async () => {
+    const response = await productService.getAllProductAdmin();
+    return response;
+  }
+);
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (ProductForm) => {
@@ -98,6 +105,18 @@ const listProductSlice = createSlice({
         state.loading = false;
       })
       .addCase(getAllProduct.rejected, (state) => {
+        return { ...state, allProduct: null, loading: false };
+      })
+      .addCase(getAllProductAdmin.pending, (state) => {
+        state.allProduct = [];
+        state.loading = true;
+        state.getProducts = false;
+      })
+      .addCase(getAllProductAdmin.fulfilled, (state, actions) => {
+        state.allProduct = actions.payload;
+        state.loading = false;
+      })
+      .addCase(getAllProductAdmin.rejected, (state) => {
         return { ...state, allProduct: null, loading: false };
       })
       .addCase(addProduct.pending, (state) => {
