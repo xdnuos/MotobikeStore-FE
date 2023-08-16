@@ -3,6 +3,7 @@ import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
+import { getProductCartQuantity } from "src/helper/product";
 // @mui
 import {
   Alert,
@@ -43,12 +44,13 @@ import { StyledSeparator } from "../../components/custom/CustomSpan";
 import {
   StyledButtonYellow,
   StyledButtonGreen,
+  StyledButtonRed,
 } from "../../components/custom/CustomButton";
 import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
 import { getProductById } from "../../redux/products/ProductDetail";
 import { addToCart } from "../../redux/cart/cartSlice";
 import Label from "../../components/label/Label";
-
+import { message } from "antd";
 
 function ProductDetailsPage() {
   const { id } = useParams();
@@ -60,22 +62,18 @@ function ProductDetailsPage() {
   const loading = useSelector((state) => state.products.productDetail.loading);
   const idAccount = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const cartItems = useSelector((state) => state.cart.cart);
 
- 
-  const [unit, setUnit] = useState(product?.unit);
   const [showAlert, setShowAlert] = useState(false);
   const [showPrice, setShowPrice] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-
+  const cartItem = cartItems?.filter(
+    (cartItem) => cartItem.productID === product?.productID
+  )[0];
+  const productCartQty = getProductCartQuantity(cartItem, null, null, null);
   useEffect(() => {
     dispatch(getProductById(id));
-    console.log("product", product);
-  }, [dispatch, id,idAccount]);
+  }, [dispatch, id]);
 
-
-
-
-  // const [open, setOpen] = useState(false);
   const [state, setState] = useState({
     open: false,
     vertical: "bottom",
@@ -83,31 +81,39 @@ function ProductDetailsPage() {
   });
   const { vertical, horizontal, open } = state;
 
+  const [cartRequest, setCartRequest] = useState({
+    userID: idAccount,
+    productID: id,
+    quantity: 1,
+  });
+
+  const { userID, idProduct, quantity } = cartRequest;
+
   const handleClickAdd = async () => {
-    // if (isLoggedIn) {
-    //   if (isNaN(selectedIndex)) {
-    //     setShowAlert(true);
-    //   } else {
-    //     await dispatch(addToCart(cartRequest));
-    //     setState({ ...state, open: true });
-    //     console.log("cartRequestzzzzzzzzzzzzzzzzzz", cartRequest);
-    //   }
-    // } else {
-    //   setState({ ...state, open: true });
-    // }
-    console.log("showPrice===> ", showPrice);
+    if (isLoggedIn) {
+      console.log(cartRequest);
+      const response = await dispatch(addToCart(cartRequest));
+      console.log("testtttttttttttt", response);
+      if (response.status === 200) {
+        message.success(response.data.message);
+      } else {
+        message.error(response.response.data);
+      }
+    }
   };
 
   const handleClickBuyNow = async () => {
     if (isLoggedIn) {
-      await  dispatch(addToCart({
+      await dispatch(
+        addToCart({
           productID: id,
           quantity: quantity,
-          userID: idAccount
-        }));
-        setState({ ...state, open: true });
-        navigate("/checkout");
-      
+          userID: idAccount,
+        })
+      );
+      setState({ ...state, open: true });
+      navigate("/checkout");
+
       // console.log("is login = true",quantity);
     } else {
       setState({ ...state, open: true });
@@ -120,19 +126,24 @@ function ProductDetailsPage() {
     setState({ ...state, open: false });
   };
 
-
   // ========== Quantity ========== //
-  const totalPrice = product?.price * quantity;
   const handleIncrement = () => {
-     setQuantity( quantity + 1);
+    if ((product?.stock > 0) & (product?.stock - productCartQty > quantity)) {
+      setCartRequest({
+        ...cartRequest,
+        quantity: quantity + 1,
+      });
+    }
   };
 
   const handleDecrement = () => {
     if (quantity > 1) {
-      setQuantity( quantity - 1);
+      setCartRequest({
+        ...cartRequest,
+        quantity: quantity - 1,
+      });
     }
   };
-  
 
   if (loading) {
     return <SkeletonLoading />;
@@ -156,8 +167,12 @@ function ProductDetailsPage() {
                 Trang chủ
               </Link>
               {product?.categories.map((category, index) => (
-
-                <Link key={index} underline="hover" color="text.primary" href="#">
+                <Link
+                  key={index}
+                  underline="hover"
+                  color="text.primary"
+                  href="#"
+                >
                   {category}
                 </Link>
               ))}
@@ -172,37 +187,31 @@ function ProductDetailsPage() {
           <Grid item xs={12} md={6} p={"16px 32px 16px 40px"}>
             <Stack spacing={2}>
               {/* thông tin tên , giá ,... */}
-              <ProductInfoForm
-                product={product}
-                price={totalPrice}
-              />
+              <ProductInfoForm product={product} price={showPrice} />
 
               {/* option lựa số lượng */}
-              <Grid item xs={12}>
-              <Label sx={{ fontSize: "14px" }} color={product?.stock > 0 ? "success" : "error"}>
-                {product?.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}
-              </Label>
-              </Grid>
+              {/* <Grid item xs={12}>
+                <Label
+                  sx={{ fontSize: "14px" }}
+                  color={product?.stock > 0 ? "success" : "error"}
+                >
+                  {product?.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}
+                </Label>
+              </Grid> */}
 
               <Grid item xs={12}>
-                <Stack direction="row" justifyContent="space-between">
-                  <Typography variant="subtitle1"> Quantity </Typography>
-                  <Stack>
-                    <Quantity
-                      countNumber={quantity}
-                      handleDecrement={handleDecrement}
-                      handleIncrement={handleIncrement}
-                    />
+                <Stack direction="row" justifyContent="flex-start">
+                  <Typography variant="subtitle1"> Select quantity </Typography>
+                  <Quantity
+                    countNumber={quantity}
+                    handleDecrement={handleDecrement}
+                    handleIncrement={handleIncrement}
+                  />
 
-                    <Typography
-                      variant="caption"
-                      pt={"2px"}
-                      textAlign={"right"}
-                    >
-                      {" "}
-                      Available : {product?.stock }{" "}
-                    </Typography>
-                  </Stack>
+                  <Typography pt={"5px"} textAlign={"right"} pl={2}>
+                    {" "}
+                    Availlable : {product?.stock}{" "}
+                  </Typography>
                 </Stack>
               </Grid>
 
@@ -219,15 +228,21 @@ function ProductDetailsPage() {
                 </Alert>
               )}
               <Stack direction="row" spacing={2}>
-                {/* thêm vào giỏ */}
-                <StyledButtonYellow onClick={handleClickAdd}>
-                  <Iconify icon={"ic:round-add-shopping-cart"} />
-                  &nbsp;&nbsp;Add To Cart
-                </StyledButtonYellow>
-                {/* mua ngay */}
-                <StyledButtonGreen onClick={handleClickBuyNow}>
-                  Buy Now
-                </StyledButtonGreen>
+                {product?.stock <= 0 ? (
+                  // Hiện nút "Out of Stock" khi sản phẩm hết hàng
+                  <StyledButtonRed>Out of Stock</StyledButtonRed>
+                ) : (
+                  // Hiện nút "Add To Cart" và "Buy Now" khi sản phẩm còn hàng
+                  <>
+                    <StyledButtonYellow onClick={handleClickAdd}>
+                      <Iconify icon={"ic:round-add-shopping-cart"} />
+                      &nbsp;&nbsp;Add To Cart
+                    </StyledButtonYellow>
+                    <StyledButtonGreen onClick={handleClickBuyNow}>
+                      Buy Now
+                    </StyledButtonGreen>
+                  </>
+                )}
               </Stack>
 
               {/* nút share vô tri */}
@@ -279,7 +294,7 @@ function ProductDetailsPage() {
               </Stack>
               <Typography variant="h6">100% Original</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-              without editing, dissection
+                without editing, dissection
               </Typography>
             </Stack>
           </Grid>
@@ -303,7 +318,7 @@ function ProductDetailsPage() {
               </Stack>
               <Typography variant="h6">10 Day Replacement</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-              if the proposal is rejected
+                if the proposal is rejected
               </Typography>
             </Stack>
           </Grid>
@@ -326,7 +341,7 @@ function ProductDetailsPage() {
               </Stack>
               <Typography variant="h6">Year Warranty</Typography>
               <Typography variant="body1" color={"text.secondary"}>
-              hungskr cuacoem thaooongannnnn
+                hungskr cuacoem thaooongannnnn
               </Typography>
             </Stack>
           </Grid>
@@ -358,17 +373,17 @@ function ProductDetailsPage() {
           )}
         </Snackbar>
         <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add to Cart</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please login to add products to the cart.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Continue</Button>
-          <Button onClick={() => navigate("/login")}>Login</Button>
-        </DialogActions>
-      </Dialog>
+          <DialogTitle>Add to Cart</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please login to add products to the cart.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Continue</Button>
+            <Button onClick={() => navigate("/login")}>Login</Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </>
   );

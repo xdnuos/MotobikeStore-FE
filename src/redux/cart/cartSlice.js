@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { cartService } from "../../services/cartService";
-import { message } from "antd";
+import { message } from "antd/es";
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
@@ -17,6 +17,13 @@ export const fetchCartItems = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (AddToCartRequest) => {
+    message.config({
+      top: 150,
+      duration: 5,
+      maxCount: 3,
+      rtl: true,
+      prefixCls: "my-message",
+    });
     try {
       const response = await cartService.addToCart(AddToCartRequest);
       console.log(response.data);
@@ -46,6 +53,13 @@ export const removeFromCart = createAsyncThunk(
 export const updateCart = createAsyncThunk(
   "cart/updateCart",
   async (updateCartRequest) => {
+    message.config({
+      top: 150,
+      duration: 5,
+      maxCount: 3,
+      rtl: true,
+      prefixCls: "my-message",
+    });
     try {
       const response = await cartService.updateToCart(updateCartRequest);
       message.success(response.data.message);

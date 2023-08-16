@@ -69,7 +69,7 @@ function AdminProductDetails() {
     quantity: 1,
   });
 
-  const { idAccount, idProduct, price, quantity } = cartRequest;
+  const { idAccount, idProduct, quantity } = cartRequest;
 
   const handleClickAdd = async () => {
     if (isLoggedIn) {

@@ -116,7 +116,7 @@ export default function Nav({ openNav, onCloseNav }) {
           PaperProps={{
             sx: {
               // overflow: 'hidden',
-              display: "flex",
+              display: isScrolled ? "none" : "flex",
               flexDirection: "row",
               justifyContent: "center",
               mt: "70px",
