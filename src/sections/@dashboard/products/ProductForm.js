@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addProduct, updateProduct } from "src/redux/products/productList";
+import { blobToFile } from "src/helper/image";
 // const imageServer = process.env.REACT_APP_IMAGE_SERVER;
 // -------------------------------------------------------------------
 message.config({
@@ -85,12 +86,7 @@ function getObjectByNames(arr, names) {
 //   }
 //   return images.map((image) => imageServer + image);
 // }
-function blobToFile(theBlob, fileName) {
-  return new File([theBlob], fileName, {
-    lastModified: new Date().getTime(),
-    type: theBlob.type,
-  });
-}
+
 function ProductForm({ product, categories, tags, manufacturer }) {
   const [categoryIDs, setCategoryIDs] = useState("");
   const [tagIDs, setTagIDs] = useState("");
