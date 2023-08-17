@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
-import { Dialog, Button, useMediaQuery, useTheme, Typography, Box, Stack, Link } from '@mui/material';
+import { Dialog, Button, useMediaQuery, useTheme, Typography, Box, Stack, Backdrop, CircularProgress, } from '@mui/material';
 import { StyledButtonGreen } from '../../components/custom/CustomButton';
 import Iconify from '../../components/iconify/Iconify';
 import { useState } from 'react';
@@ -8,16 +8,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { localStorageService } from '../../services/localStorageService';
 import { loginUser } from '../../redux/auth/authSlice';
 import { useEffect } from 'react';
-import { el } from 'date-fns/locale';
 import { authService } from 'src/services/authService';
 import { message } from 'antd';
 
 
-function ActiveAccount() {
+function ActiveAccountPage() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [openError, setOpenError] = useState(false);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -39,8 +39,9 @@ function ActiveAccount() {
 
     useEffect(() => {
         if (isLoggedIn) {
-            const role = localStorageService.get('USER').roles[0]
-            if (role === "CUSTOMER") {
+            const role = localStorageService.get('USER')?.roles
+            const hasCustomerRole = role?.includes('CUSTOMER');
+            if (hasCustomerRole) {
                 navigate("/");
             } else {
                 navigate("/dashboard/app")
@@ -49,11 +50,15 @@ function ActiveAccount() {
             authService.active(token).then((res) => {
                 message.success("Active Success");
                 console.log(res.data);
+                setOpen(true);
                 return res.data;
             }).catch((err) => {
+                setOpen(false);
+                setOpenError(true);
                 console.log(err);
                 return err;
             });
+
         }
     }, [isLoggedIn, navigate, token]);
 
@@ -67,8 +72,59 @@ function ActiveAccount() {
                 width: '100%',
                 height: '100%'
             }}>
-
+                <Backdrop
+                    sx={{ color: '#000', background: '#ffffffbd', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={!open || !openError}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
             </div>
+
+            <Dialog
+                open={openError}
+                maxWidth={'100%'}
+                fullWidth={true}
+                fullScreen={true}
+                PaperProps={{
+                    style: {
+                        maxWidth: fullScreen ? 'calc(100% - 32px)' : '490px',
+                        maxHeight: fullScreen ? '100%' : 'calc(100% - 80px)', textAlign: 'center',
+                        display: 'flex', justifyContent: 'center', alignItems: 'center'
+                        , borderRadius: '20px'
+                    },
+                }}
+                BackdropProps={{ style: { backgroundColor: '#ffffffbd' } }}
+            >
+
+                <Stack justifyContent={'center'} alignItems={'center'} spacing={3}  >
+
+                    <Typography variant='h4'>No permission</Typography>
+                    <Typography>
+                        The page you're trying access has restricted access.<br />
+                        Please refer to your system administrator
+                    </Typography>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Box
+                            component="img"
+                            src="/assets/illustrations/illustration_403.svg"
+                            sx={{ height: 200 }}
+                        />
+                    </div>
+
+
+                    <Stack direction={'row'} spacing={2} sx={{ width: '100%', pt: 4, borderTop: '1px dashed lightgrey' }}>
+                        <Button fullWidth variant="outlined" sx={{ color: '#000', py: '8px' }} onClick={()=>navigate('/')}>
+                            <Iconify icon='ic:outline-keyboard-arrow-left' mr={0.5} />
+                            Continue Shopping
+                        </Button>
+                        <StyledButtonGreen onClick={()=>navigate('/login')}>
+                            Go to Login
+                            <Iconify icon='ic:outline-keyboard-arrow-right' ml={0.5} />
+                        </StyledButtonGreen>
+                    </Stack>
+                </Stack>
+            </Dialog>
 
             <Dialog
                 open={open}
@@ -121,8 +177,9 @@ function ActiveAccount() {
                     </div>
                 </Stack>
             </Dialog>
+            
         </>
     )
 }
 
-export default ActiveAccount
+export default ActiveAccountPage

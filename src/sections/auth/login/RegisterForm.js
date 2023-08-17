@@ -1,4 +1,4 @@
-import { useState,forwardRef } from 'react';
+import { useState, forwardRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Button, Checkbox, RadioGroup, FormControlLabel, Radio, FormControl, FormLabel, Slide, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
@@ -23,6 +23,8 @@ export default function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const [open, setOpen] = useState(false);
 
@@ -47,38 +49,40 @@ export default function RegisterForm() {
       return;
     }
     // Check if password is at least 8 characters long
-    if (password.length < 8) {
+    else if (password.length < 8) {
       setErrorMessage('Password must be at least 8 characters long');
       return;
-    }
+    } else {
       setLoading(true);
-    const info = e.target;
-    await authService.register({
-      email: info.email.value,
-      password: confirmPassword,
-      phone: info.phone.value,
-      birth: info.birth.value,
-      address: info.address.value,
-      sex: info.gender.value,
-      firstName: info.firstName.value,
-      lastName: info.lastName.value
-    }).then((res) => {
-      localStorageService.set('_tempUser', { email: info.email.value, password: confirmPassword });
-      message.success("Check mail đê bạn ơi");
-      console.log(res.data);
-      setOpen(true);
-    setLoading(false);
-      return;
-    }).catch((err) => {
-      if (err.response.data.emailError === "Email is already in use." || err.response.data.emailError === "Phone number is already in use.") {
-        message.error(err.response.data.emailError + " Please login");
-        return navigate("/login");
-      }
-      console.log(err);
-    });
+      const info = e.target;
+      await authService.register({
+        email: info.email.value,
+        password: confirmPassword,
+        phone: info.phone.value,
+        birth: info.birth.value,
+        address: info.address.value,
+        sex: info.gender.value,
+        firstName: info.firstName.value,
+        lastName: info.lastName.value
+      }).then((res) => {
+        localStorageService.set('_tempUser', { email: info.email.value, password: confirmPassword });
+        message.success("Check mail đê bạn ơi");
+        console.log(res.data);
+        setOpen(true);
+        setLoading(false);
+        return;
+      }).catch((err) => {
+        if (err.response.data.emailError === "Email is already in use." || err.response.data.emailError === "Phone number is already in use.") {
+          message.error(err.response.data.emailError + " Please login");
+          return navigate("/login");
+        }
+        console.log(err);
+      });
 
-    // Handle form submission logic here
-    setErrorMessage('');
+      // Handle form submission logic here
+      setErrorMessage('');
+    }
+
   };
 
   // const handleChange = (event) => {
@@ -89,16 +93,15 @@ export default function RegisterForm() {
   //   });
   // };
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
 
   useEffect(() => {
     if (isLoggedIn) {
-      const role = localStorageService.get('USER').roles[0]
-      if (role === "CUSTOMER") {
+      const role = localStorageService.get('USER')?.roles;
+      const hasCustomerRole = role?.includes('CUSTOMER');
+      if (hasCustomerRole) {
         navigate("/");
       } else {
         navigate("/dashboard/app")
