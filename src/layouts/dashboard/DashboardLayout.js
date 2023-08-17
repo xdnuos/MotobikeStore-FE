@@ -73,32 +73,24 @@ function DashboardLayout() {
     dispatch(getAllTags());
     dispatch(getAllManufacturer());
     dispatch(fetchCartItems(userID));
-    if (getProducts) {
-      console.log("Get lai product");
-      dispatch(getAllProductAdmin());
-    }
   }, [dispatch, getProducts, userID]);
 
-  if (
-    loadingProducts ||
-    loadingCategories ||
-    loadingTags ||
-    loadingManufacturer
-    // loadCart
-  ) {
-    console.log("Loading...................");
-    return <SkeletonLoading />;
-  }
-  console.log("Loading ok");
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />
 
       <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
-      <Main>
-        <Outlet context={[products, categories, tags, manufacturer]} />
-      </Main>
+      {loadingProducts ||
+      loadingCategories ||
+      loadingTags ||
+      loadingManufacturer ? (
+        <SkeletonLoading />
+      ) : (
+        <Main>
+          <Outlet context={[products, categories, tags, manufacturer]} />
+        </Main>
+      )}
     </StyledRoot>
   );
 }

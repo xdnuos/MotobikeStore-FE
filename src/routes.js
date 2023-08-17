@@ -25,11 +25,13 @@ import OrdersPage from "./pages/admin/order/OrdersPage";
 import InventoryManagement from "./pages/admin/InventoryManagementPage";
 import CreateReceipt from "./sections/@dashboard/products/CreateReceipt";
 import Staff from "./pages/admin/staff/StaffPage";
+import StaffDetail from "./pages/admin/staff/StaffDetail";
 import CreateStaff from "./pages/admin/staff/CreateStaff";
 import EditStaff from "./pages/admin/staff/EditStaff";
 import Invoice from "./pages/admin/buy/InvoicePage";
 import UserDetail from "./pages/admin/user/UserOrder";
 import OrderDetail from "./pages/admin/order/OrderDetail";
+import PersonalInfoForm from "./pages/admin/InfoPage";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -53,15 +55,17 @@ export default function Router() {
         { path: "stock", element: <InventoryManagement /> },
         { path: "stock/new", element: <CreateReceipt /> },
         { path: "staff", element: <Staff /> },
+        { path: "staff/:staffID", element: <StaffDetail /> },
         { path: "staff/new", element: <CreateStaff /> },
         { path: "staff/edit/:staffID", element: <EditStaff /> },
+        { path: "info", element: <PersonalInfoForm /> },
       ],
     },
     {
       path: "/",
       element: <ClientLayout />,
       children: [
-        { element:  <HomePage />, index: true },
+        { element: <HomePage />, index: true },
         { path: "product-details/:id", element: <ProductDetailsPage /> },
         { path: "blog", element: <BlogPage /> },
         { path: "list-products/:id", element: <ProductsListPage /> },

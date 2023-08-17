@@ -246,20 +246,20 @@ function UserDetail() {
     getComparator(order, orderBy),
     filterName
   );
-  const isNotFound = !filteredUsers.length && !!filterName;
+  const isNotFound = !filteredUsers.length;
   const createSortHandler = (property) => (event) => {
     handleRequestSort(event, property);
   };
   let icon = "";
 
   switch (customerInfo.sex) {
-    case "male":
+    case "Male":
       icon = "ion:male";
       break;
-    case "female":
+    case "Female":
       icon = "ion:female";
       break;
-    case "other":
+    case "Other":
       icon = "healthicons:sexual-reproductive-health";
       break;
     default:
@@ -499,14 +499,7 @@ function UserDetail() {
                           }}
                         >
                           <Typography variant="h6" paragraph>
-                            Not found
-                          </Typography>
-
-                          <Typography variant="body2">
-                            No results found for &nbsp;
-                            <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete
-                            words.
+                            There is no order yet
                           </Typography>
                         </Paper>
                       </TableCell>

@@ -39,8 +39,10 @@ import { orderService } from "src/services/orderService";
 import { Link, useParams } from "react-router-dom";
 import { customersService } from "src/services/customerService";
 import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
-function UserDetail() {
-  const { userID } = useParams();
+import { staffService } from "src/services/staffService";
+import { MonthRevenue, TotalRevenue } from "src/helper/order";
+function StaffDetail() {
+  const { staffID } = useParams();
   const TABLE_HEAD = [
     { id: "email", label: "Purchase method", alignLeft: true },
     { id: "fullname", label: "Order time", alignLeft: true },
@@ -51,7 +53,7 @@ function UserDetail() {
     { id: "" },
   ];
   const [orders, setOrders] = useState([]);
-  const [customerInfo, setCustomerInfo] = useState([]);
+  const [customerInfo, setStaffInfo] = useState([]);
   const [page, setPage] = useState(0);
   const [selectedOrderID, setSelectedOrderID] = useState(null);
   const [selected, setSelected] = useState([]);
@@ -68,21 +70,22 @@ function UserDetail() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    getOrderByCustomer();
-    geCustomerInfo();
+    getAllOrderByStaff();
+    getStaffInfo();
   }, []);
   const compareByCreatedAt = (orderA, orderB) => {
-    const dateA = new Date(orderA.createDate);
-    const dateB = new Date(orderB.createDate);
+    const dateA = new Date(orderA.orderTime);
+    const dateB = new Date(orderB.orderTime);
     return dateB - dateA;
   };
-  const getOrderByCustomer = async () => {
+  const getAllOrderByStaff = async () => {
+    console.log("staffID", staffID);
     return new Promise((resolve, reject) => {
       orderService
-        .getOrdersByCustomer(userID)
+        .getOrdersByStaff(staffID)
         .then((response) => {
           setOrders(response.sort(compareByCreatedAt));
-          console.log("get order", response);
+          console.log("response", response);
           resolve();
         })
         .catch((error) => {
@@ -90,12 +93,12 @@ function UserDetail() {
         });
     });
   };
-  const geCustomerInfo = async () => {
+  const getStaffInfo = async () => {
     return new Promise((resolve, reject) => {
-      customersService
-        .getCustomersInfoWithStatisticByUserID(userID)
+      staffService
+        .getByID(staffID)
         .then((response) => {
-          setCustomerInfo(response);
+          setStaffInfo(response);
           console.log("customerInfo", response);
           resolve();
         })
@@ -103,45 +106,6 @@ function UserDetail() {
           reject(error);
         });
     });
-  };
-  const changeState = async (userID) => {
-    // return new Promise((resolve, reject) => {
-    //   staffService
-    //     .then((response) => {
-    //       console.log("response", response);
-    //       if (response.status === 200) {
-    //         setDeleteDialog(false);
-    //         getOrderByCustomer();
-    //         message.success(response.data);
-    //       }
-    //       resolve();
-    //     })
-    //     .catch((error) => {
-    //       setDeleteDialog(false);
-    //       message.error(error.response.data);
-    //       reject(error);
-    //     });
-    // });
-  };
-  const resetPassword = async (userID) => {
-    // return new Promise((resolve, reject) => {
-    //   staffService
-    //     .resetPass(userID)
-    //     .then((response) => {
-    //       console.log("response", response);
-    //       if (response.status === 200) {
-    //         setResetDialog(false);
-    //         getAllOrder();
-    //         message.success(response.data);
-    //       }
-    //       resolve();
-    //     })
-    //     .catch((error) => {
-    //       setResetDialog(false);
-    //       message.error(error.response.data);
-    //       reject(error);
-    //     });
-    // });
   };
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
@@ -201,30 +165,6 @@ function UserDetail() {
     setFilterName(event.target.value);
   };
 
-  const deleteOrder = async (id) => {
-    if (idRowOrder !== -1) {
-      await dispatch(changeState(id));
-      setOpen(null);
-      setIdRowOrder(-1);
-    } else if (selected.length !== 0) {
-      // await dispatch(changeStateMulti(id));
-      setSelected([]);
-    }
-    // loadProducts();
-    setDeleteDialog(false);
-  };
-  const resetPass = async (id) => {
-    if (idRowOrder !== -1) {
-      await dispatch(resetPassword(id));
-      setOpen(null);
-      setIdRowOrder(-1);
-    } else if (selected.length !== 0) {
-      // await dispatch(changeStateMulti(id));
-      setSelected([]);
-    }
-    setResetDialog(false);
-  };
-
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders?.length) : 0;
 
@@ -246,20 +186,21 @@ function UserDetail() {
     getComparator(order, orderBy),
     filterName
   );
-  const isNotFound = !filteredUsers.length && !!filterName;
+  const isNotFound = !filteredUsers.length;
+  console.log("isNotFound", filterName);
   const createSortHandler = (property) => (event) => {
     handleRequestSort(event, property);
   };
   let icon = "";
 
   switch (customerInfo.sex) {
-    case "male":
+    case "Male":
       icon = "ion:male";
       break;
-    case "female":
+    case "Female":
       icon = "ion:female";
       break;
-    case "other":
+    case "Other":
       icon = "healthicons:sexual-reproductive-health";
       break;
     default:
@@ -322,42 +263,61 @@ function UserDetail() {
                       <Typography variant="h7">{customerInfo.phone}</Typography>
                     </Stack>
                     <Stack direction={"row"} spacing={1}>
-                      <Iconify icon="mdi:address-marker-outline"></Iconify>
+                      <Iconify icon="uiw:date"></Iconify>
                       <Typography variant="h7">
-                        {customerInfo.address
-                          ? customerInfo.address
-                          : "Unregister"}
+                        Create:{" "}
+                        {convertStringToDateTime(customerInfo.createDate)}
+                      </Typography>
+                    </Stack>
+                    <Stack direction={"row"} spacing={1}>
+                      <Iconify icon="eos-icons:admin-outlined"></Iconify>
+                      <Typography variant="h7">
+                        Manager: &nbsp;
+                        {customerInfo.managerLastName}
                       </Typography>
                     </Stack>
                   </Grid>
                   <Grid item xs={12} md={6} sm={6}>
                     <Typography variant="h4">&nbsp;</Typography>
+
                     <Stack direction={"row"} spacing={1}>
                       <Iconify icon="icon-park-outline:order"></Iconify>
-                      <Typography>
-                        Total Order: {customerInfo.totalOrders}
-                      </Typography>
+                      <Typography>Total order: {orders?.length}</Typography>
                     </Stack>
-                    <Stack direction={"row"} spacing={1}>
-                      <Iconify icon="icon-park:ad-product"></Iconify>
-                      <Typography>
-                        Total Product Buy: {customerInfo.totalProductBuy}
-                      </Typography>
-                    </Stack>
+                    {orders.length !== 0 && (
+                      <Stack direction={"row"} spacing={1}>
+                        <Iconify icon="material-symbols:percent"></Iconify>
+                        <Typography>
+                          Ratio:{" "}
+                          {(
+                            (orders.filter(
+                              (order) => order.orderStatus !== "FAILED"
+                            ).length /
+                              orders?.length) *
+                            100
+                          ).toFixed(2)}
+                          %
+                        </Typography>
+                      </Stack>
+                    )}
                     <Stack direction={"row"} spacing={1}>
                       <Iconify icon="bi:coin"></Iconify>
                       <Typography>
-                        Total Purchased:{" "}
-                        {customerInfo.totalPurchased.toLocaleString("vi-VN", {
+                        Revenue in month:{" "}
+                        {MonthRevenue(orders).toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
                         })}
                       </Typography>
                     </Stack>
                     <Stack direction={"row"} spacing={1}>
-                      <Iconify icon="ic:outline-percent"></Iconify>
+                      <Iconify icon="bi:coin"></Iconify>
                       <Typography>
-                        Order ratio: {customerInfo.ratioOrder * 100}%
+                        Total Revenue:{" "}
+                        {TotalRevenue(orders).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
                       </Typography>
                     </Stack>
                   </Grid>
@@ -499,14 +459,7 @@ function UserDetail() {
                           }}
                         >
                           <Typography variant="h6" paragraph>
-                            Not found
-                          </Typography>
-
-                          <Typography variant="body2">
-                            No results found for &nbsp;
-                            <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete
-                            words.
+                            There is no order yet
                           </Typography>
                         </Paper>
                       </TableCell>
@@ -531,18 +484,4 @@ function UserDetail() {
   );
 }
 
-export default UserDetail;
-// const getAllOrderByStaff = async (staffID) => {
-//   return new Promise((resolve, reject) => {
-//     orderService
-//       .getOrdersByStaff(staffID)
-//       .then((response) => {
-//         setOrders(response.sort(compareByCreatedAt));
-//         console.log("response", response);
-//         resolve();
-//       })
-//       .catch((error) => {
-//         reject(error);
-//       });
-//   });
-// };
+export default StaffDetail;
