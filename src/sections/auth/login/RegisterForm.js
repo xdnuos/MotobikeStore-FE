@@ -11,6 +11,7 @@ import { loginUser } from '../../../redux/auth/authSlice';
 import { localStorageService } from '../../../services/localStorageService';
 import { authService } from '../../../services/authService';
 import { DatePicker, Form, message } from 'antd';
+import { StyledButtonGreen, StyledButtonGreenText } from '../../../components/custom/CustomButton';
 
 // ----------------------------------------------------------------------
 const Transition = forwardRef(function Transition(props, ref) {
@@ -27,6 +28,7 @@ export default function RegisterForm() {
 
   const handleClose = () => {
     setOpen(false);
+    navigate("/");
   };
 
   const handlePasswordChange = (event) => {
@@ -230,19 +232,17 @@ export default function RegisterForm() {
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle>{"Thank for register ❤️❤️❤️"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+            Please check your email to verify your account
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
+          <StyledButtonGreen onClick={handleClose}>Agree</StyledButtonGreen>
         </DialogActions>
       </Dialog>
     </>
