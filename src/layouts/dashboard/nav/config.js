@@ -45,6 +45,21 @@ const navConfig = [
     path: "/dashboard/staff",
     icon: <Icon icon="icon-park-outline:file-staff-one" />,
   },
+  {
+    title: "Category",
+    path: "/dashboard/categories",
+    icon: <Icon icon="carbon:category" />,
+  },
+  {
+    title: "Tag",
+    path: "/dashboard/tags",
+    icon: <Icon icon="solar:tag-linear" />,
+  },
+  {
+    title: "Manufacture",
+    path: "/dashboard/manufacturer",
+    icon: <Icon icon="fluent-mdl2:manufacturing" />,
+  },
 ];
 
 const navConfigStore = [
@@ -72,6 +87,21 @@ const navConfigStore = [
     title: "User",
     path: "/dashboard/users",
     icon: <Icon icon="ph:user-bold" />,
+  },
+  {
+    title: "Category",
+    path: "/dashboard/categories",
+    icon: <Icon icon="carbon:category" />,
+  },
+  {
+    title: "Tag",
+    path: "/dashboard/tags",
+    icon: <Icon icon="solar:tag-linear" />,
+  },
+  {
+    title: "Manufacture",
+    path: "/dashboard/manufacturer",
+    icon: <Icon icon="fluent-mdl2:manufacturing" />,
   },
 ];
 export { navConfig, navConfigStore };

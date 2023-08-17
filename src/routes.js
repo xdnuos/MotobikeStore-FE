@@ -34,6 +34,9 @@ import OrderDetail from "./pages/admin/order/OrderDetail";
 import ActiveAccount from "./pages/auth/ActiveAccount";
 import PersonalInfoForm from "./pages/admin/InfoPage";
 import ProfileAdmin from "./pages/admin/ProfilePage";
+import ManageCategoriesPage from "./pages/admin/productPropeties/CategoryPage";
+import ManageTagsPage from "./pages/admin/productPropeties/TagPage";
+import ManageManufacturerPage from "./pages/admin/productPropeties/ManufacturerPage";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -62,6 +65,9 @@ export default function Router() {
         { path: "staff/edit/:staffID", element: <EditStaff /> },
         { path: "info", element: <PersonalInfoForm /> },
         { path: "profile", element: <ProfileAdmin /> },
+        { path: "categories", element: <ManageCategoriesPage /> },
+        { path: "tags", element: <ManageTagsPage /> },
+        { path: "manufacturer", element: <ManageManufacturerPage /> },
       ],
     },
     {
