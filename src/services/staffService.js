@@ -84,6 +84,26 @@ export let staffService = {
       console.log(error);
     }
   },
+  getByUserID: async (userID) => {
+    try {
+      const response = await axios.get(
+        BASE_URL + `/api/v1/admin/staff/getByUser/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response.status === 406) {
+        message.error(error.response.data);
+      } else {
+        message.error("An error has occurred. Please try again");
+      }
+      console.log(error);
+    }
+  },
   changeState: async (request) => {
     try {
       console.log("reset pass", request);

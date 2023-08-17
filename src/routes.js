@@ -25,6 +25,7 @@ import OrdersPage from "./pages/admin/order/OrdersPage";
 import InventoryManagement from "./pages/admin/InventoryManagementPage";
 import CreateReceipt from "./sections/@dashboard/products/CreateReceipt";
 import Staff from "./pages/admin/staff/StaffPage";
+import StaffDetail from "./pages/admin/staff/StaffDetail";
 import CreateStaff from "./pages/admin/staff/CreateStaff";
 import EditStaff from "./pages/admin/staff/EditStaff";
 import Invoice from "./pages/admin/buy/InvoicePage";
@@ -32,6 +33,11 @@ import UserDetail from "./pages/admin/user/UserOrder";
 import OrderDetail from "./pages/admin/order/OrderDetail";
 import ActiveAccountPage from "./pages/auth/ActiveAccountPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import PersonalInfoForm from "./pages/admin/InfoPage";
+import ProfileAdmin from "./pages/admin/ProfilePage";
+import ManageCategoriesPage from "./pages/admin/productPropeties/CategoryPage";
+import ManageTagsPage from "./pages/admin/productPropeties/TagPage";
+import ManageManufacturerPage from "./pages/admin/productPropeties/ManufacturerPage";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -55,14 +61,20 @@ export default function Router() {
         { path: "stock", element: <InventoryManagement /> },
         { path: "stock/new", element: <CreateReceipt /> },
         { path: "staff", element: <Staff /> },
+        { path: "staff/:staffID", element: <StaffDetail /> },
         { path: "staff/new", element: <CreateStaff /> },
         { path: "staff/edit/:staffID", element: <EditStaff /> },
+        { path: "info", element: <PersonalInfoForm /> },
+        { path: "profile", element: <ProfileAdmin /> },
+        { path: "categories", element: <ManageCategoriesPage /> },
+        { path: "tags", element: <ManageTagsPage /> },
+        { path: "manufacturer", element: <ManageManufacturerPage /> },
       ],
     },
     {
       element: <ClientLayout />,
       children: [
-        { element:  <HomePage />, index: true },
+        { element: <HomePage />, index: true },
         { path: "product-details/:id", element: <ProductDetailsPage /> },
         { path: "blog", element: <BlogPage /> },
         { path: "list-products/:id", element: <ProductsListPage /> },
@@ -72,10 +84,7 @@ export default function Router() {
     },
     {
       element: <LoginPage />,
-      children: [
-        { path: "/login"},
-        { path: "/register"}
-      ]
+      children: [{ path: "/login" }, { path: "/register" }],
     },
     { path: "/activate/:token", element: <ActiveAccountPage /> },
     { path: "/reset/:token", element: <ResetPasswordPage /> },

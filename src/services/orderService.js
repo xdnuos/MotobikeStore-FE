@@ -51,6 +51,18 @@ export let orderService = {
       throw error;
     }
   },
+  getOrderStaffByUserID: async (userID) => {
+    try {
+      const response = await axios.get(
+        BASE_URL + `/api/v1/order/get/admin/user/${userID}`
+      );
+      console.log("Response: ", response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
   getOrdersID: async (orderID) => {
     try {
       const response = await axios.get(

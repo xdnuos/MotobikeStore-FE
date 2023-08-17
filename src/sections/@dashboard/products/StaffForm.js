@@ -158,7 +158,7 @@ function StaffForm({ staff }) {
         firstName: values.firstName,
         lastName: values.lastName,
         role: values.role,
-        avatar: values.avatar,
+        img: values.avatar,
         sex: values.sex,
         phone: values.phone,
         birth: format(new Date(values.birth), "dd/MM/yyyy"),

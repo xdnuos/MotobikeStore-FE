@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { productService } from "../../services/productService";
 import { stockService } from "src/services/stockService";
+import { message } from "antd";
 /** State **/
 const initialState = {
   allProduct: [],
@@ -24,8 +25,8 @@ export const addProduct = createAsyncThunk(
   async (ProductForm) => {
     try {
       const response = await productService.create(ProductForm);
-      console.log(response);
-      return response;
+      message.success(response.data.message);
+      return response.data.product;
     } catch (error) {
       throw new Error(error);
     }
@@ -36,20 +37,21 @@ export const updateProduct = createAsyncThunk(
   async ({ formData, id }) => {
     try {
       const response = await productService.update({ formData, id });
-      console.log(response);
-      return response;
+      message.success(response.data.message);
+      return response.data.product;
     } catch (error) {
       throw new Error(error);
     }
   }
 );
+// cai nay bo
 export const creatStockProduct = createAsyncThunk(
   "product/creatStockProduct",
   async (formData) => {
     try {
       const response = await stockService.create(formData);
-      console.log(response);
-      return response;
+      message.success(response.data.message);
+      return response.data.product;
     } catch (error) {
       throw new Error(error);
     }
@@ -61,12 +63,14 @@ export const changeState = createAsyncThunk(
     try {
       const response = await productService.changeState(productID);
       console.log(response);
-      return response;
+      message.success(response.data.message);
+      return response.data.product;
     } catch (error) {
       throw new Error(error);
     }
   }
 );
+// Chua lam
 export const changeStateMulti = createAsyncThunk(
   "product/changeStateMulti",
   async (productIDs) => {
@@ -98,7 +102,6 @@ const listProductSlice = createSlice({
       .addCase(getAllProduct.pending, (state) => {
         state.allProduct = [];
         state.loading = true;
-        state.getProducts = false;
       })
       .addCase(getAllProduct.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
@@ -110,7 +113,6 @@ const listProductSlice = createSlice({
       .addCase(getAllProductAdmin.pending, (state) => {
         state.allProduct = [];
         state.loading = true;
-        state.getProducts = false;
       })
       .addCase(getAllProductAdmin.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
@@ -137,7 +139,7 @@ const listProductSlice = createSlice({
       })
       .addCase(updateProduct.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
-        state.getProducts = true;
+        state.loading = false;
       })
       .addCase(updateProduct.rejected, (state, { error }) => {
         state.loading = false;
@@ -149,7 +151,7 @@ const listProductSlice = createSlice({
       })
       .addCase(changeState.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
-        state.getProducts = true;
+        state.loading = false;
       })
       .addCase(changeState.rejected, (state, { error }) => {
         state.loading = false;
@@ -161,7 +163,7 @@ const listProductSlice = createSlice({
       })
       .addCase(creatStockProduct.fulfilled, (state, actions) => {
         state.allProduct = actions.payload;
-        state.getProducts = true;
+        state.loading = false;
       })
       .addCase(creatStockProduct.rejected, (state, { error }) => {
         state.loading = false;

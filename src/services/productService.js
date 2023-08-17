@@ -41,20 +41,12 @@ export let productService = {
 
   create: async (values) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/products/add`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return {
-        status: response.status,
-        data: response.data,
-      };
+      return await axios.post(BASE_URL + `/api/v1/products/add`, values, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
     } catch (error) {
       if (error.response.status === 406) {
         message.error(error.response.data);
@@ -62,11 +54,12 @@ export let productService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
+      throw error;
     }
   },
   update: async ({ formData, id }) => {
     try {
-      const response = await axios.put(
+      return await axios.put(
         BASE_URL + `/api/v1/products/edit/${id}`,
         formData,
         {
@@ -76,10 +69,34 @@ export let productService = {
           },
         }
       );
-      return {
-        status: response.status,
-        data: response.data,
-      };
+    } catch (error) {
+      if (error.response.status === 406) {
+        message.error(error.response.data);
+      } else {
+        message.error("An error has occurred. Please try again");
+      }
+      throw error;
+    }
+  },
+  // delete: async (values) => {
+  //   try {
+  //     const response = await https.delete(`/api/v1/products/delete`, values);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+  // stockProduct: async (values) => {
+  //   try {
+  //     const response = await https.delete(`/api/v1/products/delete`, values);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
+  changeState: async (values) => {
+    try {
+      return await https.put(`/api/v1/products/changeState/${values}`);
     } catch (error) {
       if (error.response.status === 406) {
         message.error(error.response.data);
@@ -87,32 +104,7 @@ export let productService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
-    }
-  },
-  delete: async (values) => {
-    try {
-      const response = await https.delete(`/api/v1/products/delete`, values);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  stockProduct: async (values) => {
-    try {
-      const response = await https.delete(`/api/v1/products/delete`, values);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-  changeState: async (values) => {
-    try {
-      const response = await https.put(
-        `/api/v1/products/changeState/${values}`
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
   changeStateMulti: async (values) => {
@@ -123,6 +115,7 @@ export let productService = {
       console.log(response);
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
 };

@@ -10,6 +10,41 @@ export let categoryService = {
       console.log(error);
     }
   },
+  create: async (request) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + `/api/v1/categories/add`,
+        request
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  update: async (request) => {
+    try {
+      const response = await axios.put(
+        BASE_URL + `/api/v1/categories/edit`,
+        request
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  delete: async (id) => {
+    try {
+      const response = await axios.delete(
+        BASE_URL + `/api/v1/categories/delete/${id}`
+      );
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
   getSubcategories: async (id) => {
     try {
       const response = await axios.get(
