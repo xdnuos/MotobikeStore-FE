@@ -16,8 +16,9 @@ import Logo from "../../components/logo";
 import Iconify from "../../components/iconify";
 // sections
 import { LoginForm } from "../../sections/auth/login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RegisterForm from "../../sections/auth/login/RegisterForm";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -50,20 +51,27 @@ const StyledContent = styled("div")(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const mdUp = useResponsive("up", "md");
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(location.pathname === "/register");
   const handleClickRegister = () => {
     setIsRegistered(true);
+    navigate("/register");
   };
 
   const handleClickLogin = () => {
     setIsRegistered(false);
+    navigate("/login");
   };
-
+useEffect(() => {
+  setIsRegistered(location.pathname === "/register");
+}, [location.pathname]);
   return (
     <>
       <Helmet>
-        <title> Login | Biker Dashboard </title>
+        <title>  {!isRegistered ? "Login":"Register"  } | Biker Dashboard </title>
       </Helmet>
 
       <StyledRoot>
@@ -90,7 +98,7 @@ export default function LoginPage() {
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              {!isRegistered ? "Sign" : "Login"} in to Biker Shop
+              {!isRegistered ? "Login" : "Register"} in to Biker Shop
             </Typography>
             {!isRegistered ? (
               <Typography variant="body2" sx={{ mb: 5 }}>
@@ -156,9 +164,12 @@ export default function LoginPage() {
                   </Typography>
                 </Divider>
 
+                {/* form login */}
                 <LoginForm />
               </div>
             ) : (
+              
+              // form register here
               <RegisterForm />
             )}
           </StyledContent>

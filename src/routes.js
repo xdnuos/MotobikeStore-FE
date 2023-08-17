@@ -5,7 +5,7 @@ import SimpleLayout from "./layouts/simple";
 import ClientLayout from "./layouts/client/ClientLayout";
 import BlogPage from "./pages/admin/BlogPage";
 import UserPage from "./pages/admin/user/UserPage";
-import LoginPage from "./pages/admin/LoginPage";
+import LoginPage from "./pages/auth/LoginPage";
 import Page404 from "./pages/admin/Page404";
 import ProductsPage from "./pages/admin/product/ProductsPage";
 import DashboardAppPage from "./pages/admin/DashboardAppPage";
@@ -31,6 +31,7 @@ import EditStaff from "./pages/admin/staff/EditStaff";
 import Invoice from "./pages/admin/buy/InvoicePage";
 import UserDetail from "./pages/admin/user/UserOrder";
 import OrderDetail from "./pages/admin/order/OrderDetail";
+import ActiveAccount from "./pages/auth/ActiveAccount";
 import PersonalInfoForm from "./pages/admin/InfoPage";
 // ----------------------------------------------------------------------
 
@@ -62,7 +63,6 @@ export default function Router() {
       ],
     },
     {
-      path: "/",
       element: <ClientLayout />,
       children: [
         { element: <HomePage />, index: true },
@@ -74,9 +74,10 @@ export default function Router() {
       ],
     },
     {
-      path: "/login",
       element: <LoginPage />,
+      children: [{ path: "/login" }, { path: "/register" }],
     },
+    { path: "/activate/:token", element: <ActiveAccount /> },
     { path: "/dashboard/invoice/:orderID", element: <Invoice /> },
     {
       element: <SimpleLayout />,
