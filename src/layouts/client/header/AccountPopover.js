@@ -54,7 +54,6 @@ export default function AccountPopover() {
   };
 
   const handleClose = () => {
-    navigate("/order");
     setOpen(null);
   };
 

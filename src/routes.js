@@ -30,7 +30,8 @@ import EditStaff from "./pages/admin/staff/EditStaff";
 import Invoice from "./pages/admin/buy/InvoicePage";
 import UserDetail from "./pages/admin/user/UserOrder";
 import OrderDetail from "./pages/admin/order/OrderDetail";
-import ActiveAccount from "./pages/auth/ActiveAccount";
+import ActiveAccountPage from "./pages/auth/ActiveAccountPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -76,7 +77,8 @@ export default function Router() {
         { path: "/register"}
       ]
     },
-    { path: "/activate/:token", element: <ActiveAccount /> },
+    { path: "/activate/:token", element: <ActiveAccountPage /> },
+    { path: "/reset/:token", element: <ResetPasswordPage /> },
     { path: "/dashboard/invoice/:orderID", element: <Invoice /> },
     {
       element: <SimpleLayout />,
