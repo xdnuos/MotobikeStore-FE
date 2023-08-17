@@ -65,7 +65,7 @@ export default function Router() {
         { element:  <HomePage />, index: true },
         { path: "product-details/:id", element: <ProductDetailsPage /> },
         { path: "blog", element: <BlogPage /> },
-        { path: "list-products/:id", element: <ProductsListPage /> },
+        { path: "list-products", element: <ProductsListPage /> },
         { path: "checkout", element: <Checkout /> },
         { path: "order", element: <OrderPage /> },
       ],
