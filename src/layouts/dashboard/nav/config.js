@@ -49,29 +49,29 @@ const navConfig = [
 
 const navConfigStore = [
   {
-    title: "dashboard",
-    path: "/dashboard/app",
-    icon: icon("ic_analytics"),
+    title: "Store",
+    path: "/dashboard/buy",
+    icon: <Icon icon="ic:outline-local-grocery-store" />,
   },
   {
     title: "Order",
-    path: "/dashboard/order",
-    icon: icon("ic_cart"),
+    path: "/dashboard/orders",
+    icon: <Icon icon="icon-park-outline:order" />,
   },
   {
-    title: "blog",
-    path: "/dashboard/blog",
-    icon: icon("ic_blog"),
+    title: "Product",
+    path: "/dashboard/products",
+    icon: <Icon icon="icon-park:ad-product" />,
   },
   {
-    title: "login",
-    path: "/login",
-    icon: icon("ic_lock"),
+    title: "Warehouse",
+    path: "/dashboard/stock",
+    icon: <Icon icon="vaadin:stock" />,
   },
   {
-    title: "Not found",
-    path: "/404",
-    icon: icon("ic_disabled"),
+    title: "User",
+    path: "/dashboard/users",
+    icon: <Icon icon="ph:user-bold" />,
   },
 ];
 export { navConfig, navConfigStore };

@@ -33,6 +33,7 @@ import UserDetail from "./pages/admin/user/UserOrder";
 import OrderDetail from "./pages/admin/order/OrderDetail";
 import ActiveAccount from "./pages/auth/ActiveAccount";
 import PersonalInfoForm from "./pages/admin/InfoPage";
+import ProfileAdmin from "./pages/admin/ProfilePage";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -60,6 +61,7 @@ export default function Router() {
         { path: "staff/new", element: <CreateStaff /> },
         { path: "staff/edit/:staffID", element: <EditStaff /> },
         { path: "info", element: <PersonalInfoForm /> },
+        { path: "profile", element: <ProfileAdmin /> },
       ],
     },
     {

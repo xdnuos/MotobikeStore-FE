@@ -30,7 +30,7 @@ function UserForm({ handleBack, handleNext, activeStep }) {
       .string()
       .required("Phone Number is required")
       .min(9, "Phone Number must be at least 9 characters")
-      .max(11, "Incorrect phone number"),
+      .max(10, "Incorrect phone number"),
   });
   const handleGetCustomerInfo = async () => {
     try {
