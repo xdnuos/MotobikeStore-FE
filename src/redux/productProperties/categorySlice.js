@@ -8,7 +8,7 @@ const initialState = {
 
 export const getAllCategories = createAsyncThunk("category/list", async () => {
   const response = await categoryService.getAllCategories();
-  return response;
+  return response.data;
 });
 
 const categorySlice = createSlice({

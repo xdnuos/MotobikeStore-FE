@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { Link as RouterLink } from "react-router-dom";
+import { Link, Link as RouterLink } from "react-router-dom";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
@@ -34,6 +34,11 @@ import {
 } from "../../../sections/@dashboard/user";
 // mock
 import { customersService } from "../../../services/customerService";
+import ResetPassDialog from "src/sections/@dashboard/products/ResetPassDialog";
+import { DeleteDialog } from "src/sections/@dashboard/products";
+import { applySortFilterByPhone, getComparator } from "src/helper/table";
+import { useDispatch } from "react-redux";
+import { message } from "antd";
 
 // ----------------------------------------------------------------------
 
@@ -51,43 +56,10 @@ const TABLE_HEAD = [
 ];
 
 // ----------------------------------------------------------------------
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(
-      array,
-      (_user) => _user.phone.toLowerCase().indexOf(query.toLowerCase()) !== -1
-    );
-  }
-  return stabilizedThis.map((el) => el[0]);
-}
-
 export default function UserPage() {
   const [users, setUsers] = useState([]);
 
-  const getAllStore = async () => {
+  const getAllCustomer = async () => {
     return new Promise((resolve, reject) => {
       customersService
         .getAllCustomers()
@@ -103,29 +75,61 @@ export default function UserPage() {
   };
 
   useEffect(() => {
-    getAllStore();
+    getAllCustomer();
   }, []);
 
   const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
-
   const [order, setOrder] = useState("asc");
-
   const [selected, setSelected] = useState([]);
-
   const [orderBy, setOrderBy] = useState("name");
-
   const [filterName, setFilterName] = useState("");
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openDeletedialog, setDeleteDialog] = useState(false);
+  const [openResetdialog, setResetDialog] = useState(false);
+  const [idRowCustomer, setIdRowCustomer] = useState(-1);
+  const [stateRowCustomer, setStateRowCustomer] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
+  const changeState = async (userID) => {
+    return new Promise((resolve, reject) => {
+      customersService
+        .changeState(userID)
+        .then((response) => {
+          console.log("response", response);
+          if (response.status === 200) {
+            setDeleteDialog(false);
+            getAllCustomer();
+            message.success(response.data);
+          }
+          resolve();
+        })
+        .catch((error) => {
+          setDeleteDialog(false);
+          message.error(error.response.data);
+          reject(error);
+        });
+    });
   };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
+  const resetPassword = async (userID) => {
+    return new Promise((resolve, reject) => {
+      customersService
+        .resetPass(userID)
+        .then((response) => {
+          console.log("response", response);
+          if (response.status === 200) {
+            setResetDialog(false);
+            getAllCustomer();
+            message.success(response.data);
+          }
+          resolve();
+        })
+        .catch((error) => {
+          setResetDialog(false);
+          message.error(error.response.data);
+          reject(error);
+        });
+    });
   };
 
   const handleRequestSort = (event, property) => {
@@ -161,6 +165,55 @@ export default function UserPage() {
     setSelected(newSelected);
   };
 
+  const handleClickDeleteDialog = () => {
+    setOpen(false);
+    setDeleteDialog(true);
+  };
+  const handleClickResetDialog = () => {
+    setOpen(false);
+    setResetDialog(true);
+  };
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialog(false);
+  };
+  const handleCloseResetDialog = () => {
+    setResetDialog(false);
+  };
+
+  const handleOpenMenu = (event, id, active) => {
+    setIdRowCustomer(id);
+    setStateRowCustomer(active);
+    setOpen(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  const deleteCustomer = async (id) => {
+    if (idRowCustomer !== -1) {
+      await dispatch(changeState(id));
+      setOpen(null);
+      setIdRowCustomer(-1);
+    } else if (selected.length !== 0) {
+      // await dispatch(changeStateMulti(id));
+      setSelected([]);
+    }
+    // loadProducts();
+    setDeleteDialog(false);
+  };
+  const resetPass = async (id) => {
+    if (idRowCustomer !== -1) {
+      await dispatch(resetPassword(id));
+      setOpen(null);
+      setIdRowCustomer(-1);
+    } else if (selected.length !== 0) {
+      // await dispatch(changeStateMulti(id));
+      setSelected([]);
+    }
+    setResetDialog(false);
+  };
+  // --------------------------------------------------------------------------
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -178,14 +231,14 @@ export default function UserPage() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users?.length) : 0;
 
-  const filteredUsers = applySortFilter(
+  const filteredUsers = applySortFilterByPhone(
     users,
     getComparator(order, orderBy),
     filterName
   );
 
   const isNotFound = !filteredUsers.length && !!filterName;
-
+  // message.success("response.data");
   return (
     <>
       <Helmet>
@@ -304,13 +357,17 @@ export default function UserPage() {
                             {ratioOrder * 100} %
                           </TableCell>
                           <TableCell align="right">
-                            <IconButton
-                              size="large"
-                              color="inherit"
-                              onClick={handleOpenMenu}
-                            >
-                              <Iconify icon={"eva:more-vertical-fill"} />
-                            </IconButton>
+                            {email !== null && (
+                              <IconButton
+                                size="large"
+                                color="inherit"
+                                onClick={(e) =>
+                                  handleOpenMenu(e, userID, isActive)
+                                }
+                              >
+                                <Iconify icon={"eva:more-vertical-fill"} />
+                              </IconButton>
+                            )}
                           </TableCell>
                         </TableRow>
                       );
@@ -380,16 +437,46 @@ export default function UserPage() {
           },
         }}
       >
-        <MenuItem>
-          <Iconify icon={"eva:edit-fill"} sx={{ mr: 2 }} />
-          Edit
+        {/* click to go to edit page get id product xong rồi chuyển qua trang /edit/{id} */}
+        <MenuItem
+          onClick={handleClickResetDialog}
+          // to={`/dashboard/products/edit/${idRowProduct}`}
+        >
+          <Iconify icon={"fluent:key-reset-20-filled"} sx={{ mr: 2 }} />
+          Reset Pass
         </MenuItem>
-
-        <MenuItem sx={{ color: "error.main" }}>
-          <Iconify icon={"eva:trash-2-outline"} sx={{ mr: 2 }} />
-          Delete
+        <MenuItem
+          sx={
+            stateRowCustomer
+              ? { color: "error.main" }
+              : { color: "success.main" }
+          }
+          onClick={handleClickDeleteDialog}
+        >
+          <Iconify
+            icon={
+              stateRowCustomer
+                ? "eva:toggle-left-outline"
+                : "eva:toggle-right-outline"
+            }
+            sx={{ mr: 2 }}
+          />
+          {stateRowCustomer ? "Locked" : "Unlock"}
         </MenuItem>
       </Popover>
+      <DeleteDialog
+        opendialog={openDeletedialog}
+        handleClose={handleCloseDeleteDialog}
+        deleteProduct={deleteCustomer}
+        id={idRowCustomer}
+        state={stateRowCustomer}
+      />
+      <ResetPassDialog
+        opendialog={openResetdialog}
+        handleClose={handleCloseResetDialog}
+        deleteProduct={resetPass}
+        id={idRowCustomer}
+      />
     </>
   );
 }

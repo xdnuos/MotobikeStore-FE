@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { useEffect, useState } from "react";
 import moment from "moment";
-
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // @mui
 import {
   Card,
@@ -34,6 +34,7 @@ import {
   DialogContentText,
   DialogActions,
   Snackbar,
+  Select,
 } from "@mui/material";
 // components
 import Label from "../../../components/label";
@@ -45,6 +46,11 @@ import { UserListToolbar } from "../../../sections/@dashboard/user";
 import { useSelector } from "react-redux";
 import { orderService } from "src/services/orderService";
 import { localStorageService } from "src/services/localStorageService";
+import { convertStringToDateTime, getComparator } from "src/helper/table";
+import {
+  OrderInfoCard,
+  OrderItemsTable,
+} from "src/components/order/OrderInfoCard";
 
 message.config({
   top: 100,
@@ -54,25 +60,6 @@ message.config({
   prefixCls: "my-message",
 });
 // ----------------------------------------------------------------------
-function convertStringToDateTime(dateTimeString) {
-  return moment(dateTimeString).format("HH:mm:ss DD/MM/YYYY");
-}
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
 function applySortFilter(array, comparator, query) {
   if (array != null) {
     const stabilizedThis = array.map((el, index) => [el, index]);
@@ -90,114 +77,125 @@ function applySortFilter(array, comparator, query) {
     return stabilizedThis.map((el) => el[0]);
   }
 }
-function OrderItemsTable({ orderItems }) {
-  return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Product</TableCell>
-            <TableCell align="center">Quantity</TableCell>
-            <TableCell align="center">Price</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {orderItems?.map((orderItem) => (
-            <TableRow key={orderItem.orderItemID}>
-              <TableCell>{orderItem.product.name}</TableCell>
-              <TableCell align="center">{orderItem.quantity}</TableCell>
-              <TableCell align="center">{orderItem.price}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-function OrderInfoCard({ fullname, phone, note, address, payment }) {
-  return (
-    <Card>
-      <CardContent>
-        <Typography variant="h6">Buyer Information</Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <Stack direction={"row"} spacing={1}>
-              <Iconify icon="wpf:name"></Iconify>
-              <Typography variant="h7">{fullname}</Typography>
-            </Stack>
-            <Stack direction={"row"} spacing={1}>
-              <Iconify icon="fluent:payment-32-regular"></Iconify>
-              <Typography variant="h7">{payment}</Typography>
-            </Stack>
-            <Stack direction={"row"} spacing={1}>
-              <Iconify icon="ph:note-light"></Iconify>
-              <Typography variant="h7">{note}</Typography>
-            </Stack>
-          </Grid>
-          <Grid item xs={6}>
-            <Stack direction={"row"} spacing={1}>
-              <Iconify icon="ph:phone"></Iconify>
-              <Typography variant="h7">{phone}</Typography>
-            </Stack>
-            <Stack direction={"row"} spacing={1}>
-              <Iconify icon="mdi:address-marker-outline"></Iconify>
-              <Typography variant="h7">{address}</Typography>
-            </Stack>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  );
-}
-function ConfirmationDialog({ open, onClose, onConfirm }) {
-  return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Confirm Action</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Are you sure you want to confirm order?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="inherit">
-          Cancel
-        </Button>
-        <Button onClick={onConfirm} color="warning">
-          Confirm
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
+
 export default function OrderStorePage() {
   const TABLE_HEAD = [
+    { id: "id", label: "OrderID", alignLeft: true },
     { id: "name", label: "Purchase method", alignLeft: true },
     { id: "time", label: "Order time" },
     { id: "quantity", label: "Quantity product" },
     { id: "status", label: "Status" },
     { id: "total", label: "Total Price" },
     { id: "confirm", label: "Confirm by" },
-    { id: "action", label: "Action" },
+    { id: "" },
   ];
+
   const [orders, setOrders] = useState([]);
   const idAccount = useSelector((state) => state.auth.idAccount);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
-  const [selectedOrderID, setSelectedOrderID] = useState(null);
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   useEffect(() => {
     getAllOrder();
   }, []);
 
-  const [confirmOrderRequest, setConfirmOrderRequest] = useState({
-    orderID: null,
-    userID: idAccount,
-  });
+  const handleConfirmAction = async (orderID) => {
+    console.log(orderID);
+  };
+  const confirmOrder = async (orderID) => {
+    return new Promise((resolve, reject) => {
+      orderService
+        .confirmOrder({ userID: idAccount, orderID: orderID })
+        .then((response) => {
+          if (response.status === 200) {
+            setTimeout(() => {
+              message.success(response.data);
+            }, 500);
+            getAllOrder();
+          }
+          resolve();
+        })
+        .catch((error) => {
+          setTimeout(() => {
+            message.error(error.response.data);
+          }, 500);
+          reject(error);
+        });
+    });
+  };
+  const shippingOrder = async (orderID) => {
+    return new Promise((resolve, reject) => {
+      orderService
+        .shipping({ userID: idAccount, orderID: orderID })
+        .then((response) => {
+          if (response.status === 200) {
+            setTimeout(() => {
+              message.success(response.data);
+            }, 500);
+            getAllOrder();
+          }
+          resolve();
+        })
+        .catch((error) => {
+          setTimeout(() => {
+            message.error(error.response.data);
+          }, 500);
+          reject(error);
+        });
+    });
+  };
+  const successOrder = async (orderID) => {
+    return new Promise((resolve, reject) => {
+      orderService
+        .success({ userID: idAccount, orderID: orderID })
+        .then((response) => {
+          if (response.status === 200) {
+            setTimeout(() => {
+              message.success(response.data);
+            }, 500);
+            getAllOrder();
+          }
+          resolve();
+        })
+        .catch((error) => {
+          setTimeout(() => {
+            message.error(error.response.data);
+          }, 500);
+          reject(error);
+        });
+    });
+  };
+  const cancelOrder = async (orderID) => {
+    return new Promise((resolve, reject) => {
+      orderService
+        .cancel({ userID: idAccount, orderID: orderID })
+        .then((response) => {
+          if (response.status === 200) {
+            setTimeout(() => {
+              message.success(response.data);
+            }, 500);
+            getAllOrder();
+          }
+          resolve();
+        })
+        .catch((error) => {
+          setTimeout(() => {
+            message.error(error.response.data);
+          }, 500);
+          reject(error);
+        });
+    });
+  };
+  const buttonsData = [
+    { label: "Confirm", color: "warning", action: confirmOrder },
+    { label: "Shipping", color: "primary", action: shippingOrder },
+    { label: "Success", color: "success", action: successOrder },
+    { label: "Cancel", color: "error", action: cancelOrder },
+  ];
+  // ------------------------------------------------------------------------------------------------
   const compareByCreatedAt = (orderA, orderB) => {
     const dateA = new Date(orderA.orderTime);
     const dateB = new Date(orderB.orderTime);
@@ -217,79 +215,7 @@ export default function OrderStorePage() {
         });
     });
   };
-  const getAllOrderByStaff = async (staffID) => {
-    return new Promise((resolve, reject) => {
-      orderService
-        .getOrdersByStaff(staffID)
-        .then((response) => {
-          setOrders(response.sort(compareByCreatedAt));
-          console.log("response", response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
-  const confirmOrder = async () => {
-    return new Promise((resolve, reject) => {
-      orderService
-        .confirmOrder({ ...confirmOrderRequest, orderID: selectedOrderID })
-        .then((response) => {
-          if (response.status === 200) {
-            setTimeout(() => {
-              message.success(response.data);
-            }, 500);
-            getAllOrder();
-          }
-          resolve();
-        })
-        .catch((error) => {
-          setTimeout(() => {
-            message.error(error.response.data);
-          }, 500);
-          reject(error);
-        });
-    });
-  };
-
-  const handleOpenDialog = (orderID) => {
-    setSelectedOrderID(orderID);
-    setDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-
-  const handleConfirmAction = () => {
-    handleCloseDialog();
-    confirmOrder();
-  };
-
-  // const handleRequestSort = (event, property) => {
-  //   const isAsc = orderBy === property && order === "asc";
-  //   setOrder(isAsc ? "desc" : "asc");
-  //   setOrderBy(property);
-  // };
-
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1)
-  //     );
-  //   }
-  //   setSelected(newSelected);
-  // };
+  // ------------------------------------------------------------------------------------------------
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -315,6 +241,19 @@ export default function OrderStorePage() {
   );
 
   const isNotFound = !filteredUsers.length && !!filterName;
+
+  const accordionProps = {
+    sx: {
+      pointerEvents: "none",
+    },
+    expandIcon: (
+      <ExpandMoreIcon
+        sx={{
+          pointerEvents: "auto",
+        }}
+      />
+    ),
+  };
   return (
     <>
       <Helmet>
@@ -357,7 +296,7 @@ export default function OrderStorePage() {
                           sortDirection={
                             orderBy === headCell.id ? order : false
                           }
-                          sx={{ width: "15%" }}
+                          sx={{ width: "14%" }}
                         >
                           {headCell.label}
                         </TableCell>
@@ -386,11 +325,7 @@ export default function OrderStorePage() {
 
                       return (
                         <Accordion key={orderID}>
-                          <AccordionSummary
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            sx={{ width: "100%" }}
-                          >
+                          <AccordionSummary {...accordionProps}>
                             <TableRow
                               hover
                               key={orderID}
@@ -399,28 +334,15 @@ export default function OrderStorePage() {
                               role="checkbox"
                               selected={selectedUser}
                             >
-                              <TableCell align="left" sx={{ width: "4%" }}>
-                                {" "}
-                                &nbsp;
+                              <TableCell align="center" sx={{ width: "15%" }}>
+                                <Typography variant="subtitle2" noWrap>
+                                  # {orderID}
+                                </Typography>
                               </TableCell>
-
-                              <TableCell
-                                component="th"
-                                scope="row"
-                                padding="none"
-                                sx={{ width: "15%" }}
-                              >
-                                <Stack
-                                  direction="row"
-                                  alignItems="center"
-                                  spacing={2}
-                                >
-                                  <Typography variant="subtitle2" noWrap>
-                                    {payment === "LIVE"
-                                      ? "Direct puchase"
-                                      : "Shipping"}{" "}
-                                  </Typography>
-                                </Stack>
+                              <TableCell align="center" sx={{ width: "15%" }}>
+                                {payment === "LIVE"
+                                  ? "Direct puchase"
+                                  : "Shipping"}{" "}
                               </TableCell>
 
                               <TableCell align="center" sx={{ width: "15%" }}>
@@ -451,15 +373,6 @@ export default function OrderStorePage() {
                               <TableCell align="center" sx={{ width: "15%" }}>
                                 {staffUsers?.lastName}
                               </TableCell>
-                              <TableCell align="right" sx={{ width: "15%" }}>
-                                <IconButton
-                                  size="large"
-                                  color="inherit"
-                                  onClick={() => handleOpenDialog(orderID)}
-                                >
-                                  <Iconify icon={"line-md:confirm-circle"} />
-                                </IconButton>
-                              </TableCell>
                             </TableRow>{" "}
                           </AccordionSummary>
                           <AccordionDetails>
@@ -471,6 +384,8 @@ export default function OrderStorePage() {
                                   note={note}
                                   address={address}
                                   payment={payment}
+                                  orderID={orderID}
+                                  buttonsData={buttonsData}
                                 />
                               </Grid>
                               <Grid item xs={6}>
@@ -527,11 +442,6 @@ export default function OrderStorePage() {
           />
         </Card>
       </Container>
-      <ConfirmationDialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-        onConfirm={handleConfirmAction}
-      />
     </>
   );
 }

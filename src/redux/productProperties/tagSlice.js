@@ -8,7 +8,7 @@ const initialState = {
 
 export const getAllTags = createAsyncThunk("tag/list", async () => {
   const response = await tagService.getAllTags();
-  return response;
+  return response.data;
 });
 
 const tagSlice = createSlice({

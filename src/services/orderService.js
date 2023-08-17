@@ -78,7 +78,46 @@ export let orderService = {
   confirmOrder: async (confirmOrderRequest) => {
     try {
       const response = await axios.put(
-        BASE_URL + `/api/v1/order/edit/admin/confirmOrder`,
+        BASE_URL + `/api/v1/order/edit/admin/confirm`,
+        confirmOrderRequest
+      );
+      console.log("Response: ", response);
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  shipping: async (confirmOrderRequest) => {
+    try {
+      const response = await axios.put(
+        BASE_URL + `/api/v1/order/edit/admin/shipping`,
+        confirmOrderRequest
+      );
+      console.log("Response: ", response);
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  success: async (confirmOrderRequest) => {
+    try {
+      const response = await axios.put(
+        BASE_URL + `/api/v1/order/edit/admin/success`,
+        confirmOrderRequest
+      );
+      console.log("Response: ", response);
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  cancel: async (confirmOrderRequest) => {
+    try {
+      const response = await axios.put(
+        BASE_URL + `/api/v1/order/edit/admin/cancel`,
         confirmOrderRequest
       );
       console.log("Response: ", response);
@@ -122,5 +161,5 @@ export let orderService = {
       console.log(error);
       throw error;
     }
-  }
+  },
 };

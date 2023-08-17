@@ -10,7 +10,7 @@ export const getAllManufacturer = createAsyncThunk(
   "manufacturer/list",
   async () => {
     const response = await manufacturerService.getAllManufacturer();
-    return response;
+    return response.data;
   }
 );
 
