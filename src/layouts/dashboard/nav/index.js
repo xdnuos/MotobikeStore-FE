@@ -59,10 +59,11 @@ export default function Nav({ openNav, onCloseNav }) {
   }, [isLoggedIn, navigate]);
 
   useEffect(() => {
-    const role = localStorageService.get("USER")?.roles[0];
-    if ((role === "ADMIN") | (role === "MASTER")) {
+    const role = localStorageService.get("USER")?.roles;
+    const isAdminOrMaster = role?.includes("ADMIN") || role?.includes("MASTER");
+    if (isAdminOrMaster) {
       setNav(navConfig);
-    } else if (role === "STAFF") {
+    } else if (role?.includes("STAFF")) {
       setNav(navConfigStore);
     }
   }, [account]);

@@ -12,8 +12,12 @@ export let authService = {
   active: async (token) => {
     return await axios.get(BASE_URL + `/api/v1/registration/activate/${token}`);
   },
-
-
+  forgotPassword: async (email) => {
+    return await axios.get(BASE_URL + `/api/v1/auth/forgot/${email}`);
+  },
+  resetPassword: async (values) => {
+    return await axios.post(BASE_URL + `/api/v1/auth/reset`, values);
+  },
   registerStore: async (values) => {
     try {
       const response = await axios.post(
