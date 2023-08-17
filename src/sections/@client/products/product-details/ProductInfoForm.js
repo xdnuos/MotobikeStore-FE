@@ -95,13 +95,13 @@ function ProductInfoForm({ product, price }) {
         <Typography variant="h3">
           {!price
             ? product?.price.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })
+              style: "currency",
+              currency: "VND",
+            })
             : price.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })}
+              style: "currency",
+              currency: "VND",
+            })}
         </Typography>
       </Grid>
 
@@ -123,16 +123,13 @@ function ProductInfoForm({ product, price }) {
       </Grid>
 
       {/* Manufacturer */}
-      {product?.manufacturer !== null ? (
+      {product?.manufacturer !== null && product?.manufacturer !== "" &&
         <Grid item xs={12}>
           <Stack direction={"row"} spacing={1}>
             <Typography variant="subtitle1">Manufacturer:</Typography>
-            <Typography variant="body1">{product?.manufacturer} </Typography>
+            <Label sx={{ fontSize: "15px" }} color="info">{product?.manufacturer}</Label>
           </Stack>
-        </Grid>
-      ) : (
-        ""
-      )}
+        </Grid>}
 
       <Grid item xs={12}>
         <Stack direction={"row"} spacing={1}>

@@ -6,12 +6,15 @@ import { ListItemIcon, ListItemButton } from '@mui/material';
 
 export const StyledNavItem = styled((props) => <ListItemButton disableGutters {...props} />)(({ theme }) => ({
   ...theme.typography.body2,
-  paddingLeft: 10,
   position: 'relative',
   textTransform: 'capitalize',
   borderRadius: theme.shape.borderRadius,
   fontWeight: 'bold',
+  textAlign: 'center',
   color: theme.palette.text.secondary,
+  ':hover': {
+    color: theme.palette.text.primary,
+  }
 }));
 
 export const StyledNavItemIcon = styled(ListItemIcon)({

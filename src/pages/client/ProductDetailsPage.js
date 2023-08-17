@@ -65,7 +65,6 @@ function ProductDetailsPage() {
   const cartItems = useSelector((state) => state.cart.cart);
 
   const [showAlert, setShowAlert] = useState(false);
-  const [showPrice, setShowPrice] = useState(null);
   const cartItem = cartItems?.filter(
     (cartItem) => cartItem.productID === product?.productID
   )[0];
@@ -127,6 +126,8 @@ function ProductDetailsPage() {
   };
 
   // ========== Quantity ========== //
+  
+  const totalPrice = product?.price * quantity;
   const handleIncrement = () => {
     if ((product?.stock > 0) & (product?.stock - productCartQty > quantity)) {
       setCartRequest({
@@ -163,8 +164,8 @@ function ProductDetailsPage() {
               separator={<StyledSeparator>&nbsp;•&nbsp;</StyledSeparator>}
               aria-label="breadcrumb"
             >
-              <Link underline="hover" color="text.primary" href="/">
-                Trang chủ
+              <Link underline="hover" color="text.primary" to="/" component={RouterLink}>
+                Home Page
               </Link>
               {product?.categories.map((category, index) => (
                 <Link
@@ -172,6 +173,7 @@ function ProductDetailsPage() {
                   underline="hover"
                   color="text.primary"
                   href="#"
+                  component={RouterLink}
                 >
                   {category}
                 </Link>
@@ -187,7 +189,7 @@ function ProductDetailsPage() {
           <Grid item xs={12} md={6} p={"16px 32px 16px 40px"}>
             <Stack spacing={2}>
               {/* thông tin tên , giá ,... */}
-              <ProductInfoForm product={product} price={showPrice} />
+              <ProductInfoForm product={product} price={totalPrice} />
 
               {/* option lựa số lượng */}
               {/* <Grid item xs={12}>

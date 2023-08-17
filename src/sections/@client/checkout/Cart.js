@@ -76,6 +76,7 @@ function Cart({ handleNext, activeStep }) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const emptyCart = useSelector((state) => state.cart.emptyCart);
   const idAccount = useSelector((state) => state.auth.idAccount);
+  const idProductDetail = useSelector((state) => state.products?.productDetail?.product?.productID);
 
   const [state, setState] = useState({
     open: false,
@@ -332,13 +333,13 @@ function Cart({ handleNext, activeStep }) {
                               <TableCell align="center">
                                 {isEdited === product?.cartProductID
                                   ? totalPrice.toLocaleString("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    })
+                                    style: "currency",
+                                    currency: "VND",
+                                  })
                                   : basePrice.toLocaleString("vi-VN", {
-                                      style: "currency",
-                                      currency: "VND",
-                                    })}
+                                    style: "currency",
+                                    currency: "VND",
+                                  })}
                               </TableCell>
 
                               {/* Số lượng */}
@@ -435,7 +436,7 @@ function Cart({ handleNext, activeStep }) {
           </Card>
           {/* --------------------------------------- BUTTON --------------------------------------------------- */}
 
-          <Button sx={{ color: "#000", mt: 3 }} href="/">
+          <Button sx={{ color: "#000", mt: 3 }} onClick={() => navigate( !idProductDetail ? "/" : `/product-details/${idProductDetail}`)}>
             <Iconify icon="ic:outline-keyboard-arrow-left" mr={1} />
             Continue Shopping
           </Button>

@@ -6,37 +6,37 @@ import { styled } from "@mui/material/styles";
 import Iconify from "../../../components/iconify/Iconify";
 import Logo from "../../../components/logoHome";
 
-const COPYRIGHT = "©2023 Biker® by Giang~Đình, lnc.";
+const COPYRIGHT = "©2023 Biker® by xdnuos~yangdev, lnc.";
 
 const AboutUs = [
+  { title: 'Shop system', href: "/" },
+  { title: 'Business license', href: "/" },
+  { title: 'Operational Regulations', href: "/" },
+  { title: 'Deposit policy', href: "/" },
   { title: 'Introduce', href: "/" },
-  { title: 'Hệ thống cửa hàng', href: "/" },
-  { title: 'Giấy phép kinh doanh', href: "/" },
-  { title: 'Quy chế hoạt động', href: "/" },
-  { title: 'Chính sách đặt cọc', href: "/" },
-  { title: 'Chính sách đổi trả thuốc', href: "/" },
-  { title: 'Chính sách giao hàng', href: "/" },
-  { title: 'Tra cứu đơn hàng', href: "/" }];
+  { title: 'Return policy', href: "/" },
+  { title: 'Delivery policy', href: "/" },
+  { title: 'Order lookup', href: "/" }];
 
 const Category = [
-  { title: 'Giới thiệu', href: "/" },
-  { title: 'Hệ thống cửa hàng', href: "/" },
-  { title: 'Giấy phép kinh doanh', href: "/" },
-  { title: 'Quy chế hoạt động', href: "/" },
-  { title: 'Chính sách đặt cọc', href: "/" },
-  { title: 'Chính sách đổi trả thuốc', href: "/" },
-  { title: 'Chính sách bảo mật', href: "/" },
-  { title: 'Chính sách thanh toán', href: "/" }];
+  { title: 'Order lookup', href: "/" },
+  { title: 'Introduce', href: "/" },
+  { title: 'Operational Regulations', href: "/" },
+  { title: 'Shop system', href: "/" },
+  { title: 'Business license', href: "/" },
+  { title: 'Deposit policy', href: "/" },
+  { title: 'Return policy', href: "/" },
+  { title: 'Delivery policy', href: "/" },];
 
 const FunctionalFoods = [
-  { title: 'Giới thiệu', href: "/" },
-  { title: 'Hệ thống cửa hàng', href: "/" },
-  { title: 'Giấy phép kinh doanh', href: "/" },
-  { title: 'Quy chế hoạt động', href: "/" },
-  { title: 'Chính sách đặt cọc', href: "/" },
-  { title: 'Chính sách đổi trả thuốc', href: "/" },
-  { title: 'Chính sách giao hàng', href: "/" },
-  { title: 'Chính sách bảo mật', href: "/" }
+  { title: 'Introduce', href: "/" },
+  { title: 'Shop system', href: "/" },
+  { title: 'Business license', href: "/" },
+  { title: 'Deposit policy', href: "/" },
+  { title: 'Return policy', href: "/" },
+  { title: 'Operational Regulations', href: "/" },
+  { title: 'Delivery policy', href: "/" },
+  { title: 'Order lookup', href: "/" }
 ];
 
 const StyledFooter = styled("footer")(() => ({
@@ -113,7 +113,7 @@ function Footer() {
             <Typography variant="body2" color={"text.secondary"}>
               {COPYRIGHT}
               <br />
-              ĐKKD 0394366313 cấp ngày 17/09/2018 tại Sở Kế hoạch Đầu tư TPHCM
+              issued on August 18, 2023 at the DOP and Investment HCM
             </Typography>
           </Grid>
 
@@ -157,7 +157,7 @@ function Footer() {
           {/* THỰC PHẨM CHỨC NĂNG */}
           <StyledGridItem item xs={12} md={2}>
             <Stack spacing={1}>
-              <Typography variant="subtitle2">THỰC PHẨM CHỨC NĂNG</Typography>
+              <Typography variant="subtitle2">TOP PRODUCT</Typography>
               {FunctionalFoods.map((data, index) => {
                 return (
                   <ListItem key={index} sx={{ p: 0 }}>
@@ -175,11 +175,11 @@ function Footer() {
           {/* hotline */}
           <StyledGridItem item xs={12} md={2}>
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">KẾT NỐI VỚI CHÚNG TÔI</Typography>
+              <Typography variant="subtitle2">CONNECT WITH US</Typography>
 
               <Stack>
                 <Typography variant="body2" color={"text.secondary"}>
-                  Tư vấn mua hàng (Miễn Phí)
+                Buying advice (Free)
                 </Typography>
                 <Link href="#" underline="none">
                   <Typography
@@ -193,7 +193,7 @@ function Footer() {
               </Stack>
               <Stack>
                 <Typography variant="body2" color={"text.secondary"}>
-                  Góp ý, khiếu nại (8h00 - 22h00)
+                Feedback, complaints (8h00 - 22h00)
                 </Typography>
                 <Link href="#" underline="none">
                   <Typography
