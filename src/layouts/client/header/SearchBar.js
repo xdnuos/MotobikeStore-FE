@@ -49,7 +49,7 @@ export default function SearchBar() {
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Tìm tên thuốc , bệnh lý, thực phẩm chức năng..."
+          placeholder="Search product, manufacturer..."
           
           InputProps={{
             startAdornment: (

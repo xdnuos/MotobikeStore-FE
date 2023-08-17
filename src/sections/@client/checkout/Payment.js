@@ -77,10 +77,12 @@ function Payment({ handleBack, handleNext, activeStep }) {
         payment: paymentOption,
       })
       .then((response) => {
+        handleNext();
         return response;
       })
       .catch((error) => {
         console.log(error);
+        return error;
       });
   };
 

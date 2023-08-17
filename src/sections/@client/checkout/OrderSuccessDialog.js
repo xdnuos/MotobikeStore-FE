@@ -1,14 +1,14 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Dialog, Button, useMediaQuery, useTheme, Typography, Box, Stack, Link } from '@mui/material';
 import { StyledButtonGreen } from '../../../components/custom/CustomButton';
 import Iconify from '../../../components/iconify/Iconify';
 
 
-const OrderSuccessDialog = ({ open, handleClose }) => {
+const OrderSuccessDialog = ({ open }) => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+const navigate = useNavigate();
     return (
         <Dialog
             open={open}
@@ -57,11 +57,11 @@ const OrderSuccessDialog = ({ open, handleClose }) => {
                 <Typography>All the best.</Typography>
 
                 <Stack direction={'row'} spacing={2} sx={{ width: '100%', pt: 4,px:1, borderTop: '1px dashed lightgrey' }}>
-                    <Button fullWidth variant="outlined" sx={{ color: '#000', py: '8px' }} onClick={handleClose} component={RouterLink}>
+                    <Button fullWidth variant="outlined" sx={{ color: '#000', py: '8px' }} onClick={()=>navigate("/order")} >
                         <Iconify icon='ic:outline-keyboard-arrow-left' mr={1} />
                         Continue Shopping
                     </Button>
-                    <StyledButtonGreen onClick={handleClose} component={RouterLink}>
+                    <StyledButtonGreen onClick={()=>navigate("/order")}>
                         <Iconify icon='ant-design:file-pdf-filled' mr={1} />
                         Download As PDF
                     </StyledButtonGreen>
