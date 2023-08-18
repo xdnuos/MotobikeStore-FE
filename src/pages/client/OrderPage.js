@@ -129,11 +129,11 @@ export default function OrderPage() {
                 <OrderDetail key={order.orderID} order={order}></OrderDetail>
               );
             })}
-            {orders === null && (
+            {orders.orderID === undefined && (
               <Card>
                 <CardContent>
                   <Typography variant="h5" textAlign={"center"}>
-                    No pending orders
+                    No orders
                   </Typography>
                 </CardContent>
               </Card>
