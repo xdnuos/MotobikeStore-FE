@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 // @mui
 import { styled } from "@mui/material/styles";
 //
@@ -9,6 +9,9 @@ import Footer from "./footer";
 
 import { ProductCartWidget } from "../../sections/@client/products";
 import ScrollTop from "../../components/scroll-to-top/ScrollTop";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProduct } from "src/redux/products/productList";
+import { localStorageService } from "src/services/localStorageService";
 
 // ----------------------------------------------------------------------
 
@@ -38,13 +41,27 @@ const Main = styled("div")(({ theme }) => ({
 
 export default function ClientLayout() {
   const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(getAllProduct());
+  }, [dispatch]);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  useEffect(() => {
+    if (isLoggedIn) {
+      const role = localStorageService.get("USER")?.roles;
+      const hasCustomerRole = role?.includes("CUSTOMER");
+      if (!hasCustomerRole) {
+        navigate("/dashboard/app");
+      }
+    }
+  }, [isLoggedIn, navigate]);
   return (
     <div>
       <StyledRoot>
         <Header onOpenNav={() => setOpen(true)} />
 
-        <Nav openNav={open} onCloseNav={() => setOpen(false)} />
+        {/* <Nav openNav={open} onCloseNav={() => setOpen(false)} /> */}
 
         <ProductCartWidget />
 

@@ -23,21 +23,6 @@ import { reset } from "../../../redux/cart/cartSlice";
 import { customersService } from "src/services/customerService";
 // ----------------------------------------------------------------------
 
-const MENU_OPTIONS = [
-  {
-    label: "Profile",
-    icon: "eva:person-fill",
-  },
-  {
-    label: "My Orders",
-    icon: "eva:home-fill",
-  },
-  {
-    label: "Settings",
-    icon: "eva:settings-2-fill",
-  },
-];
-
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -63,6 +48,27 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  const MyOrders = () => {
+    navigate("/order");
+    handleClose();
+  };
+  const MENU_OPTIONS = [
+    {
+      label: "Profile",
+      icon: "eva:person-fill",
+      action: handleClose,
+    },
+    {
+      label: "My Orders",
+      icon: "eva:home-fill",
+      action: MyOrders,
+    },
+    {
+      label: "Settings",
+      icon: "eva:settings-2-fill",
+      action: handleClose,
+    },
+  ];
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const idAccount = useSelector((state) => state.auth.idAccount);
 
@@ -141,7 +147,7 @@ export default function AccountPopover() {
         {isLoggedIn && (
           <Stack sx={{ p: 1 }}>
             {MENU_OPTIONS.map((option) => (
-              <MenuItem key={option.label} onClick={handleClose}>
+              <MenuItem key={option.label} onClick={option.action}>
                 {option.label}
               </MenuItem>
             ))}

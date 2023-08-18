@@ -126,7 +126,7 @@ function ProductDetailsPage() {
   };
 
   // ========== Quantity ========== //
-  
+
   const totalPrice = product?.price * quantity;
   const handleIncrement = () => {
     if ((product?.stock > 0) & (product?.stock - productCartQty > quantity)) {
@@ -164,7 +164,12 @@ function ProductDetailsPage() {
               separator={<StyledSeparator>&nbsp;•&nbsp;</StyledSeparator>}
               aria-label="breadcrumb"
             >
-              <Link underline="hover" color="text.primary" to="/" component={RouterLink}>
+              <Link
+                underline="hover"
+                color="text.primary"
+                to="/"
+                component={RouterLink}
+              >
                 Home Page
               </Link>
               {product?.categories.map((category, index) => (
@@ -232,7 +237,9 @@ function ProductDetailsPage() {
               <Stack direction="row" spacing={2}>
                 {product?.stock <= 0 ? (
                   // Hiện nút "Out of Stock" khi sản phẩm hết hàng
-                  <StyledButtonRed sx={{ color: "#fff" }}>Out of Stock</StyledButtonRed>
+                  <StyledButtonRed sx={{ color: "#fff" }}>
+                    Out of Stock
+                  </StyledButtonRed>
                 ) : (
                   // Hiện nút "Add To Cart" và "Buy Now" khi sản phẩm còn hàng
                   <>
@@ -370,16 +377,14 @@ function ProductDetailsPage() {
             </Alert>
           ) : (
             <Alert onClose={handleClose} variant="filled" severity="error">
-              Please log in to add products to the cart
+              Please log in to buy product
             </Alert>
           )}
         </Snackbar>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Add to Cart</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Please login to add products to the cart.
-            </DialogContentText>
+            <DialogContentText>Please login to buy product.</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Continue</Button>
