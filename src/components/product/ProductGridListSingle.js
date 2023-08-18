@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getDiscountPrice } from "../../helper/product";
 import Rating from "./sub-components/ProductRating";
 import ProductModal from "./ProductModal";
 import { useSelector } from "react-redux";
+import { localStorageService } from "src/services/localStorageService";
 
 const ProductGridListSingle = ({
   product,
@@ -13,8 +14,25 @@ const ProductGridListSingle = ({
   sliderClassName,
   spaceBottomClass,
 }) => {
+  const navigate = useNavigate();
   const userID = useSelector((state) => state.auth.idAccount);
   const [modalShow, setModalShow] = useState(false);
+  const handleClickItem = (idProduct) => {
+    if (!isLoggedIn) {
+      return `/product-details/${idProduct}`;
+    }
+  
+    const role = localStorageService.get("USER")?.roles;
+    const hasCustomerRole = role?.includes('CUSTOMER');
+  
+    if (hasCustomerRole) {
+      return `/product-details/${idProduct}`;
+    } else {
+      return `/dashboard/product/${idProduct}`;
+    }
+  };
+
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const handleListItemClick = (event, quantity, productID) => {
     addToCart({ userID, productID, quantity });
@@ -33,15 +51,14 @@ const ProductGridListSingle = ({
   return (
     <Fragment>
       <div
-        className={`col-xl-4 col-sm-6 ${
-          sliderClassName ? sliderClassName : ""
-        }`}
+        className={`col-xl-4 col-sm-6 ${sliderClassName ? sliderClassName : ""
+          }`}
       >
         <div
           className={`product-wrap ${spaceBottomClass ? spaceBottomClass : ""}`}
         >
           <div className="product-img">
-            <Link to={"/dashboard/product/" + product.productID}>
+            <Link to={handleClickItem(product.productID)}>
               <div className="rect-img-container">
                 {" "}
                 <img
@@ -89,7 +106,7 @@ const ProductGridListSingle = ({
                     Buy now{" "}
                   </a>
                 ) : product.variation?.length >= 1 ? (
-                  <Link to={`/dashboard/product/${product.productID}`}>
+                  <Link to={handleClickItem(product.productID)}>
                     Select option
                   </Link>
                 ) : product.stock && product.stock > 0 ? (
@@ -128,7 +145,7 @@ const ProductGridListSingle = ({
           </div>
           <div className="product-content text-center">
             <h3>
-              <Link to={"/dashboard/product/" + product.productID}>
+              <Link to={handleClickItem(product.productID)}>
                 {product.name}
               </Link>
             </h3>
@@ -156,7 +173,7 @@ const ProductGridListSingle = ({
             <div className="col-xl-4 col-md-5 col-sm-6">
               <div className="product-list-image-wrap">
                 <div className="product-img">
-                  <Link to={"/dashboard/product/" + product.productID}>
+                  <Link to={handleClickItem(product.productID)}>
                     <div className="rect-img-container">
                       <img
                         className="default-img img-fluid rect-img"
@@ -196,7 +213,7 @@ const ProductGridListSingle = ({
             <div className="col-xl-8 col-md-7 col-sm-6">
               <div className="shop-list-content">
                 <h3>
-                  <Link to={"/dashboard/product/" + product.productID}>
+                  <Link to={handleClickItem(product.productID)}>
                     {product.name}
                   </Link>
                 </h3>

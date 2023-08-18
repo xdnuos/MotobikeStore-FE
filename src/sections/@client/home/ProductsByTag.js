@@ -115,7 +115,7 @@ function ProductsByTag({ product = [], limit, loading }) {
             <Stack justifyContent={"center"}>
               <Button
                 sx={{ color: "#000", mt: 3 }}
-                onClick={() => navigate("/list-products")}
+                onClick={() => navigate("/list-products/1")}
               >
                 Show more {products?.length - 1 - limit} products
                 <Iconify icon="mingcute:right-fill" ml={1} />

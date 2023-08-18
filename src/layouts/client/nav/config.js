@@ -7,27 +7,27 @@
 
 const navConfig = [
   {
-    title: 'KHÔNG',
-    path: '/list-products'
+    title: 'HOME',
+    path: '/'
   },
   {
-    title: 'BIẾT',
-    path: '/list-products?tag=all'
+    title: 'ALL PRODUCTS',
+    path: '/list-products/1'
   },
   {
-    title: 'GHI',
-    path: '/list-products?manufacturer=all',
+    title: 'MANFUCATURER',
+    path: '/list-products/2'
   },
   {
-    title: 'GÌ',
-    path: '/list-products?category=all',
+    title: 'TAGS',
+    path: '/list-products/3',
   },
   {
-    title: 'LUÔN',
+    title: 'BLOG',
     path: '/blog',
   },
   {
-    title: 'Á',
+    title: 'ABOUT US',
     path: '/contact',
   },
 ];

@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../../redux/products/productList";
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 // @mui
 import {
   Box,
@@ -69,7 +70,7 @@ export default function HomePage() {
     dispatch(getAllProduct());
     console.log("products", products);
   }, [dispatch]);
-
+const navigate = useNavigate();
   return (
     <>
       {/* ------------------------------------------------------------------------------- */}
@@ -120,6 +121,7 @@ export default function HomePage() {
                     variant="contained"
                     sx={{ height: "45px" }}
                     fullWidth
+                    onClick={() => navigate("/list-products/1")}
                   >
                     Shop now
                   </StyledButtonGreen>
