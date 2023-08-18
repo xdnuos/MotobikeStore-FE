@@ -60,7 +60,6 @@ export default function Staff() {
     { id: "role", label: "Role" },
     { id: "status", label: "Status" },
     { id: "phone", label: "Phone" },
-    { id: "birth", label: "Birth" },
     { id: "manager", label: "Manager" },
     { id: "create", label: "Create Date", alignLeft: true },
     { id: "" },
@@ -306,7 +305,6 @@ export default function Staff() {
                         roles,
                         isActive,
                         phone,
-                        birth,
                         managerLastName,
                         createDate,
                         staffID,
@@ -327,7 +325,14 @@ export default function Staff() {
                               onChange={(event) => handleClick(event, userID)}
                             />
                           </TableCell>
-                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">
+                            <Typography
+                              component={Link}
+                              to={`/dashboard/staff/${staffID}`}
+                            >
+                              {email}
+                            </Typography>
+                          </TableCell>
                           <TableCell align="left">{fullName}</TableCell>
                           <TableCell align="left">{roles[0]}</TableCell>
                           <TableCell align="center">
@@ -336,7 +341,6 @@ export default function Staff() {
                             </Label>
                           </TableCell>
                           <TableCell align="left">{phone}</TableCell>
-                          <TableCell align="left">{birth}</TableCell>
                           <TableCell>{managerLastName}</TableCell>
 
                           <TableCell component="th" scope="row" padding="none">

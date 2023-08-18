@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // @mui
 import { styled } from "@mui/material/styles";
@@ -15,6 +15,7 @@ import { getAllCategories } from "src/redux/productProperties/categorySlice";
 import { getAllTags } from "src/redux/productProperties/tagSlice";
 import { getAllManufacturer } from "src/redux/productProperties/manufacturerSlice";
 import { fetchCartItems } from "src/redux/cart/cartSlice";
+import { localStorageService } from "src/services/localStorageService";
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,17 @@ const Main = styled("div")(({ theme }) => ({
 function DashboardLayout() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  useEffect(() => {
+    if (isLoggedIn) {
+      const role = localStorageService.get("USER")?.roles;
+      const hasCustomerRole = role?.includes("CUSTOMER");
+      if (hasCustomerRole) {
+        navigate("/");
+      }
+    }
+  }, [isLoggedIn, navigate]);
   // get
   const products = useSelector(
     (state) => state.products.productList.allProduct
@@ -73,32 +85,24 @@ function DashboardLayout() {
     dispatch(getAllTags());
     dispatch(getAllManufacturer());
     dispatch(fetchCartItems(userID));
-    if (getProducts) {
-      console.log("Get lai product");
-      dispatch(getAllProductAdmin());
-    }
   }, [dispatch, getProducts, userID]);
 
-  if (
-    loadingProducts ||
-    loadingCategories ||
-    loadingTags ||
-    loadingManufacturer
-    // loadCart
-  ) {
-    console.log("Loading...................");
-    return <SkeletonLoading />;
-  }
-  console.log("Loading ok");
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />
 
       <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 
-      <Main>
-        <Outlet context={[products, categories, tags, manufacturer]} />
-      </Main>
+      {loadingProducts ||
+      loadingCategories ||
+      loadingTags ||
+      loadingManufacturer ? (
+        <SkeletonLoading />
+      ) : (
+        <Main>
+          <Outlet context={[products, categories, tags, manufacturer]} />
+        </Main>
+      )}
     </StyledRoot>
   );
 }

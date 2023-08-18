@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { addProduct, updateProduct } from "src/redux/products/productList";
+import { blobToFile } from "src/helper/image";
 // const imageServer = process.env.REACT_APP_IMAGE_SERVER;
 // -------------------------------------------------------------------
 message.config({
@@ -85,16 +86,11 @@ function getObjectByNames(arr, names) {
 //   }
 //   return images.map((image) => imageServer + image);
 // }
-function blobToFile(theBlob, fileName) {
-  return new File([theBlob], fileName, {
-    lastModified: new Date().getTime(),
-    type: theBlob.type,
-  });
-}
+
 function ProductForm({ product, categories, tags, manufacturer }) {
   const [categoryIDs, setCategoryIDs] = useState("");
   const [tagIDs, setTagIDs] = useState("");
-  const [imageFiles, setImageFiles] = useState([]);
+  // const [imageFiles, setImageFiles] = useState([]);
   const dispatch = useDispatch();
   let initialValues = {
     name: "",
@@ -107,7 +103,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     // manufacturer: "",
     // categories: "",
     // tags: "",
-    imageFiles: imageFiles,
+    imageFiles: [],
   };
 
   let isEdit = false;
@@ -159,13 +155,13 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     const isValid = await validationSchema.isValid(values);
     if (isValid) {
       const formData = new FormData();
-      console.log("imageFiles", imageFiles);
-      imageFiles.forEach((file) => {
+      values.imageFiles.forEach((file) => {
         console.log("Add image", file);
         const newFile = blobToFile(file, file.name);
         console.log(newFile);
         formData.append(`imageFiles`, newFile);
       });
+
       let newTags;
       if (((tagIDs === "") | (tagIDs === null)) & isEdit) {
         newTags = values.tags;
@@ -213,7 +209,6 @@ function ProductForm({ product, categories, tags, manufacturer }) {
         response = await dispatch(addProduct(formData));
       }
       if (response.payload.status === 200) {
-        message.success(response.payload.data);
         resetForm();
       }
     } else {
@@ -228,7 +223,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ values, touched, errors, handleChange, form }) => (
+      {({ values, touched, errors, handleChange, setFieldValue }) => (
         <Form>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8}>
@@ -319,7 +314,10 @@ function ProductForm({ product, categories, tags, manufacturer }) {
                 acceptedFileTypes={["image/png", "image/jpeg"]}
                 files={values.imageFiles}
                 onupdatefiles={(files) =>
-                  setImageFiles(files.map((f) => f.file))
+                  setFieldValue(
+                    "imageFiles",
+                    files.map((f) => f.file)
+                  )
                 }
               />
             </Grid>

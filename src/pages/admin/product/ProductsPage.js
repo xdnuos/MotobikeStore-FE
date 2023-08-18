@@ -109,7 +109,7 @@ function ProductsPage() {
   const deleteProduct = async (id) => {
     if (idRowProduct !== -1) {
       await dispatch(changeState(id));
-      await dispatch(getAllProduct());
+      // await dispatch(getAllProduct());
       setOpen(null);
       setIdRowProduct(-1);
     } else if (selected.length !== 0) {

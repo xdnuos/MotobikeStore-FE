@@ -26,8 +26,7 @@ import {
 import Iconify from "src/components/iconify/Iconify";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { message } from "antd";
-import Label from "../../../components/label";
+import Label from "../../components/label";
 import {
   applySortFilterByPhone,
   convertStringToDateTime,
@@ -36,13 +35,12 @@ import {
 } from "src/helper/table";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
 import { orderService } from "src/services/orderService";
-import { Link, useParams } from "react-router-dom";
-import { customersService } from "src/services/customerService";
+import { Link } from "react-router-dom";
 import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
 import { staffService } from "src/services/staffService";
 import { MonthRevenue, TotalRevenue } from "src/helper/order";
-function StaffDetail() {
-  const { staffID } = useParams();
+function ProfileAdmin() {
+  const userID = useSelector((state) => state.auth.idAccount);
   const TABLE_HEAD = [
     { id: "email", label: "Purchase method", alignLeft: true },
     { id: "fullname", label: "Order time", alignLeft: true },
@@ -79,10 +77,9 @@ function StaffDetail() {
     return dateB - dateA;
   };
   const getAllOrderByStaff = async () => {
-    console.log("staffID", staffID);
     return new Promise((resolve, reject) => {
       orderService
-        .getOrdersByStaff(staffID)
+        .getOrderStaffByUserID(userID)
         .then((response) => {
           setOrders(response.sort(compareByCreatedAt));
           console.log("response", response);
@@ -96,7 +93,7 @@ function StaffDetail() {
   const getStaffInfo = async () => {
     return new Promise((resolve, reject) => {
       staffService
-        .getByID(staffID)
+        .getByID(userID)
         .then((response) => {
           setStaffInfo(response);
           console.log("customerInfo", response);
@@ -484,4 +481,4 @@ function StaffDetail() {
   );
 }
 
-export default StaffDetail;
+export default ProfileAdmin;

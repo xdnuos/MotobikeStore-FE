@@ -59,7 +59,6 @@ export default function HomePage() {
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const limit = matches ? 10 : 8;
 
-  const dispatch = useDispatch();
   const products = useSelector(
     (state) => state.products.productList.allProduct
   );
@@ -71,6 +70,7 @@ export default function HomePage() {
     console.log("products", products);
   }, [dispatch]);
 const navigate = useNavigate();
+
   return (
     <>
       {/* ------------------------------------------------------------------------------- */}

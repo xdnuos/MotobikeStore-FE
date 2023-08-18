@@ -16,23 +16,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../redux/auth/authSlice";
 import { localStorageService } from "../../../services/localStorageService";
-
 // ----------------------------------------------------------------------
-
-const MENU_OPTIONS = [
-  {
-    label: "Home",
-    icon: "eva:home-fill",
-  },
-  {
-    label: "Profile",
-    icon: "eva:person-fill",
-  },
-  {
-    label: "Settings",
-    icon: "eva:settings-2-fill",
-  },
-];
 
 // ----------------------------------------------------------------------
 
@@ -65,6 +49,31 @@ export default function AccountPopover() {
     }
   }, [isLoggedIn]);
 
+  const editInfo = () => {
+    navigate("/dashboard/info");
+    handleClose();
+  };
+  const Profile = () => {
+    navigate("/dashboard/profile");
+    handleClose();
+  };
+
+  const MENU_OPTIONS = [
+    {
+      label: "Profile",
+      icon: "eva:person-fill",
+      action: Profile,
+    },
+    {
+      label: "Edit info",
+      icon: "eva:home-fill",
+      action: editInfo,
+    },
+    // {
+    //   label: "Settings",
+    //   icon: "eva:settings-2-fill",
+    // },
+  ];
   return (
     <>
       <IconButton
@@ -119,7 +128,7 @@ export default function AccountPopover() {
 
         <Stack sx={{ p: 1 }}>
           {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
+            <MenuItem key={option.label} onClick={option.action}>
               {option.label}
             </MenuItem>
           ))}
