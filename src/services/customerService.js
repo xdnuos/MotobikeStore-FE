@@ -6,7 +6,12 @@ export let customersService = {
   getInfo: async (idAccount) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/get/${idAccount}`
+        BASE_URL + `/api/v1/customers/get/${idAccount}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
 
       return response.data;
@@ -18,7 +23,12 @@ export let customersService = {
     try {
       console.log("phone:", phone);
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/get/phone/${phone}`
+        BASE_URL + `/api/v1/customers/get/phone/${phone}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {
@@ -29,7 +39,12 @@ export let customersService = {
   getAllCustomers: async () => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/get/admin`
+        BASE_URL + `/api/v1/customers/get/admin`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -39,7 +54,12 @@ export let customersService = {
   getCustomersInfoWithStatisticByUserID: async (userID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/get/admin/userID/${userID}`
+        BASE_URL + `/api/v1/customers/get/admin/userID/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -49,7 +69,12 @@ export let customersService = {
   getCustomersInfoByCustomerID: async (customerID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/get/admin/${customerID}`
+        BASE_URL + `/api/v1/customers/get/admin/${customerID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -59,7 +84,12 @@ export let customersService = {
   getAllOrder: async (idAccount) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/customers/${idAccount}/orders`
+        BASE_URL + `/api/v1/customers/${idAccount}/orders`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -71,7 +101,12 @@ export let customersService = {
     try {
       const response = await axios.post(
         BASE_URL + `/api/v1/address`,
-        CustomerAddressRequest
+        CustomerAddressRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -83,6 +118,7 @@ export let customersService = {
       console.log("reset pass", userID);
       const response = await axios.put(
         BASE_URL + `/api/v1/customers/admin/changeState/${userID}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -100,6 +136,7 @@ export let customersService = {
       console.log("reset pass", userID);
       const response = await axios.put(
         BASE_URL + `/api/v1/customers/admin/resetPassword/${userID}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

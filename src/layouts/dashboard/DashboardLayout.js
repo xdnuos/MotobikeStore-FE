@@ -47,6 +47,7 @@ function DashboardLayout() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userID = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   useEffect(() => {
     if (isLoggedIn) {
@@ -57,16 +58,7 @@ function DashboardLayout() {
       }
     }
   }, [isLoggedIn, navigate]);
-  // get
-  const products = useSelector(
-    (state) => state.products.productList.allProduct
-  );
-  const categories = useSelector((state) => state.categories.allCategories);
-  const tags = useSelector((state) => state.tags.allTags);
-  const manufacturer = useSelector(
-    (state) => state.manufacturer.allManufacturer
-  );
-  const userID = useSelector((state) => state.auth.idAccount);
+
   // loading
   const loadingCategories = useSelector((state) => state.categories.loading);
   const loadingProducts = useSelector(
@@ -74,19 +66,19 @@ function DashboardLayout() {
   );
   const loadingTags = useSelector((state) => state.categories.loading);
   const loadingManufacturer = useSelector((state) => state.categories.loading);
-  const getProducts = useSelector(
-    (state) => state.products.productList.getProducts
-  );
-  const loadCart = useSelector((state) => state.cart.loading);
-  console.log("loading cart", loadCart);
+  // const loadCart = useSelector((state) => state.cart.loading);
+  // console.log("loading cart", loadCart);
   useEffect(() => {
-    dispatch(getAllProductAdmin());
-    dispatch(getAllCategories());
-    dispatch(getAllTags());
-    dispatch(getAllManufacturer());
-    dispatch(fetchCartItems(userID));
-  }, [dispatch, getProducts, userID]);
+    const fetchData = async () => {
+      await dispatch(getAllProductAdmin());
+      await dispatch(getAllCategories());
+      await dispatch(getAllTags());
+      await dispatch(getAllManufacturer());
+    };
+    fetchData();
+  }, [dispatch, userID]);
 
+  console.log("load product", loadingProducts);
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />
@@ -100,7 +92,7 @@ function DashboardLayout() {
         <SkeletonLoading />
       ) : (
         <Main>
-          <Outlet context={[products, categories, tags, manufacturer]} />
+          <Outlet />
         </Main>
       )}
     </StyledRoot>

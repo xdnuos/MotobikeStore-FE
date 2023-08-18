@@ -4,9 +4,18 @@ import { Helmet } from "react-helmet-async";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import ProductForm from "../../../sections/@dashboard/products/ProductForm";
 import { useOutletContext } from "react-router-dom";
+import { useSelector } from "react-redux";
 // import
 function CreateProduct() {
-  const [products, categories, tags, manufacturer] = useOutletContext();
+  // get
+  const products = useSelector(
+    (state) => state.products.productList.allProduct
+  );
+  const categories = useSelector((state) => state.categories.allCategories);
+  const tags = useSelector((state) => state.tags.allTags);
+  const manufacturer = useSelector(
+    (state) => state.manufacturer.allManufacturer
+  );
   return (
     <>
       <Helmet>

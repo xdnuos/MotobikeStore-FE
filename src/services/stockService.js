@@ -49,6 +49,7 @@ export let stockService = {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/admin/stock/cancel/${stockID}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

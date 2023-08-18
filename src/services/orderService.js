@@ -8,7 +8,12 @@ export let orderService = {
       console.log(AddToCartRequest);
       const response = await axios.post(
         BASE_URL + `/api/v1/order/add/admin`,
-        AddToCartRequest
+        AddToCartRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response;
@@ -20,7 +25,12 @@ export let orderService = {
   getOrders: async (customerID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/${customerID}`
+        BASE_URL + `/api/v1/order/get/${customerID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response.data;
@@ -31,7 +41,11 @@ export let orderService = {
   },
   getAllOrdersAdmin: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/order/get/admin`);
+      const response = await axios.get(BASE_URL + `/api/v1/order/get/admin`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
       console.log("Response: ", response);
       return response.data;
     } catch (error) {
@@ -42,7 +56,12 @@ export let orderService = {
   getOrdersByStaff: async (staffID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/admin/${staffID}`
+        BASE_URL + `/api/v1/order/get/admin/${staffID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response.data;
@@ -54,7 +73,12 @@ export let orderService = {
   getOrderStaffByUserID: async (userID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/admin/user/${userID}`
+        BASE_URL + `/api/v1/order/get/admin/user/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response.data;
@@ -66,7 +90,12 @@ export let orderService = {
   getOrdersID: async (orderID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/orderDetail/${orderID}`
+        BASE_URL + `/api/v1/order/get/orderDetail/${orderID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response.data;
@@ -78,7 +107,12 @@ export let orderService = {
   getOrdersByCustomer: async (userID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/${userID}`
+        BASE_URL + `/api/v1/order/get/${userID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response.data;
@@ -91,7 +125,12 @@ export let orderService = {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/order/edit/admin/confirm`,
-        confirmOrderRequest
+        confirmOrderRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response;
@@ -104,7 +143,12 @@ export let orderService = {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/order/edit/admin/shipping`,
-        confirmOrderRequest
+        confirmOrderRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response;
@@ -117,7 +161,12 @@ export let orderService = {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/order/edit/admin/success`,
-        confirmOrderRequest
+        confirmOrderRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response;
@@ -130,7 +179,12 @@ export let orderService = {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/order/edit/admin/cancel`,
-        confirmOrderRequest
+        confirmOrderRequest,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log("Response: ", response);
       return response;

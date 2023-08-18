@@ -5,7 +5,7 @@ import { message } from "antd";
 /** State **/
 const initialState = {
   allProduct: [],
-  loading: false,
+  loading: true,
   error: null,
   getProducts: false,
 };
@@ -44,15 +44,17 @@ export const updateProduct = createAsyncThunk(
     }
   }
 );
-// cai nay bo
 export const creatStockProduct = createAsyncThunk(
   "product/creatStockProduct",
   async (formData) => {
     try {
       const response = await stockService.create(formData);
-      message.success(response.data.message);
+      console.log(response);
+      message.success(response.data);
       return response.data.product;
     } catch (error) {
+      console.log(error);
+      message.error(error.response.data);
       throw new Error(error);
     }
   }

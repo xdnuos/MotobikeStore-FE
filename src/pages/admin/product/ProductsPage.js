@@ -33,7 +33,7 @@ import {
   ProductListHead,
   DeleteDialog,
 } from "../../../sections/@dashboard/products";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   changeState,
   changeStateMulti,
@@ -89,7 +89,10 @@ function applySortFilter(array, comparator, query) {
 // ----------------------------------------------------------------------
 
 function ProductsPage() {
-  const [products] = useOutletContext();
+  // get
+  const products = useSelector(
+    (state) => state.products.productList.allProduct
+  );
   const [opendialog, setOpenDialog] = useState(false);
 
   const [open, setOpen] = useState(null);

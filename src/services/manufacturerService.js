@@ -15,7 +15,12 @@ export let manufacturerService = {
     try {
       const response = await axios.post(
         BASE_URL + `/api/v1/manufacturer/add`,
-        request
+        request,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {
@@ -27,7 +32,12 @@ export let manufacturerService = {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/manufacturer/edit`,
-        request
+        request,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {
@@ -38,7 +48,12 @@ export let manufacturerService = {
   delete: async (id) => {
     try {
       const response = await axios.delete(
-        BASE_URL + `/api/v1/manufacturer/delete/${id}`
+        BASE_URL + `/api/v1/manufacturer/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {

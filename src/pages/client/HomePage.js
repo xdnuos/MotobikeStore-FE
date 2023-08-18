@@ -63,12 +63,6 @@ export default function HomePage() {
     (state) => state.products.productList.allProduct
   );
   const loading = useSelector((state) => state.products.productList.loading);
-  // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  // useEffect(() => {
-  //   dispatch(getAllProduct());
-  //   console.log("products", products);
-  // }, [dispatch]);
   const navigate = useNavigate();
 
   return (
