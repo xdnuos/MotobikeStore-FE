@@ -73,10 +73,9 @@ export const updateCart = createAsyncThunk(
 
 const initialState = {
   cart: [],
-  loading: false,
+  loading: true,
   error: null,
   emptyCart: true,
-  loadOk: false,
 };
 
 const cartSlice = createSlice({
@@ -96,7 +95,6 @@ const cartSlice = createSlice({
         state.cart = payload;
         state.loading = false;
         state.emptyCart = state.cart?.length === 0;
-        state.loadOk = true;
       })
       .addCase(fetchCartItems.rejected, (state, { payload }) => {
         state.loading = false;

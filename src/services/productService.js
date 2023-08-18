@@ -14,7 +14,14 @@ export let productService = {
   },
   getAllProductAdmin: async () => {
     try {
-      const response = await axios.get(BASE_URL + "/api/v1/products/get/admin");
+      const response = await axios.get(
+        BASE_URL + "/api/v1/products/get/admin",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.log(error);
@@ -96,7 +103,11 @@ export let productService = {
   // },
   changeState: async (values) => {
     try {
-      return await https.put(`/api/v1/products/changeState/${values}`);
+      return await https.put(`/api/v1/products/changeState/${values}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
     } catch (error) {
       if (error.response.status === 406) {
         message.error(error.response.data);
@@ -110,7 +121,12 @@ export let productService = {
   changeStateMulti: async (values) => {
     try {
       const response = await https.put(
-        `/api/v1/products/changeStateMulti/${values}`
+        `/api/v1/products/changeStateMulti/${values}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       console.log(response);
     } catch (error) {

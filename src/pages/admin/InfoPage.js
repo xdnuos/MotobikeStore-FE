@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormik } from "formik";
+import { Form, useFormik } from "formik";
 import {
   TextField,
   Button,
@@ -241,24 +241,26 @@ const PersonalInfoForm = () => {
                   />
                 </Stack>
                 <Stack direction="row" spacing={2}>
-                  <LocalizationProvider
-                    dateAdapter={AdapterDayjs}
-                    sx={{ width: "50ch" }}
-                  >
-                    <DatePicker
-                      format="DD-MM-YYYY"
-                      label="Birth"
-                      name="birth"
-                      value={formik.values.birth}
-                      onChange={(value) =>
-                        formik.setFieldValue("birth", new Date(value))
-                      }
-                      renderInput={(params) => <TextField {...params} />}
-                      error={
-                        formik.touched.birth && Boolean(formik.errors.birth)
-                      }
-                    />
-                  </LocalizationProvider>
+                  <FormControl>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        format="DD-MM-YYYY"
+                        label="Birth"
+                        name="birth"
+                        value={formik.values.birth}
+                        onChange={(value) =>
+                          formik.setFieldValue("birth", value ? value : null)
+                        }
+                        renderInput={(params) => <TextField {...params} />}
+                        error={
+                          formik.touched.birth && Boolean(formik.errors.birth)
+                        }
+                      />
+                    </LocalizationProvider>
+                  </FormControl>
+                  {formik.touched.birth && formik.errors.birth ? (
+                    <Typography color={"red"}>{formik.errors.birth}</Typography>
+                  ) : null}
                   <FormControl sx={{ width: "50ch" }}>
                     <InputLabel htmlFor="grouped-native-select">Sex</InputLabel>
                     <Select
@@ -266,7 +268,7 @@ const PersonalInfoForm = () => {
                       name="sex"
                       id="grouped-native-select"
                       label="Grouping"
-                      value={formik.values.sex}
+                      value={formik.values.sex || ""}
                       onChange={formik.handleChange}
                       error={formik.touched.sex && Boolean(formik.errors.sex)}
                     >

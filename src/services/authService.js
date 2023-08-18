@@ -4,10 +4,7 @@ import { BASE_URL } from "../utils/baseURL";
 
 export let authService = {
   register: async (values) => {
-    return await axios.post(
-      BASE_URL + "/api/v1/registration",
-      values
-    );
+    return await axios.post(BASE_URL + "/api/v1/registration", values);
   },
   active: async (token) => {
     return await axios.get(BASE_URL + `/api/v1/registration/activate/${token}`);

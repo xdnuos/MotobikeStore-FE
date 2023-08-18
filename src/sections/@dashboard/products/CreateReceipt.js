@@ -71,7 +71,6 @@ function CreateReceipt() {
     const response = await dispatch(creatStockProduct(formData));
     console.log(response);
     if (response.payload.status === 200) {
-      message.success(response.payload.data);
       setSelectedProducts([]);
       SetIsNotFound(true);
     }

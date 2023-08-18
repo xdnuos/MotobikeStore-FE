@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Paginator from "react-hooks-paginator";
 import { Stack, Container, Typography } from "@mui/material";
 import ShopSidebar from "src/sections/@dashboard/products/ShopSidebar";
@@ -8,9 +8,13 @@ import ShopTopbar from "src/sections/@dashboard/products/ShopTopbar";
 import ShopProducts from "./ShopProducts";
 import { getSortedProducts } from "../../../helper/product";
 import { useOutletContext } from "react-router-dom";
+import { fetchCartItems } from "src/redux/cart/cartSlice";
 
 function AdminOrder() {
-  const [products] = useOutletContext();
+  // get
+  const products = useSelector(
+    (state) => state.products.productList.allProduct
+  );
   const [layout, setLayout] = useState("grid three-column");
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
@@ -21,11 +25,11 @@ function AdminOrder() {
   const [currentData, setCurrentData] = useState([]);
   const [sortedProducts, setSortedProducts] = useState([]);
   const pageLimit = 9;
-
+  const dispatch = useDispatch();
   const getLayout = (layout) => {
     setLayout(layout);
   };
-
+  const userID = useSelector((state) => state.auth.idAccount);
   const getSortParams = (sortType, sortValue) => {
     setSortType(sortType);
     setSortValue(sortValue);
@@ -37,6 +41,10 @@ function AdminOrder() {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(fetchCartItems(userID));
+    };
+    fetchData();
     let sortedProducts = getSortedProducts(products, sortType, sortValue);
     const filterSortedProducts = getSortedProducts(
       sortedProducts,

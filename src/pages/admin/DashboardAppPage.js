@@ -48,19 +48,18 @@ export default function DashboardAppPage() {
   const [orders, setOrders] = useState([]);
 
   const getAllOrder = async () => {
-    return new Promise((resolve, reject) => {
-      orderService
-        .getAllOrdersAdmin()
-        .then((response) => {
-          setOrders(response);
-          console.log("response", response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await orderService.getAllOrdersAdmin();
+        setOrders(response);
+        console.log("response", response);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
     });
   };
+
   useEffect(() => {
     getAllOrder();
   }, []);

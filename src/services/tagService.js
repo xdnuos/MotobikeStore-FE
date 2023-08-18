@@ -12,7 +12,11 @@ export let tagService = {
   },
   create: async (request) => {
     try {
-      const response = await axios.post(BASE_URL + `/api/v1/tag/add`, request);
+      const response = await axios.post(BASE_URL + `/api/v1/tag/add`, request, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
       return response;
     } catch (error) {
       console.log(error);
@@ -20,7 +24,11 @@ export let tagService = {
   },
   update: async (request) => {
     try {
-      const response = await axios.put(BASE_URL + `/api/v1/tag/edit`, request);
+      const response = await axios.put(BASE_URL + `/api/v1/tag/edit`, request, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
       return response;
     } catch (error) {
       console.log(error);
@@ -29,7 +37,12 @@ export let tagService = {
   delete: async (id) => {
     try {
       const response = await axios.delete(
-        BASE_URL + `/api/v1/tag/delete/${id}`
+        BASE_URL + `/api/v1/tag/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {

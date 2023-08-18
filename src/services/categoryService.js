@@ -14,7 +14,12 @@ export let categoryService = {
     try {
       const response = await axios.post(
         BASE_URL + `/api/v1/categories/add`,
-        request
+        request,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {
@@ -26,7 +31,12 @@ export let categoryService = {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/categories/edit`,
-        request
+        request,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {
@@ -37,7 +47,12 @@ export let categoryService = {
   delete: async (id) => {
     try {
       const response = await axios.delete(
-        BASE_URL + `/api/v1/categories/delete/${id}`
+        BASE_URL + `/api/v1/categories/delete/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       return response;
     } catch (error) {

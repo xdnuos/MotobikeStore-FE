@@ -127,6 +127,7 @@ export let staffService = {
       console.log("reset pass", userID);
       const response = await axios.put(
         BASE_URL + `/api/v1/admin/staff/resetPassword/${userID}`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

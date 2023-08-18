@@ -5,10 +5,19 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import ProductForm from "../../../sections/@dashboard/products/ProductForm";
 import { useOutletContext, useParams } from "react-router-dom";
 import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
+import { useSelector } from "react-redux";
 
 // import
 function EditProduct() {
-  const [products, categories, tags, manufacturer] = useOutletContext();
+  // get
+  const products = useSelector(
+    (state) => state.products.productList.allProduct
+  );
+  const categories = useSelector((state) => state.categories.allCategories);
+  const tags = useSelector((state) => state.tags.allTags);
+  const manufacturer = useSelector(
+    (state) => state.manufacturer.allManufacturer
+  );
   const { productID } = useParams();
   const [product, setProduct] = useState(null);
 
