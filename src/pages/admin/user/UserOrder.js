@@ -53,20 +53,12 @@ function UserDetail() {
   const [orders, setOrders] = useState([]);
   const [customerInfo, setCustomerInfo] = useState([]);
   const [page, setPage] = useState(0);
-  const [selectedOrderID, setSelectedOrderID] = useState(null);
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
-  const [openDeletedialog, setDeleteDialog] = useState(false);
-  const [openResetdialog, setResetDialog] = useState(false);
-  const [open, setOpen] = useState(null);
-  const [idRowOrder, setIdRowOrder] = useState(-1);
-  const [stateRowOrder, setStateRowOrder] = useState(false);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     getOrderByCustomer();
     geCustomerInfo();
@@ -104,88 +96,6 @@ function UserDetail() {
         });
     });
   };
-  const changeState = async (userID) => {
-    // return new Promise((resolve, reject) => {
-    //   staffService
-    //     .then((response) => {
-    //       console.log("response", response);
-    //       if (response.status === 200) {
-    //         setDeleteDialog(false);
-    //         getOrderByCustomer();
-    //         message.success(response.data);
-    //       }
-    //       resolve();
-    //     })
-    //     .catch((error) => {
-    //       setDeleteDialog(false);
-    //       message.error(error.response.data);
-    //       reject(error);
-    //     });
-    // });
-  };
-  const resetPassword = async (userID) => {
-    // return new Promise((resolve, reject) => {
-    //   staffService
-    //     .resetPass(userID)
-    //     .then((response) => {
-    //       console.log("response", response);
-    //       if (response.status === 200) {
-    //         setResetDialog(false);
-    //         getAllOrder();
-    //         message.success(response.data);
-    //       }
-    //       resolve();
-    //     })
-    //     .catch((error) => {
-    //       setResetDialog(false);
-    //       message.error(error.response.data);
-    //       reject(error);
-    //     });
-    // });
-  };
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
-
-  const handleClickDeleteDialog = () => {
-    setOpen(false);
-    setDeleteDialog(true);
-  };
-  const handleClickResetDialog = () => {
-    setOpen(false);
-    setResetDialog(true);
-  };
-  const handleCloseDeleteDialog = () => {
-    setDeleteDialog(false);
-  };
-  const handleCloseResetDialog = () => {
-    setResetDialog(false);
-  };
-
-  const handleOpenMenu = (event, id, active, orderID) => {
-    setIdRowOrder(id);
-    setSelectedOrderID(orderID);
-    setStateRowOrder(active);
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -196,35 +106,6 @@ function UserDetail() {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
-
-  const deleteOrder = async (id) => {
-    if (idRowOrder !== -1) {
-      await dispatch(changeState(id));
-      setOpen(null);
-      setIdRowOrder(-1);
-    } else if (selected.length !== 0) {
-      // await dispatch(changeStateMulti(id));
-      setSelected([]);
-    }
-    // loadProducts();
-    setDeleteDialog(false);
-  };
-  const resetPass = async (id) => {
-    if (idRowOrder !== -1) {
-      await dispatch(resetPassword(id));
-      setOpen(null);
-      setIdRowOrder(-1);
-    } else if (selected.length !== 0) {
-      // await dispatch(changeStateMulti(id));
-      setSelected([]);
-    }
-    setResetDialog(false);
-  };
-
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders?.length) : 0;
 
@@ -233,14 +114,7 @@ function UserDetail() {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = orders?.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
+
   const filteredUsers = applySortFilterByPhone(
     orders,
     getComparator(order, orderBy),

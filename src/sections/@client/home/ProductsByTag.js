@@ -36,9 +36,10 @@ function ProductsByTag({ product = [], limit, loading }) {
       })
       .catch((err) => {
         setTags([]);
+        console.log("error");
+
         console.log(err);
       });
-    console.log("sssssssssssssssooooooooooooooosssssssssssssssssss");
   }, [product]);
 
   const handleChipClick = (index, name) => {

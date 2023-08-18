@@ -58,17 +58,11 @@ export default function HomePage() {
   const matches = useMediaQuery(theme.breakpoints.up("lg"));
   const limit = matches ? 10 : 8;
 
-  const dispatch = useDispatch();
   const products = useSelector(
     (state) => state.products.productList.allProduct
   );
   const loading = useSelector((state) => state.products.productList.loading);
   // const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-
-  useEffect(() => {
-    dispatch(getAllProduct());
-    console.log("products", products);
-  }, [dispatch]);
 
   return (
     <>
