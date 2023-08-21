@@ -3,24 +3,27 @@ import { BASE_URL, getAuthConfig } from "../utils/baseURL";
 
 export let cartService = {
   getAllCart: async (userID) => {
-    return await axios.get(BASE_URL + `/api/v1/carts/get/${userID}`, {
+    return await axios.get(BASE_URL + `/api/v1/user/${userID}/cart`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     });
   },
 
-  addToCart: (AddToCartRequest) => {
-    return axios.post(BASE_URL + `/api/v1/carts/add`, AddToCartRequest, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    });
+  addToCart: ({ userID, AddToCartRequest }) => {
+    return axios.post(
+      BASE_URL + `/api/v1/user/${userID}/cart`,
+      AddToCartRequest,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
   },
-  updateToCart: async (UpdateCartItemRequest) => {
-    // console.log("updateCarrt", UpdateCartItemRequest);
+  updateToCart: async ({ userID, UpdateCartItemRequest }) => {
     return await axios.put(
-      BASE_URL + `/api/v1/carts/edit`,
+      BASE_URL + `/api/v1/user/${userID}/cart`,
       UpdateCartItemRequest,
       {
         headers: {
@@ -29,12 +32,15 @@ export let cartService = {
       }
     );
   },
-  deleteToCart: async (value) => {
-    return await axios.put(BASE_URL + `/api/v1/carts/delete`, value, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    });
+  deleteToCart: async ({ userID, itemID }) => {
+    return await axios.delete(
+      BASE_URL + `/api/v1/user/${userID}/cart/${itemID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }
+    );
   },
   // deleteAll: async (idAccount) => {
   //   try {

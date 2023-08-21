@@ -95,6 +95,7 @@ function Summary({ handleBack, handleNext, activeStep, handleReset }) {
       if (error?.response.status === 404) {
         message.error(error.response.data);
       }
+      throw error;
     }
   };
   console.log("Order INFO", request);

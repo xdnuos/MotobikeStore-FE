@@ -17,6 +17,7 @@ function EditStaff() {
         setStaff(fetchedStaff);
       } catch (error) {
         console.error("Error fetching staff data:", error);
+        throw error;
       }
     };
 

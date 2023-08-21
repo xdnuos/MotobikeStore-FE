@@ -5,27 +5,16 @@ import { message } from "antd";
 
 export let productService = {
   getAllProduct: async () => {
-    try {
-      const response = await axios.get(BASE_URL + "/api/v1/products/get");
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await axios.get(BASE_URL + "/api/v1/products/get");
+    return response.data;
   },
   getAllProductAdmin: async () => {
-    try {
-      const response = await axios.get(
-        BASE_URL + "/api/v1/products/get/admin",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await axios.get(BASE_URL + "/api/v1/products/get/admin", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
+    return response.data;
   },
   getProductById: async (id) => {
     try {
@@ -33,6 +22,7 @@ export let productService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   getUnitsByIdProduct: async (id) => {
@@ -43,6 +33,7 @@ export let productService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
 

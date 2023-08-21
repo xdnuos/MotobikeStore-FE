@@ -30,10 +30,7 @@ import Scrollbar from "../../../../components/scrollbar/Scrollbar";
 import CartListHead from "./CartListHead";
 import { Quantity } from "src/sections/@client/products/product-details";
 import SvgColor from "../../../../components/svg-color/SvgColor";
-import {
-  removeFromCart,
-  updateCart,
-} from "../../../../redux/cart/cartSlice";
+import { removeFromCart, updateCart } from "../../../../redux/cart/cartSlice";
 
 import { addToOrder } from "src/redux/order/OrderSlice";
 
@@ -147,6 +144,7 @@ function AdminCart({ handleNext, activeStep }) {
         console.log(response);
       } catch (error) {
         console.error("Failed to update cart quantity:", error);
+        throw error;
       }
     } else {
       console.log("isEdited is undefined", isEdited);
@@ -164,6 +162,7 @@ function AdminCart({ handleNext, activeStep }) {
       }
     } catch (error) {
       console.error("Failed to delete product:", error);
+      throw error;
     }
   };
   const handleCheckout = () => {

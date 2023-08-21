@@ -42,6 +42,7 @@ function ActiveAccountPage() {
       localStorageService.remove("_tempUser");
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
 

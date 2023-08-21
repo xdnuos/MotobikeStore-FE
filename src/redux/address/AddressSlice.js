@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { addressService } from "../../services/addressService";
 
-
 export const fetchAddressItems = createAsyncThunk(
   "address/fetchAddressItems",
   async (userID, { rejectWithValue }) => {
@@ -24,23 +23,19 @@ export const CreateAddress = createAsyncThunk(
       return items?.address;
     } catch (err) {
       return err.response.data.message;
-    };
-
+    }
   }
 );
-
 
 export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
   async (request) => {
     try {
-      const response = await  addressService.deleteAddress(request);
-      console.log("áaskdjlksjd kas   ",response.data?.address);
-       return response.data?.address;
+      const response = await addressService.deleteAddress(request);
+      console.log("áaskdjlksjd kas   ", response.data?.address);
+      return response.data?.address;
     } catch (error) {
-
-      throw new Error(error);
-
+      throw error;
     }
   }
 );
@@ -107,27 +102,27 @@ const addressSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteAddress.fulfilled, (state, { payload }) => {
-       state.address = payload;
+        state.address = payload;
         state.loading = false;
         state.emptyAddress = payload?.length === 0;
       })
       .addCase(deleteAddress.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message;
-      })
-      // .addCase(updateCart.pending, (state) => {
-      //   state.loading = true;
-      //   state.error = null;
-      // })
-      // .addCase(updateCart.fulfilled, (state, { payload }) => {
-      //   state.cart = payload.cart;
-      //   state.loading = false;
-      //   state.loadOk = false;
-      // })
-      // .addCase(updateCart.rejected, (state, { error }) => {
-      //   state.loading = false;
-      //   state.error = error.message;
-      // });
+      });
+    // .addCase(updateCart.pending, (state) => {
+    //   state.loading = true;
+    //   state.error = null;
+    // })
+    // .addCase(updateCart.fulfilled, (state, { payload }) => {
+    //   state.cart = payload.cart;
+    //   state.loading = false;
+    //   state.loadOk = false;
+    // })
+    // .addCase(updateCart.rejected, (state, { error }) => {
+    //   state.loading = false;
+    //   state.error = error.message;
+    // });
   },
 });
 

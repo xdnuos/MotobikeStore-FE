@@ -8,6 +8,7 @@ export let tagService = {
       return response;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   create: async (request) => {
@@ -20,6 +21,7 @@ export let tagService = {
       return response;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   update: async (request) => {
@@ -32,6 +34,7 @@ export let tagService = {
       return response;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   delete: async (id) => {
@@ -47,6 +50,7 @@ export let tagService = {
       return response;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
 };

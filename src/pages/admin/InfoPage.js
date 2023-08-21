@@ -35,6 +35,7 @@ import { blobToFile } from "src/helper/image";
 import { Helmet } from "react-helmet-async";
 import Iconify from "src/components/iconify/Iconify";
 import { Link } from "react-router-dom";
+import ChangePasswordDialog from "src/components/user/ChangePassDialog";
 registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginFileValidateType,
@@ -62,6 +63,7 @@ const PersonalInfoForm = () => {
     } catch (error) {
       message.error(error.response.data);
       console.error("Error fetching order detail:", error);
+      throw error;
     }
   };
   const validationSchema = yup.object({
@@ -97,6 +99,7 @@ const PersonalInfoForm = () => {
       setStaff(response);
     } catch (error) {
       console.error("Error fetching order detail:", error);
+      throw error;
     }
   };
   useEffect(() => {

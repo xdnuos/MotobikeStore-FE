@@ -81,6 +81,7 @@ function Invoice() {
         setInvoice(response); // Assuming response contains the order detail data
       } catch (error) {
         console.error("Error fetching order detail:", error);
+        throw error;
       }
     };
     getOrderDetail();

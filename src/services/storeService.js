@@ -8,6 +8,7 @@ export let storeService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   getStoresNearest: async () => {
@@ -16,6 +17,7 @@ export let storeService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   getAllOrder: async (idAccount) => {
@@ -26,6 +28,7 @@ export let storeService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
 };

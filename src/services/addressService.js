@@ -3,11 +3,11 @@ import { BASE_URL } from "../utils/baseURL";
 import { message } from "antd";
 
 export let addressService = {
-  addAddress: async (value) => {
+  addAddress: async ({ userID, address }) => {
     try {
       const response = await axios.post(
-        BASE_URL + `/api/v1/address/add`,
-        value,
+        BASE_URL + `/api/v1/user/${userID}/address`,
+        address,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -24,7 +24,7 @@ export let addressService = {
   getAddress: async (idUser) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/address/get/user/${idUser}`,
+        BASE_URL + `/api/v1/user/${idUser}/address`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -38,11 +38,10 @@ export let addressService = {
       throw error;
     }
   },
-  deleteAddress: async (idUser) => {
+  deleteAddress: async ({ userID, addressID }) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/address/delete`,
-        idUser,
+      const response = await axios.delete(
+        BASE_URL + `/api/v1/user/${userID}/address/${addressID}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

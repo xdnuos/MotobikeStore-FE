@@ -66,6 +66,7 @@ function UserForm({ handleBack, handleNext, activeStep }) {
           })
         );
       }
+      throw error;
     }
   };
   const handleFormSubmit = async (values, { resetForm }) => {
@@ -82,6 +83,7 @@ function UserForm({ handleBack, handleNext, activeStep }) {
       handleNext();
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
   return (

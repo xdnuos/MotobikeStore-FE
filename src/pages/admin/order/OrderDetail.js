@@ -81,6 +81,7 @@ function OrderDetail() {
         // geCustomerInfo(response.customerID);
       } catch (error) {
         console.error("Error fetching order detail:", error);
+        throw error;
       }
     };
     getOrderDetail();

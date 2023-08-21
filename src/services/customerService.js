@@ -17,6 +17,7 @@ export let customersService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   getInfoByPhone: async (phone) => {
@@ -49,6 +50,7 @@ export let customersService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   getCustomersInfoWithStatisticByUserID: async (userID) => {
@@ -64,6 +66,7 @@ export let customersService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   getCustomersInfoByCustomerID: async (customerID) => {
@@ -79,6 +82,7 @@ export let customersService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   getAllOrder: async (idAccount) => {
@@ -94,6 +98,7 @@ export let customersService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
 
@@ -111,6 +116,7 @@ export let customersService = {
       return response.data;
     } catch (error) {
       console.log(error);
+      throw error;
     }
   },
   changeState: async (userID) => {

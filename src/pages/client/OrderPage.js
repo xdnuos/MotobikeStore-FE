@@ -57,6 +57,7 @@ export default function OrderPage() {
           setOrders(response);
         } catch (error) {
           console.error("Error fetching orders:", error);
+          throw error;
         }
       }
     };

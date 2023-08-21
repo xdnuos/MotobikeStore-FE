@@ -21,6 +21,7 @@ import { logoutUser } from "../../../redux/auth/authSlice";
 import { localStorageService } from "../../../services/localStorageService";
 import { reset } from "../../../redux/cart/cartSlice";
 import { customersService } from "src/services/customerService";
+import ChangePasswordDialog from "src/components/user/ChangePassDialog";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -48,6 +49,15 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
   const MyOrders = () => {
     navigate("/order");
     handleClose();
@@ -67,6 +77,11 @@ export default function AccountPopover() {
       label: "Settings",
       icon: "eva:settings-2-fill",
       action: handleClose,
+    },
+    {
+      label: "Change Password",
+      icon: "eva:settings-2-fill",
+      action: handleOpenDialog,
     },
   ];
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -165,6 +180,9 @@ export default function AccountPopover() {
           {isLoggedIn ? "Logout" : "Login"}
         </MenuItem>
       </Popover>
+      <div>
+        <ChangePasswordDialog open={dialogOpen} onClose={handleCloseDialog} />
+      </div>
     </>
   );
 }

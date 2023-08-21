@@ -23,7 +23,6 @@ export let staffService = {
     } catch (error) {
       // message.error(error.response.data);
       throw error;
-      console.log(error);
     }
   },
   update: async (values) => {
@@ -44,7 +43,6 @@ export let staffService = {
       };
     } catch (error) {
       throw error;
-      console.log(error);
     }
   },
   getAll: async () => {
@@ -62,6 +60,7 @@ export let staffService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
+      throw error;
     }
   },
   getByID: async (staffID) => {
@@ -82,6 +81,8 @@ export let staffService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
+
+      throw error;
     }
   },
   getByUserID: async (userID) => {
@@ -102,6 +103,7 @@ export let staffService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
+      throw error;
     }
   },
   changeState: async (request) => {
@@ -120,6 +122,7 @@ export let staffService = {
     } catch (error) {
       message.error(error.response.data);
       console.log(error);
+      throw error;
     }
   },
   resetPass: async (userID) => {
@@ -138,6 +141,7 @@ export let staffService = {
     } catch (error) {
       message.error(error.response.data);
       console.log(error);
+      throw error;
     }
   },
 };

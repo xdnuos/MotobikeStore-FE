@@ -7,7 +7,6 @@ const initialState = {
   allProduct: [],
   loading: true,
   error: null,
-  getProducts: false,
 };
 export const getAllProduct = createAsyncThunk("product/list", async () => {
   const response = await productService.getAllProduct();
@@ -16,8 +15,12 @@ export const getAllProduct = createAsyncThunk("product/list", async () => {
 export const getAllProductAdmin = createAsyncThunk(
   "product/listAdmin",
   async () => {
-    const response = await productService.getAllProductAdmin();
-    return response;
+    try {
+      const response = await productService.getAllProductAdmin();
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 export const addProduct = createAsyncThunk(
@@ -28,7 +31,7 @@ export const addProduct = createAsyncThunk(
       message.success(response.data.message);
       return response.data.product;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 );
@@ -94,7 +97,6 @@ const listProductSlice = createSlice({
       return {
         ...state,
         allProduct: [],
-        getProducts: false,
       };
     },
   },
@@ -120,8 +122,9 @@ const listProductSlice = createSlice({
         state.allProduct = actions.payload;
         state.loading = false;
       })
-      .addCase(getAllProductAdmin.rejected, (state) => {
-        return { ...state, allProduct: null, loading: false };
+      .addCase(getAllProductAdmin.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message;
       })
       .addCase(addProduct.pending, (state) => {
         state.allProduct = [];

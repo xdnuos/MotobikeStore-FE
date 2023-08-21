@@ -26,6 +26,7 @@ export let stockService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
+      throw error;
     }
   },
   get: async () => {
@@ -43,6 +44,7 @@ export let stockService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
+      throw error;
     }
   },
   cancel: async (stockID) => {
@@ -64,6 +66,7 @@ export let stockService = {
         message.error("An error has occurred. Please try again");
       }
       console.log(error);
+      throw error;
     }
   },
 };

@@ -59,6 +59,7 @@ export default function RegisterForm() {
       console.log("ddddddd");
       message.error(error.response.data.emailError);
       console.log(error);
+      throw error;
     }
   };
   const validationSchema = yup.object({
