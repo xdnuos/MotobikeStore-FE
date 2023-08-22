@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Alert, Paper, Typography } from "@mui/material";
+import Review from "./Review";
 
 const Root = styled(Paper)({
   flexGrow: 1,
@@ -79,8 +80,8 @@ function TabDescriptionAndReview({ product }) {
           <Typography>{product?.fullDescription}</Typography>
         </TabPanel>
       )}
-      {selectedTab === 1 && <TabPanel>
-        
+      {selectedTab === 1 && <TabPanel sx={{ p: 0 }}>
+        <Review/>
         </TabPanel>}
     </Root>
   );

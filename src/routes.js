@@ -38,6 +38,7 @@ import ProfileAdmin from "./pages/admin/ProfilePage";
 import ManageCategoriesPage from "./pages/admin/productPropeties/CategoryPage";
 import ManageTagsPage from "./pages/admin/productPropeties/TagPage";
 import ManageManufacturerPage from "./pages/admin/productPropeties/ManufacturerPage";
+import ProfilePage from "./pages/client/ProfilePage";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -80,6 +81,7 @@ export default function Router() {
         { path: "list-products/:id", element: <ProductsListPage /> },
         { path: "checkout", element: <Checkout /> },
         { path: "order", element: <OrderPage /> },
+        { path: "profile", element: <ProfilePage /> },
       ],
     },
     {
