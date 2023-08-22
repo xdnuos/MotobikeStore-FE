@@ -89,7 +89,7 @@ export default function OrderPage() {
     }
 
     return filteredOrders.map((order) => (
-      <OrderDetail key={order.orderID} order={order} />
+      <OrderDetail key={order?.orderID} order={order} />
     ));
   };
   return (

@@ -6,17 +6,10 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 // @mui
 import {
-  Box,
   Stack,
-  Button,
-  Divider,
-  ListItem,
   Container,
   Typography,
   Grid,
-  Paper,
-  styled,
-  Skeleton,
   useMediaQuery,
   useTheme,
   LinearProgress,
