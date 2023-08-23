@@ -62,7 +62,7 @@ export default function UserPage() {
   const getAllCustomer = async () => {
     return new Promise((resolve, reject) => {
       customersService
-        .getAllCustomers()
+        .getAllCustomersAdmin()
         .then((response) => {
           setUsers(response);
           console.log("response", response);

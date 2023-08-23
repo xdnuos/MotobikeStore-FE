@@ -62,19 +62,21 @@ function Payment({ handleBack, handleNext, activeStep }) {
     setPaymentOption(event.target.value);
     setOpen(false);
   };
-  
 
   const handleComplete = async () => {
     if (paymentOption === "") {
       setOpen(true);
       return;
     }
+    const req = {
+      cartProductIDs: listIdCart,
+      addressID: idAddress,
+      payment: paymentOption,
+    };
     await orderService
-      .createOrderByCustomer({
-        cartProductIDs: listIdCart,
+      .createOrderForCustomer({
         userID: idAccount,
-        addressID: idAddress,
-        payment: paymentOption,
+        req,
       })
       .then((response) => {
         handleNext();
@@ -102,7 +104,7 @@ function Payment({ handleBack, handleNext, activeStep }) {
                 <Stack spacing={2}>
                   <Collapse in={open}>
                     <Alert
-                     severity="warning"
+                      severity="warning"
                       action={
                         <IconButton
                           aria-label="close"
@@ -115,9 +117,9 @@ function Payment({ handleBack, handleNext, activeStep }) {
                           <Iconify icon="eva:close-fill" />
                         </IconButton>
                       }
-                      sx={{border: "1px solid #d32f2f"}}
+                      sx={{ border: "1px solid #d32f2f" }}
                     >
-                     Please choose a payment method !!!
+                      Please choose a payment method !!!
                     </Alert>
                   </Collapse>
                   {PAYMENTOPTION.map((item) => {

@@ -53,20 +53,12 @@ function ProfileAdmin() {
   const [orders, setOrders] = useState([]);
   const [customerInfo, setStaffInfo] = useState([]);
   const [page, setPage] = useState(0);
-  const [selectedOrderID, setSelectedOrderID] = useState(null);
   const [selected, setSelected] = useState([]);
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
-  const [openDeletedialog, setDeleteDialog] = useState(false);
-  const [openResetdialog, setResetDialog] = useState(false);
-  const [open, setOpen] = useState(null);
-  const [idRowOrder, setIdRowOrder] = useState(-1);
-  const [stateRowOrder, setStateRowOrder] = useState(false);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     getAllOrderByStaff();
     getStaffInfo();
@@ -79,7 +71,7 @@ function ProfileAdmin() {
   const getAllOrderByStaff = async () => {
     return new Promise((resolve, reject) => {
       orderService
-        .getOrderStaffByUserID(userID)
+        .getOrderByStaffUserIDAdmin(userID)
         .then((response) => {
           setOrders(response.sort(compareByCreatedAt));
           console.log("response", response);
@@ -93,7 +85,7 @@ function ProfileAdmin() {
   const getStaffInfo = async () => {
     return new Promise((resolve, reject) => {
       staffService
-        .getByID(userID)
+        .getInfo(userID)
         .then((response) => {
           setStaffInfo(response);
           console.log("customerInfo", response);
@@ -103,49 +95,6 @@ function ProfileAdmin() {
           reject(error);
         });
     });
-  };
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
-
-  const handleClickDeleteDialog = () => {
-    setOpen(false);
-    setDeleteDialog(true);
-  };
-  const handleClickResetDialog = () => {
-    setOpen(false);
-    setResetDialog(true);
-  };
-  const handleCloseDeleteDialog = () => {
-    setDeleteDialog(false);
-  };
-  const handleCloseResetDialog = () => {
-    setResetDialog(false);
-  };
-
-  const handleOpenMenu = (event, id, active, orderID) => {
-    setIdRowOrder(id);
-    setSelectedOrderID(orderID);
-    setStateRowOrder(active);
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -157,11 +106,6 @@ function ProfileAdmin() {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
-
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - orders?.length) : 0;
 
@@ -169,14 +113,6 @@ function ProfileAdmin() {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  };
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = orders?.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
   };
   const filteredUsers = applySortFilterByPhone(
     orders,

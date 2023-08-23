@@ -16,9 +16,9 @@ export const fetchAddressItems = createAsyncThunk(
 
 export const CreateAddress = createAsyncThunk(
   "address/CreateAddress",
-  async (value) => {
+  async ({ userID, req }) => {
     try {
-      const items = await addressService.addAddress(value);
+      const items = await addressService.addAddress({ userID, req });
       console.log(items.address);
       return items?.address;
     } catch (err) {
@@ -29,9 +29,12 @@ export const CreateAddress = createAsyncThunk(
 
 export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
-  async (request) => {
+  async ({ userID, addressID }) => {
     try {
-      const response = await addressService.deleteAddress(request);
+      const response = await addressService.deleteAddress({
+        userID,
+        addressID,
+      });
       console.log("áaskdjlksjd kas   ", response.data?.address);
       return response.data?.address;
     } catch (error) {

@@ -77,7 +77,7 @@ function Invoice() {
   useEffect(() => {
     const getOrderDetail = async () => {
       try {
-        const response = await orderService.getOrdersID(orderID);
+        const response = await orderService.getOrderDetailAdmin(orderID);
         setInvoice(response); // Assuming response contains the order detail data
       } catch (error) {
         console.error("Error fetching order detail:", error);

@@ -131,11 +131,11 @@ function AdminCart({ handleNext, activeStep }) {
     if (!isNaN(isEdited)) {
       try {
         console.log(cartProductID, quantity);
+        const req = { cartProductID: cartProductID, quantity: quantity };
         const response = await dispatch(
           updateCart({
-            cartProductID: cartProductID,
-            quantity: quantity,
-            userID: userID,
+            userID,
+            req,
           })
         );
         setState({ ...state, open: true });
@@ -154,9 +154,7 @@ function AdminCart({ handleNext, activeStep }) {
     try {
       if (idCartItem) {
         setCartItemDelete({ ...cartItemDelete, cartProductID: idCartItem });
-        await dispatch(
-          removeFromCart({ cartProductID: idCartItem, userID: userID })
-        );
+        await dispatch(removeFromCart({ itemID: idCartItem, userID: userID }));
       } else {
         console.log("idCartItem is undefined", idCartItem);
       }

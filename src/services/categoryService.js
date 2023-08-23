@@ -11,11 +11,11 @@ export let categoryService = {
       throw error;
     }
   },
-  create: async (request) => {
+  create: async (req) => {
     try {
       const response = await axios.post(
         BASE_URL + `/api/v1/admin/categories`,
-        request,
+        req,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -28,11 +28,11 @@ export let categoryService = {
       throw error;
     }
   },
-  update: async (request) => {
+  update: async (req) => {
     try {
       const response = await axios.put(
         BASE_URL + `/api/v1/admin/categories`,
-        request,
+        req,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

@@ -11,9 +11,9 @@ export const getAllTags = createAsyncThunk("tag/list", async () => {
   const response = await tagService.getAllTags();
   return response.data;
 });
-export const createTag = createAsyncThunk("tag/create", async (request) => {
+export const createTag = createAsyncThunk("tag/create", async (req) => {
   try {
-    const response = await tagService.create(request);
+    const response = await tagService.create(req);
     message.success(response.data.message);
     return response.data.tags;
   } catch (error) {
@@ -21,9 +21,9 @@ export const createTag = createAsyncThunk("tag/create", async (request) => {
     throw new Error(error);
   }
 });
-export const updateTag = createAsyncThunk("tag/update", async (request) => {
+export const updateTag = createAsyncThunk("tag/update", async (req) => {
   try {
-    const response = await tagService.update(request);
+    const response = await tagService.update(req);
     message.success(response.data.message);
     return response.data.tags;
   } catch (error) {

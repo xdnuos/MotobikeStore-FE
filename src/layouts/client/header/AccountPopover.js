@@ -90,7 +90,7 @@ export default function AccountPopover() {
   const getInfo = async (idAccount) => {
     return new Promise((resolve, reject) => {
       customersService
-        .getInfo(idAccount)
+        .getInfoForCustomer(idAccount)
         .then((response) => {
           setInfoCustomer({ name: response.name, phone: response.phoneNumber });
           console.log("response", response);

@@ -15,20 +15,12 @@ import {
 } from "@mui/material";
 import Iconify from "../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
-import {
-  StyledButtonGreen,
-  StyledButtonGreenOutlined,
-  StyledButtonGreenText,
-} from "../../../components/custom/CustomButton";
+import { StyledButtonGreenText } from "../../../components/custom/CustomButton";
 
-import Label from "../../../components/label/Label";
 import OrderSummary from "./OrderSummary";
 import AddressForm from "./AddressForm";
 import { useDispatch, useSelector } from "react-redux";
-import { customersService } from "../../../services/customerService";
-import { Input, Select } from "antd";
 import { useEffect } from "react";
-import axios from "axios";
 import CardAddress from "./CardAddress";
 import { fetchAddressItems } from "../../../redux/address/AddressSlice";
 
@@ -43,19 +35,16 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
 
   const [openDialog, setOpenDialog] = useState(false);
 
-
   const totalPrice = useSelector((state) => state.order.totalPrice);
   const idAccount = useSelector((state) => state.auth.idAccount);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const address = useSelector((state) => state.address.address);
 
-
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(fetchAddressItems(idAccount));
-     }
+    }
   }, [dispatch, isLoggedIn, idAccount]);
-
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -64,7 +53,7 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-  
+
   return (
     <>
       <Container>
@@ -72,8 +61,12 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
           <Grid item xs={12} md={8.5}>
             {address?.map((item, index) => {
               return (
-                <CardAddress key={index} handleNext={handleNext} address={item} />
-              )
+                <CardAddress
+                  key={index}
+                  handleNext={handleNext}
+                  address={item}
+                />
+              );
             })}
             {/* --------------------------------------- BUTTON --------------------------------------------------- */}
             <Stack
@@ -87,8 +80,8 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
                 Back
               </Button>
 
-              <StyledButtonGreenText size='small' onClick={handleOpenDialog}>
-                <Iconify icon='ic:sharp-plus' sx={{ height: 16, width: 16 }} />
+              <StyledButtonGreenText size="small" onClick={handleOpenDialog}>
+                <Iconify icon="ic:sharp-plus" sx={{ height: 16, width: 16 }} />
                 &nbsp; Thêm địa chỉ mới &nbsp;
               </StyledButtonGreenText>
             </Stack>
@@ -100,7 +93,7 @@ function BillingAndAddress({ handleBack, handleNext, activeStep }) {
           </Grid>
         </Grid>
       </Container>
-     
+
       <AddressForm open={openDialog} onClose={handleCloseDialog} />
     </>
   );

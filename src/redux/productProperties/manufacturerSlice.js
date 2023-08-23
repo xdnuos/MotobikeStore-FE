@@ -16,9 +16,9 @@ export const getAllManufacturer = createAsyncThunk(
 );
 export const createManufacturer = createAsyncThunk(
   "manufacturer/create",
-  async (request) => {
+  async (req) => {
     try {
-      const response = await manufacturerService.create(request);
+      const response = await manufacturerService.create(req);
       message.success(response.data.message);
       return response.data.manufacturer;
     } catch (error) {
@@ -29,9 +29,9 @@ export const createManufacturer = createAsyncThunk(
 );
 export const updateManufacturer = createAsyncThunk(
   "manufacturer/update",
-  async (request) => {
+  async (req) => {
     try {
-      const response = await manufacturerService.update(request);
+      const response = await manufacturerService.update(req);
       message.success(response.data.message);
       return response.data.manufacturer;
     } catch (error) {

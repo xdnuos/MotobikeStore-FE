@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Autocomplete,
   Button,
@@ -12,25 +12,22 @@ import {
   MenuItem,
   Select,
   TextField,
-} from '@mui/material';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { LoadingButton } from '@mui/lab';
-import { CreateAddress } from '../../../redux/address/AddressSlice';
-import Iconify from '../../../components/iconify/Iconify';
+} from "@mui/material";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { LoadingButton } from "@mui/lab";
+import { CreateAddress } from "../../../redux/address/AddressSlice";
+import Iconify from "../../../components/iconify/Iconify";
 
 const PROVINCES_API_URL = "https://provinces.open-api.vn/api";
 
 function AddressForm({ open, onClose }) {
-
   const dispatch = useDispatch();
 
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
 
-  const [note, setNote] = useState('');
-
-
+  const [note, setNote] = useState("");
 
   const [province, setProvince] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -47,7 +44,6 @@ function AddressForm({ open, onClose }) {
   const loading = useSelector((state) => state.address.loading);
   const idAccount = useSelector((state) => state.auth.idAccount);
 
-
   const handleProvinceChange = (event, option) => {
     setSelectedProvince(option?.value);
     setNameProvince(option?.label);
@@ -62,15 +58,6 @@ function AddressForm({ open, onClose }) {
     setSelectedWard(option?.value);
     setNameWard(option?.label ?? "");
   };
-
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     // dispatch(fetchCartItems(idAccount));
-  //     // console.log("localStorageService",localStorageService.get("USER")?.id)
-  //   }
-  // }, [ isLoggedIn, idAccount]);
-
-
 
   useEffect(() => {
     axios
@@ -129,23 +116,22 @@ function AddressForm({ open, onClose }) {
     }
   }, [selectedDistrict]);
 
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     // Do something with the form data
     try {
-      await dispatch(CreateAddress({
+      const req = {
         address: `${street}, ${nameWard}, ${nameDistrict}, ${nameProvince}`,
         fullname: name,
         phone: phone,
-        userID: idAccount
-      }));
-      setName('');
-      setPhone('');
-      setNameDistrict('');
-      setNameProvince('');
-      setNameWard('');
-      setStreet('');
+      };
+      await dispatch(CreateAddress({ userID: idAccount, req }));
+      setName("");
+      setPhone("");
+      setNameDistrict("");
+      setNameProvince("");
+      setNameWard("");
+      setStreet("");
     } catch (err) {
       console.log(err);
     }
@@ -162,7 +148,7 @@ function AddressForm({ open, onClose }) {
               <Grid item md={6} xs={12}>
                 <TextField
                   required
-                  type='phone'
+                  type="phone"
                   label="Họ và tên người nhận"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -172,7 +158,7 @@ function AddressForm({ open, onClose }) {
               <Grid item md={6} xs={12}>
                 <TextField
                   required
-                  type='number'
+                  type="number"
                   label="Số điện thoại"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -197,7 +183,6 @@ function AddressForm({ open, onClose }) {
                     />
                   )}
                 />
-
               </Grid>
               <Grid item md={6} xs={12}>
                 <Autocomplete
@@ -249,12 +234,22 @@ function AddressForm({ open, onClose }) {
               </Grid>
             </Grid>
             <DialogActions>
-              <LoadingButton disabled={loading} variant="outlined" onClick={onClose}>Cancel</LoadingButton>
+              <LoadingButton
+                disabled={loading}
+                variant="outlined"
+                onClick={onClose}
+              >
+                Cancel
+              </LoadingButton>
               <LoadingButton
                 loading={loading}
-                variant="outlined" type="submit" color="primary">Submit</LoadingButton>
+                variant="outlined"
+                type="submit"
+                color="primary"
+              >
+                Submit
+              </LoadingButton>
             </DialogActions>
-
           </form>
         </DialogContent>
       </Dialog>
@@ -262,4 +257,4 @@ function AddressForm({ open, onClose }) {
   );
 }
 
-export default AddressForm
+export default AddressForm;

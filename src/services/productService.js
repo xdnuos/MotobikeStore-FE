@@ -5,11 +5,11 @@ import { message } from "antd";
 
 export let productService = {
   getAllProduct: async () => {
-    const response = await axios.get(BASE_URL + "/api/v1/products/get");
+    const response = await axios.get(BASE_URL + "/api/v1/products");
     return response.data;
   },
   getAllProductAdmin: async () => {
-    const response = await axios.get(BASE_URL + "/api/v1/products/get/admin", {
+    const response = await axios.get(BASE_URL + "/api/v1/admin/products", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
@@ -18,17 +18,23 @@ export let productService = {
   },
   getProductById: async (id) => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/products/get/${id}`);
+      const response = await axios.get(BASE_URL + `/api/v1/products/${id}`);
       return response.data;
     } catch (error) {
       console.log(error);
       throw error;
     }
   },
-  getUnitsByIdProduct: async (id) => {
+  getProductByIdAdmin: async (id) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/products/${id}/units`
+        BASE_URL + `/api/v1/admin/products/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -37,9 +43,9 @@ export let productService = {
     }
   },
 
-  create: async (values) => {
+  create: async (req) => {
     try {
-      return await axios.post(BASE_URL + `/api/v1/products/add`, values, {
+      return await axios.post(BASE_URL + `/api/v1/admin/products`, req, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           "Content-Type": "multipart/form-data",
@@ -55,18 +61,14 @@ export let productService = {
       throw error;
     }
   },
-  update: async ({ formData, id }) => {
+  update: async ({ req, id }) => {
     try {
-      return await axios.put(
-        BASE_URL + `/api/v1/products/edit/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      return await axios.put(BASE_URL + `/api/v1/admin/products/${id}`, req, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
     } catch (error) {
       if (error.response.status === 406) {
         message.error(error.response.data);
@@ -92,13 +94,17 @@ export let productService = {
   //     console.log(error);
   //   }
   // },
-  changeState: async (values) => {
+  changeState: async (id) => {
     try {
-      return await https.put(`/api/v1/products/changeState/${values}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
+      return await https.put(
+        `/api/v1/admin/products/${id}/changeState`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
     } catch (error) {
       if (error.response.status === 406) {
         message.error(error.response.data);
@@ -109,20 +115,20 @@ export let productService = {
       throw error;
     }
   },
-  changeStateMulti: async (values) => {
-    try {
-      const response = await https.put(
-        `/api/v1/products/changeStateMulti/${values}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  },
+  // changeStateMulti: async (values) => {
+  //   try {
+  //     const response = await https.put(
+  //       `/api/v1/products/changeStateMulti/${values}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //     throw error;
+  //   }
+  // },
 };

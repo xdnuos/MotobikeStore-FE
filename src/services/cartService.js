@@ -10,27 +10,19 @@ export let cartService = {
     });
   },
 
-  addToCart: ({ userID, AddToCartRequest }) => {
-    return axios.post(
-      BASE_URL + `/api/v1/user/${userID}/cart`,
-      AddToCartRequest,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }
-    );
+  addToCart: ({ userID, req }) => {
+    return axios.post(BASE_URL + `/api/v1/user/${userID}/cart`, req, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
   },
-  updateToCart: async ({ userID, UpdateCartItemRequest }) => {
-    return await axios.put(
-      BASE_URL + `/api/v1/user/${userID}/cart`,
-      UpdateCartItemRequest,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }
-    );
+  updateToCart: async ({ userID, req }) => {
+    return await axios.put(BASE_URL + `/api/v1/user/${userID}/cart`, req, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
   },
   deleteToCart: async ({ userID, itemID }) => {
     return await axios.delete(

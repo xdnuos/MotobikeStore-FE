@@ -5,15 +5,21 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import StaffForm from "src/sections/@dashboard/products/StaffForm";
 import { useParams } from "react-router-dom";
 import { staffService } from "src/services/staffService";
+import { useSelector } from "react-redux";
 // import
 function EditStaff() {
-  const { staffID } = useParams();
+  const { staffUserID } = useParams();
+  console.log("staffUserID", staffUserID);
+  const userID = useSelector((state) => state.auth.idAccount);
   const [staff, setStaff] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedStaff = await staffService.getByID(staffID);
+        const fetchedStaff = await staffService.getByUserID({
+          userID,
+          staffUserID,
+        });
         setStaff(fetchedStaff);
       } catch (error) {
         console.error("Error fetching staff data:", error);
@@ -22,7 +28,7 @@ function EditStaff() {
     };
 
     fetchData();
-  }, [staffID]);
+  }, [staffUserID]);
   return (
     <>
       <Helmet>

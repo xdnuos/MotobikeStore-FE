@@ -33,9 +33,6 @@ import { message } from "antd";
 import { format } from "date-fns";
 import { blobToFile } from "src/helper/image";
 import { Helmet } from "react-helmet-async";
-import Iconify from "src/components/iconify/Iconify";
-import { Link } from "react-router-dom";
-import ChangePasswordDialog from "src/components/user/ChangePassDialog";
 registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginFileValidateType,
@@ -53,9 +50,12 @@ const PersonalInfoForm = () => {
   const [staff, setStaff] = useState([]);
   const classes = useStyles();
   const userID = useSelector((state) => state.auth.idAccount);
-  const editStaff = async (formValues) => {
+  const editStaff = async ({ userID, req }) => {
     try {
-      const response = await staffService.update(formValues);
+      const response = await staffService.updateInfo({
+        userID,
+        req,
+      });
       if (response.status === 200) {
         message.success(response.data);
         getInfo(userID);
@@ -94,7 +94,7 @@ const PersonalInfoForm = () => {
   });
   const getInfo = async (userID) => {
     try {
-      const response = await staffService.getByID(userID);
+      const response = await staffService.getInfo(userID);
       console.log("staff info", response);
       setStaff(response);
     } catch (error) {
@@ -143,9 +143,7 @@ const PersonalInfoForm = () => {
         Object.keys(formValues).forEach((key) => {
           formData.append(key, formValues[key]);
         });
-        formData.append("staffID", staff.staffID);
-        console.log("edit", formValues);
-        editStaff(formData);
+        editStaff({ userID: userID, req: formData });
       } else {
         console.log("Form data is invalid");
       }
