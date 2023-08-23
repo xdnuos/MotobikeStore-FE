@@ -13,8 +13,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { format } from "date-fns";
 import {
   Paper,
-  Autocomplete,
-  Typography,
   Grid,
   TextField,
   Button,
@@ -22,23 +20,13 @@ import {
   FormControl,
   InputLabel,
   Select,
-  OutlinedInput,
-  InputAdornment,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { localStorageService } from "src/services/localStorageService";
 import { staffService } from "src/services/staffService";
 import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
 import dayjs from "dayjs";
-// const imageServer = process.env.REACT_APP_IMAGE_SERVER;
-// -------------------------------------------------------------------
-// message.config({
-//   top: 100,
-//   duration: 5,
-//   maxCount: 3,
-//   rtl: true,
-//   prefixCls: "my-message",
-// });
+
 registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType);
 function blobToFile(theBlob, fileName) {
   return new File([theBlob], fileName, {
@@ -50,7 +38,7 @@ function StaffForm({ staff }) {
   const [imageFiles, setImageFiles] = useState([]);
   const dispatch = useDispatch();
   const role = localStorageService.get("USER")?.roles[0];
-  const managerID = useSelector((state) => state.auth.idAccount);
+  const userID = useSelector((state) => state.auth.idAccount);
   let initialValues = {
     email: "",
     firstName: "",
@@ -65,14 +53,13 @@ function StaffForm({ staff }) {
 
   let isEdit = false;
 
-  if (staff?.email != undefined) {
+  if (staff?.email !== undefined) {
     isEdit = true;
     initialValues = {
       role: staff.roles[0],
       email: staff.email,
       firstName: staff.firstName,
       lastName: staff.lastName,
-      // avatar: staff.avatar,
       sex: staff.sex,
       phone: staff.phone,
       birth: dayjs(staff.birth),
@@ -112,10 +99,10 @@ function StaffForm({ staff }) {
     sex: yup.string().required(),
     role: yup.string().required(),
   });
-  const addStaff = async (formValues) => {
+  const addStaff = async (req) => {
     return new Promise((resolve, reject) => {
       staffService
-        .create(formValues)
+        .create({ userID, req })
         .then((response) => {
           console.log("add staffs", response);
           message.success(response.data);
@@ -127,10 +114,10 @@ function StaffForm({ staff }) {
         });
     });
   };
-  const editStaff = async (formValues) => {
+  const editStaff = async ({ staffUserID, req }) => {
     return new Promise((resolve, reject) => {
       staffService
-        .update(formValues)
+        .update({ userID, staffUserID, req })
         .then((response) => {
           console.log("update staffs", response);
           message.success(response.data);
@@ -163,22 +150,16 @@ function StaffForm({ staff }) {
         phone: values.phone,
         birth: format(new Date(values.birth), "dd/MM/yyyy"),
         cccd: values.cccd,
-        managerID: managerID,
       };
       Object.keys(formValues).forEach((key) => {
         formData.append(key, formValues[key]);
       });
-
-      let response = null;
-      console.log(formValues);
       if (isEdit) {
-        const id = staff.staffID;
-        console.log("edit", formValues);
-        formData.append("staffID", staff.staffID);
-        // console.log("edit", formData);
-        editStaff(formData);
+        const id = staff.userID;
+        // console.log("stafIDDDDD", id);
+        editStaff({ staffUserID: id, req: formData });
       } else {
-        console.log("add", formValues);
+        // console.log("add", formValues);
         addStaff(formData);
       }
     } else {

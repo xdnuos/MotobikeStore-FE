@@ -76,12 +76,8 @@ export default function Staff() {
   const [openDeletedialog, setDeleteDialog] = useState(false);
   const [openResetdialog, setResetDialog] = useState(false);
   const [open, setOpen] = useState(null);
-  const [idRowStaff, setIdRowStaff] = useState(-1);
+  const [idRowStaff, setIdRowStaff] = useState(null);
   const [stateRowStaff, setStateRowStaff] = useState(false);
-  const [changeStateStaff, setchangeStateStaff] = useState({
-    userIDManager: managerID,
-    userIDStaff: null,
-  });
   const dispatch = useDispatch();
   useEffect(() => {
     getAllStaff();
@@ -94,7 +90,7 @@ export default function Staff() {
   const getAllStaff = async () => {
     return new Promise((resolve, reject) => {
       staffService
-        .getAll()
+        .getAll(managerID)
         .then((response) => {
           setStaffs(response.sort(compareByCreatedAt));
           console.log("get staffs", response);
@@ -108,7 +104,7 @@ export default function Staff() {
   const changeState = async (userID) => {
     return new Promise((resolve, reject) => {
       staffService
-        .changeState({ ...changeStateStaff, userIDStaff: userID })
+        .changeState({ userID: managerID, staffUserID: userID })
         .then((response) => {
           console.log("response", response);
           if (response.status === 200) {
@@ -128,7 +124,7 @@ export default function Staff() {
   const resetPassword = async (userID) => {
     return new Promise((resolve, reject) => {
       staffService
-        .resetPass(userID)
+        .resetPass({ userID: managerID, staffUserID: userID })
         .then((response) => {
           console.log("response", response);
           if (response.status === 200) {
@@ -178,8 +174,8 @@ export default function Staff() {
     setResetDialog(false);
   };
 
-  const handleOpenMenu = (event, id, active, staffID) => {
-    setIdRowStaff(id);
+  const handleOpenMenu = (event, active, staffID) => {
+    setIdRowStaff(staffID);
     setSelectedStaffID(staffID);
     setStateRowStaff(active);
     setOpen(event.currentTarget);
@@ -204,10 +200,10 @@ export default function Staff() {
   };
 
   const deleteStaff = async (id) => {
-    if (idRowStaff !== -1) {
+    if (idRowStaff !== null) {
       await dispatch(changeState(id));
       setOpen(null);
-      setIdRowStaff(-1);
+      setIdRowStaff(null);
     } else if (selected.length !== 0) {
       // await dispatch(changeStateMulti(id));
       setSelected([]);
@@ -216,10 +212,10 @@ export default function Staff() {
     setDeleteDialog(false);
   };
   const resetPass = async (id) => {
-    if (idRowStaff !== -1) {
+    if (idRowStaff !== null) {
       await dispatch(resetPassword(id));
       setOpen(null);
-      setIdRowStaff(-1);
+      setIdRowStaff(null);
     } else if (selected.length !== 0) {
       // await dispatch(changeStateMulti(id));
       setSelected([]);
@@ -307,7 +303,6 @@ export default function Staff() {
                         phone,
                         managerLastName,
                         createDate,
-                        staffID,
                       } = row;
                       const selectedUser = selected.indexOf(userID) !== -1;
 
@@ -328,7 +323,7 @@ export default function Staff() {
                           <TableCell align="left">
                             <Typography
                               component={Link}
-                              to={`/dashboard/staff/${staffID}`}
+                              to={`/dashboard/staff/${userID}`}
                             >
                               {email}
                             </Typography>
@@ -360,7 +355,7 @@ export default function Staff() {
                               size="large"
                               color="inherit"
                               onClick={(event) =>
-                                handleOpenMenu(event, userID, isActive, staffID)
+                                handleOpenMenu(event, isActive, userID)
                               }
                             >
                               <Iconify icon={"eva:more-vertical-fill"} />

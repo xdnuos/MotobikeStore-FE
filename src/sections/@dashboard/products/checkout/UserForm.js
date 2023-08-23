@@ -35,7 +35,7 @@ function UserForm({ handleBack, handleNext, activeStep }) {
   const handleGetCustomerInfo = async () => {
     try {
       const phone = phoneRef.current.value;
-      const response = await customersService.getInfoByPhone(phone);
+      const response = await customersService.getBasicInfoByPhoneAdmin(phone);
       console.log(response);
       if (response?.status === 200) {
         console.log("set info");
@@ -66,6 +66,7 @@ function UserForm({ handleBack, handleNext, activeStep }) {
           })
         );
       }
+      throw error;
     }
   };
   const handleFormSubmit = async (values, { resetForm }) => {
@@ -82,6 +83,7 @@ function UserForm({ handleBack, handleNext, activeStep }) {
       handleNext();
     } catch (error) {
       console.log(error);
+      throw error;
     }
   };
   return (

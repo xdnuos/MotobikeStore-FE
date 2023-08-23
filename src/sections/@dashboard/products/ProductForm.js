@@ -154,12 +154,12 @@ function ProductForm({ product, categories, tags, manufacturer }) {
   const onSubmit = async (values, { resetForm }) => {
     const isValid = await validationSchema.isValid(values);
     if (isValid) {
-      const formData = new FormData();
+      const req = new FormData();
       values.imageFiles.forEach((file) => {
         console.log("Add image", file);
         const newFile = blobToFile(file, file.name);
         console.log(newFile);
-        formData.append(`imageFiles`, newFile);
+        req.append(`imageFiles`, newFile);
       });
 
       let newTags;
@@ -196,17 +196,17 @@ function ProductForm({ product, categories, tags, manufacturer }) {
         manufacturerID: convertValue(values.manufacturer),
       };
       Object.keys(formValues).forEach((key) => {
-        formData.append(key, formValues[key]);
+        req.append(key, formValues[key]);
       });
 
       let response = null;
 
       if (isEdit) {
         const id = product.productID;
-        response = await dispatch(updateProduct({ formData, id }));
+        response = await dispatch(updateProduct({ req, id }));
       } else {
         console.log("add");
-        response = await dispatch(addProduct(formData));
+        response = await dispatch(addProduct(req));
       }
       if (response.payload.status === 200) {
         resetForm();

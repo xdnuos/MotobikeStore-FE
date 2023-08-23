@@ -27,7 +27,6 @@ import UserInfo from "./UserInfo";
 import { setUser } from "src/redux/order/OrderSlice";
 import { setInvoice } from "src/redux/order/OrderInvoice";
 import { fetchCartItems } from "src/redux/cart/cartSlice";
-import { getAllProduct } from "src/redux/products/productList";
 Summary.propTypes = {
   handleBack: PropTypes.func,
   handleNext: PropTypes.func,
@@ -36,7 +35,6 @@ Summary.propTypes = {
 function Summary({ handleBack, handleNext, activeStep, handleReset }) {
   const [request, setRequest] = useState({
     cartProductIDs: [],
-    userID: null,
     customerID: null,
     firstName: "unknow",
     lastName: "unknow",
@@ -54,7 +52,6 @@ function Summary({ handleBack, handleNext, activeStep, handleReset }) {
   useEffect(() => {
     setRequest({
       cartProductIDs: order.idCartItems,
-      userID: userID,
       customerID: order.customerID,
       firstName: order.firstName,
       lastName: order.lastName,
@@ -71,8 +68,10 @@ function Summary({ handleBack, handleNext, activeStep, handleReset }) {
   const dispatch = useDispatch();
   const handleComplete = async () => {
     try {
-      console.log(request);
-      const response = await orderService.createOrder({ ...request });
+      const response = await orderService.createOrderAdmin({
+        userID: userID,
+        req: request,
+      });
       console.log(response);
       if (response?.status === 200) {
         dispatch(
@@ -95,6 +94,7 @@ function Summary({ handleBack, handleNext, activeStep, handleReset }) {
       if (error?.response.status === 404) {
         message.error(error.response.data);
       }
+      throw error;
     }
   };
   console.log("Order INFO", request);

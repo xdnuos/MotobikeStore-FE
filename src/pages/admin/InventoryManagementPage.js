@@ -26,14 +26,11 @@ import {
   AccordionSummary,
   AccordionDetails,
   TableHead,
-  CardContent,
-  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions,
-  Snackbar,
 } from "@mui/material";
 // components
 import Label from "../../components/label";
@@ -43,8 +40,6 @@ import Scrollbar from "../../components/scrollbar";
 import { UserListToolbar } from "../../sections/@dashboard/user";
 // mock
 import { useSelector } from "react-redux";
-import { orderService } from "src/services/orderService";
-import { localStorageService } from "src/services/localStorageService";
 import { stockService } from "src/services/stockService";
 import { Link } from "react-router-dom";
 
@@ -188,7 +183,7 @@ export default function InventoryManagement() {
   const confirmCancel = async () => {
     return new Promise((resolve, reject) => {
       stockService
-        .cancel(selectedStockID)
+        .cancel({ userID: idAccount, stockID: selectedStockID })
         .then((response) => {
           if (response.status === 200) {
             setTimeout(() => {

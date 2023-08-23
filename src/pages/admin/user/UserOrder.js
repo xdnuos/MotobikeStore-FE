@@ -71,7 +71,7 @@ function UserDetail() {
   const getOrderByCustomer = async () => {
     return new Promise((resolve, reject) => {
       orderService
-        .getOrdersByCustomer(userID)
+        .getOrdersForCustomer(userID)
         .then((response) => {
           setOrders(response.sort(compareByCreatedAt));
           console.log("get order", response);
@@ -85,7 +85,7 @@ function UserDetail() {
   const geCustomerInfo = async () => {
     return new Promise((resolve, reject) => {
       customersService
-        .getCustomersInfoWithStatisticByUserID(userID)
+        .getCustomersByUserIDAdmin(userID)
         .then((response) => {
           setCustomerInfo(response);
           console.log("customerInfo", response);

@@ -41,7 +41,9 @@ const InvoiceNo = ({ invoice }) => {
       <View style={styles.invoiceDateContainer}>
         <Text>
           Staff:{" "}
-          {invoice.staffUsers.firstName + " " + invoice.staffUsers.lastName}
+          {invoice.staffUsers
+            ? invoice.staffUsers.firstName + " " + invoice.staffUsers.lastName
+            : "Unconfirmed"}
         </Text>
       </View>
     </Fragment>

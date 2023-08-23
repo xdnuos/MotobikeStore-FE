@@ -13,9 +13,9 @@ export const getAllCategories = createAsyncThunk("category/list", async () => {
 });
 export const createCategory = createAsyncThunk(
   "category/create",
-  async (request) => {
+  async (req) => {
     try {
-      const response = await categoryService.create(request);
+      const response = await categoryService.create(req);
       message.success(response.data.message);
       return response.data.categories;
     } catch (error) {
@@ -26,9 +26,9 @@ export const createCategory = createAsyncThunk(
 );
 export const updateCategory = createAsyncThunk(
   "category/update",
-  async (request) => {
+  async (req) => {
     try {
-      const response = await categoryService.update(request);
+      const response = await categoryService.update(req);
       message.success(response.data.message);
       return response.data.categories;
     } catch (error) {

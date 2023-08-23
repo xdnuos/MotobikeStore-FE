@@ -16,7 +16,7 @@ export const fetchCartItems = createAsyncThunk(
 
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async (AddToCartRequest) => {
+  async ({ userID, req }) => {
     message.config({
       top: 150,
       duration: 5,
@@ -25,22 +25,11 @@ export const addToCart = createAsyncThunk(
       prefixCls: "my-message",
     });
     try {
-      const response = await cartService.addToCart(AddToCartRequest);
+      const response = await cartService.addToCart({
+        userID,
+        req,
+      });
       console.log(response.data);
-      message.success(response.data.message);
-      return response.data;
-    } catch (error) {
-      message.error(error.response.data);
-      throw new Error(error);
-    }
-  }
-);
-
-export const removeFromCart = createAsyncThunk(
-  "cart/removeFromCart",
-  async (request) => {
-    try {
-      const response = await cartService.deleteToCart(request);
       message.success(response.data.message);
       return response.data;
     } catch (error) {
@@ -52,7 +41,7 @@ export const removeFromCart = createAsyncThunk(
 
 export const updateCart = createAsyncThunk(
   "cart/updateCart",
-  async (updateCartRequest) => {
+  async ({ userID, req }) => {
     message.config({
       top: 150,
       duration: 5,
@@ -61,7 +50,7 @@ export const updateCart = createAsyncThunk(
       prefixCls: "my-message",
     });
     try {
-      const response = await cartService.updateToCart(updateCartRequest);
+      const response = await cartService.updateToCart({ userID, req });
       message.success(response.data.message);
       return response.data;
     } catch (error) {
@@ -71,6 +60,19 @@ export const updateCart = createAsyncThunk(
   }
 );
 
+export const removeFromCart = createAsyncThunk(
+  "cart/removeFromCart",
+  async ({ userID, itemID }) => {
+    try {
+      const response = await cartService.deleteToCart({ userID, itemID });
+      message.success(response.data.message);
+      return response.data;
+    } catch (error) {
+      message.error(error.response.data);
+      throw new Error(error);
+    }
+  }
+);
 const initialState = {
   cart: [],
   loading: true,

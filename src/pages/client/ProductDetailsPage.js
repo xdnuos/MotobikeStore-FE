@@ -13,13 +13,9 @@ import {
   Grid,
   IconButton,
   Link,
-  List,
   Snackbar,
   Stack,
   Typography,
-  styled,
-  ListItem,
-  ListItemText,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -35,9 +31,6 @@ import {
   TabDescriptionAndReview,
   Quantity,
 } from "../../sections/@client/products/product-details";
-// import { FeaturedSlide } from '../../sections/@client/home';
-
-// components
 import Iconify from "../../components/iconify";
 
 import { StyledSeparator } from "../../components/custom/CustomSpan";
@@ -49,13 +42,10 @@ import {
 import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
 import { getProductById } from "../../redux/products/ProductDetail";
 import { addToCart } from "../../redux/cart/cartSlice";
-import Label from "../../components/label/Label";
 import { message } from "antd";
 
 function ProductDetailsPage() {
   const { id } = useParams();
-
-  // const [aaa,setAaa] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.products.productDetail.product);
@@ -81,7 +71,6 @@ function ProductDetailsPage() {
   const { vertical, horizontal, open } = state;
 
   const [cartRequest, setCartRequest] = useState({
-    userID: idAccount,
     productID: id,
     quantity: 1,
   });
@@ -90,24 +79,17 @@ function ProductDetailsPage() {
 
   const handleClickAdd = async () => {
     if (isLoggedIn) {
-      console.log(cartRequest);
-      const response = await dispatch(addToCart(cartRequest));
-      console.log("testtttttttttttt", response);
-      if (response.status === 200) {
-        message.success(response.data.message);
-      } else {
-        message.error(response.response.data);
-      }
+      await dispatch(addToCart({ userID: idAccount, req: cartRequest }));
     }
   };
 
   const handleClickBuyNow = async () => {
     if (isLoggedIn) {
+      const req = { productID: id, quantity: quantity };
       await dispatch(
         addToCart({
-          productID: id,
-          quantity: quantity,
           userID: idAccount,
+          req,
         })
       );
       setState({ ...state, open: true });

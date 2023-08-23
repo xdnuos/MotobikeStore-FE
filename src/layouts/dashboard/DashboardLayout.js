@@ -78,7 +78,6 @@ function DashboardLayout() {
     fetchData();
   }, [dispatch, userID]);
 
-  console.log("load product", loadingProducts);
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(true)} />

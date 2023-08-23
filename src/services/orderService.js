@@ -3,12 +3,11 @@ import { BASE_URL } from "../utils/baseURL";
 import { message } from "antd";
 
 export let orderService = {
-  createOrder: async (AddToCartRequest) => {
+  createOrderAdmin: async ({ userID, req }) => {
     try {
-      console.log(AddToCartRequest);
       const response = await axios.post(
-        BASE_URL + `/api/v1/order/add/admin`,
-        AddToCartRequest,
+        BASE_URL + `/api/v1/admin/user/${userID}/orders`,
+        req,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -22,26 +21,9 @@ export let orderService = {
       throw error;
     }
   },
-  getOrders: async (customerID) => {
-    try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/${customerID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      console.log("Response: ", response);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  },
   getAllOrdersAdmin: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/order/get/admin`, {
+      const response = await axios.get(BASE_URL + `/api/v1/admin/orders`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -53,10 +35,10 @@ export let orderService = {
       throw error;
     }
   },
-  getOrdersByStaff: async (staffID) => {
+  getOrderByStaffUserIDAdmin: async (userID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/admin/${staffID}`,
+        BASE_URL + `/api/v1/admin/user/${userID}/orders`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -70,10 +52,10 @@ export let orderService = {
       throw error;
     }
   },
-  getOrderStaffByUserID: async (userID) => {
+  getOrderDetailAdmin: async (orderID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/admin/user/${userID}`,
+        BASE_URL + `/api/v1/admin/orders/${orderID}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -87,45 +69,11 @@ export let orderService = {
       throw error;
     }
   },
-  getOrdersID: async (orderID) => {
-    try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/orderDetail/${orderID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      console.log("Response: ", response);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  },
-  getOrdersByCustomer: async (userID) => {
-    try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/${userID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      console.log("Response: ", response);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  },
-  confirmOrder: async (confirmOrderRequest) => {
+  confirmOrder: async ({ userID, orderID }) => {
     try {
       const response = await axios.put(
-        BASE_URL + `/api/v1/order/edit/admin/confirm`,
-        confirmOrderRequest,
+        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/confirm`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -139,11 +87,11 @@ export let orderService = {
       throw error;
     }
   },
-  shipping: async (confirmOrderRequest) => {
+  shipping: async ({ userID, orderID }) => {
     try {
       const response = await axios.put(
-        BASE_URL + `/api/v1/order/edit/admin/shipping`,
-        confirmOrderRequest,
+        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/shipping`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -157,11 +105,11 @@ export let orderService = {
       throw error;
     }
   },
-  success: async (confirmOrderRequest) => {
+  success: async ({ userID, orderID }) => {
     try {
       const response = await axios.put(
-        BASE_URL + `/api/v1/order/edit/admin/success`,
-        confirmOrderRequest,
+        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/success`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -175,11 +123,11 @@ export let orderService = {
       throw error;
     }
   },
-  cancel: async (confirmOrderRequest) => {
+  cancel: async ({ userID, orderID }) => {
     try {
       const response = await axios.put(
-        BASE_URL + `/api/v1/order/edit/admin/cancel`,
-        confirmOrderRequest,
+        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/cancel`,
+        {},
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -193,11 +141,11 @@ export let orderService = {
       throw error;
     }
   },
-  createOrderByCustomer: async (request) => {
+  createOrderForCustomer: async ({ userID, req }) => {
     try {
       const response = await axios.post(
-        BASE_URL + `/api/v1/order/add`,
-        request,
+        BASE_URL + `/api/v1/user/${userID}/orders`,
+        req,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -212,10 +160,10 @@ export let orderService = {
       throw error;
     }
   },
-  getOrderByCustomer: async (idUser) => {
+  getOrdersForCustomer: async (userID) => {
     try {
       const response = await axios.get(
-        BASE_URL + `/api/v1/order/get/${idUser}`,
+        BASE_URL + `/api/v1/user/${userID}/orders`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

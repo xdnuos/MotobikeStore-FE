@@ -64,7 +64,6 @@ function AdminProductDetails() {
   }, [dispatch, id]);
 
   const [cartRequest, setCartRequest] = useState({
-    userID: userID,
     productID: id,
     quantity: 1,
   });
@@ -74,7 +73,8 @@ function AdminProductDetails() {
   const handleClickAdd = async () => {
     if (isLoggedIn) {
       console.log(cartRequest);
-      const response = await dispatch(addToCart(cartRequest));
+
+      const response = await dispatch(addToCart(userID, cartRequest));
       console.log("testtttttttttttt", response);
       if (response.status === 200) {
         message.success(response.data.message);

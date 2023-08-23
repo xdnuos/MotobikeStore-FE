@@ -7,7 +7,6 @@ const initialState = {
   allProduct: [],
   loading: true,
   error: null,
-  getProducts: false,
 };
 export const getAllProduct = createAsyncThunk("product/list", async () => {
   const response = await productService.getAllProduct();
@@ -16,27 +15,31 @@ export const getAllProduct = createAsyncThunk("product/list", async () => {
 export const getAllProductAdmin = createAsyncThunk(
   "product/listAdmin",
   async () => {
-    const response = await productService.getAllProductAdmin();
-    return response;
+    try {
+      const response = await productService.getAllProductAdmin();
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 export const addProduct = createAsyncThunk(
   "product/addProduct",
-  async (ProductForm) => {
+  async (req) => {
     try {
-      const response = await productService.create(ProductForm);
+      const response = await productService.create(req);
       message.success(response.data.message);
       return response.data.product;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 );
 export const updateProduct = createAsyncThunk(
   "product/updateProduct",
-  async ({ formData, id }) => {
+  async ({ req, id }) => {
     try {
-      const response = await productService.update({ formData, id });
+      const response = await productService.update({ req, id });
       message.success(response.data.message);
       return response.data.product;
     } catch (error) {
@@ -46,9 +49,9 @@ export const updateProduct = createAsyncThunk(
 );
 export const creatStockProduct = createAsyncThunk(
   "product/creatStockProduct",
-  async (formData) => {
+  async (req) => {
     try {
-      const response = await stockService.create(formData);
+      const response = await stockService.create(req);
       console.log(response);
       message.success(response.data);
       return response.data.product;
@@ -94,7 +97,6 @@ const listProductSlice = createSlice({
       return {
         ...state,
         allProduct: [],
-        getProducts: false,
       };
     },
   },
@@ -120,8 +122,9 @@ const listProductSlice = createSlice({
         state.allProduct = actions.payload;
         state.loading = false;
       })
-      .addCase(getAllProductAdmin.rejected, (state) => {
-        return { ...state, allProduct: null, loading: false };
+      .addCase(getAllProductAdmin.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message;
       })
       .addCase(addProduct.pending, (state) => {
         state.allProduct = [];

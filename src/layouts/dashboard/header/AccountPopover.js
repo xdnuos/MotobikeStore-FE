@@ -16,8 +16,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../../redux/auth/authSlice";
 import { localStorageService } from "../../../services/localStorageService";
-// ----------------------------------------------------------------------
-
+import ChangePasswordDialog from "src/components/user/ChangePassDialog";
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -58,6 +57,15 @@ export default function AccountPopover() {
     handleClose();
   };
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
   const MENU_OPTIONS = [
     {
       label: "Profile",
@@ -69,11 +77,13 @@ export default function AccountPopover() {
       icon: "eva:home-fill",
       action: editInfo,
     },
-    // {
-    //   label: "Settings",
-    //   icon: "eva:settings-2-fill",
-    // },
+    {
+      label: "Change Password",
+      icon: "eva:settings-2-fill",
+      action: handleOpenDialog,
+    },
   ];
+
   return (
     <>
       <IconButton
@@ -145,6 +155,9 @@ export default function AccountPopover() {
           Logout
         </MenuItem>
       </Popover>
+      <div>
+        <ChangePasswordDialog open={dialogOpen} onClose={handleCloseDialog} />
+      </div>
     </>
   );
 }

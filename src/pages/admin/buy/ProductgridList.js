@@ -50,8 +50,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addToCart: (addToCartRequest) => {
-      dispatch(addToCart(addToCartRequest));
+    addToCart: ({ userID, req }) => {
+      dispatch(addToCart({ userID, req }));
     },
   };
 };

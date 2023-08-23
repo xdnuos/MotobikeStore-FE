@@ -53,10 +53,13 @@ export default function OrderPage() {
     const fetchData = async () => {
       if (isLoggedIn) {
         try {
-          const response = await orderService.getOrderByCustomer(idAccount);
-          setOrders(response);
+          const response = await orderService.getOrdersForCustomer(idAccount);
+          setOrders(
+            response?.sort((a, b) => b.orderTime.localeCompare(a.orderTime))
+          );
         } catch (error) {
           console.error("Error fetching orders:", error);
+          throw error;
         }
       }
     };
@@ -129,7 +132,7 @@ export default function OrderPage() {
                 <OrderDetail key={order.orderID} order={order}></OrderDetail>
               );
             })}
-            {orders.orderID === undefined && (
+            {orders.length === 0 && (
               <Card>
                 <CardContent>
                   <Typography variant="h5" textAlign={"center"}>

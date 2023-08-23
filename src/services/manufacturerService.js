@@ -4,18 +4,18 @@ import { BASE_URL } from "../utils/baseURL";
 export let manufacturerService = {
   getAllManufacturer: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/manufacturer/get`);
+      const response = await axios.get(BASE_URL + `/api/v1/manufactures`);
       return response;
     } catch (error) {
       console.log(error);
       throw error;
     }
   },
-  create: async (request) => {
+  create: async (req) => {
     try {
       const response = await axios.post(
-        BASE_URL + `/api/v1/manufacturer/add`,
-        request,
+        BASE_URL + `/api/v1/admin/manufactures`,
+        req,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -28,11 +28,11 @@ export let manufacturerService = {
       throw error;
     }
   },
-  update: async (request) => {
+  update: async (req) => {
     try {
       const response = await axios.put(
-        BASE_URL + `/api/v1/manufacturer/edit`,
-        request,
+        BASE_URL + `/api/v1/admin/manufactures`,
+        req,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -48,7 +48,7 @@ export let manufacturerService = {
   delete: async (id) => {
     try {
       const response = await axios.delete(
-        BASE_URL + `/api/v1/manufacturer/delete/${id}`,
+        BASE_URL + `/api/v1/admin/manufactures/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,

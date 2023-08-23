@@ -56,6 +56,7 @@ export default function CreateStore() {
       }
     } catch (error) {
       console.log(error);
+      throw error;
     }
     console.log(name, email, province, district, ward, street, password);
 

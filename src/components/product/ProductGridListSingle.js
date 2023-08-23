@@ -21,10 +21,10 @@ const ProductGridListSingle = ({
     if (!isLoggedIn) {
       return `/product-details/${idProduct}`;
     }
-  
+
     const role = localStorageService.get("USER")?.roles;
-    const hasCustomerRole = role?.includes('CUSTOMER');
-  
+    const hasCustomerRole = role?.includes("CUSTOMER");
+
     if (hasCustomerRole) {
       return `/product-details/${idProduct}`;
     } else {
@@ -35,7 +35,11 @@ const ProductGridListSingle = ({
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const handleListItemClick = (event, quantity, productID) => {
-    addToCart({ userID, productID, quantity });
+    const req = {
+      productID,
+      quantity,
+    };
+    addToCart({ userID, req });
   };
 
   const discountedPrice = getDiscountPrice(product.price, product.discount);
@@ -51,8 +55,9 @@ const ProductGridListSingle = ({
   return (
     <Fragment>
       <div
-        className={`col-xl-4 col-sm-6 ${sliderClassName ? sliderClassName : ""
-          }`}
+        className={`col-xl-4 col-sm-6 ${
+          sliderClassName ? sliderClassName : ""
+        }`}
       >
         <div
           className={`product-wrap ${spaceBottomClass ? spaceBottomClass : ""}`}

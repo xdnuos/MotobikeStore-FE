@@ -31,7 +31,11 @@ function ProductModal(props) {
   const addToCart = props.addtocart;
 
   const handleListItemClick = (event, quantity, productID) => {
-    addToCart({ productID, quantity, userID });
+    const req = {
+      productID,
+      quantity,
+    };
+    addToCart({ userID, req });
   };
   const cartItem = props.cartitem;
 

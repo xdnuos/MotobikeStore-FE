@@ -14,7 +14,7 @@ DeleteDialog.propTypes = {
   opendialog: PropTypes.bool,
   handleClose: PropTypes.func,
   deleteProduct: PropTypes.func,
-  id: PropTypes.number,
+  id: PropTypes.string,
   state: PropTypes.bool,
 };
 

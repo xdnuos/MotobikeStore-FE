@@ -30,10 +30,7 @@ import Scrollbar from "../../../../components/scrollbar/Scrollbar";
 import CartListHead from "./CartListHead";
 import { Quantity } from "src/sections/@client/products/product-details";
 import SvgColor from "../../../../components/svg-color/SvgColor";
-import {
-  removeFromCart,
-  updateCart,
-} from "../../../../redux/cart/cartSlice";
+import { removeFromCart, updateCart } from "../../../../redux/cart/cartSlice";
 
 import { addToOrder } from "src/redux/order/OrderSlice";
 
@@ -134,11 +131,11 @@ function AdminCart({ handleNext, activeStep }) {
     if (!isNaN(isEdited)) {
       try {
         console.log(cartProductID, quantity);
+        const req = { cartProductID: cartProductID, quantity: quantity };
         const response = await dispatch(
           updateCart({
-            cartProductID: cartProductID,
-            quantity: quantity,
-            userID: userID,
+            userID,
+            req,
           })
         );
         setState({ ...state, open: true });
@@ -147,6 +144,7 @@ function AdminCart({ handleNext, activeStep }) {
         console.log(response);
       } catch (error) {
         console.error("Failed to update cart quantity:", error);
+        throw error;
       }
     } else {
       console.log("isEdited is undefined", isEdited);
@@ -156,14 +154,13 @@ function AdminCart({ handleNext, activeStep }) {
     try {
       if (idCartItem) {
         setCartItemDelete({ ...cartItemDelete, cartProductID: idCartItem });
-        await dispatch(
-          removeFromCart({ cartProductID: idCartItem, userID: userID })
-        );
+        await dispatch(removeFromCart({ itemID: idCartItem, userID: userID }));
       } else {
         console.log("idCartItem is undefined", idCartItem);
       }
     } catch (error) {
       console.error("Failed to delete product:", error);
+      throw error;
     }
   };
   const handleCheckout = () => {
