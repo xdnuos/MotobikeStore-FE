@@ -1,27 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 // @mui
-import { alpha } from "@mui/material/styles";
 import {
+  Avatar,
   Box,
   Divider,
-  Typography,
-  Stack,
-  MenuItem,
-  Avatar,
   IconButton,
+  MenuItem,
   Popover,
+  Stack,
+  Typography,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 // mocks_
 import account from "../../../_mock/account";
 import { logoutUser } from "../../../redux/auth/authSlice";
 
-import { localStorageService } from "../../../services/localStorageService";
-import { reset } from "../../../redux/cart/cartSlice";
-import { customersService } from "src/services/customerService";
 import ChangePasswordDialog from "src/components/user/ChangePassDialog";
+import { customerService } from "src/services/customerService";
+import { reset } from "../../../redux/cart/cartSlice";
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -59,37 +57,41 @@ export default function AccountPopover() {
     setDialogOpen(false);
   };
   const MyOrders = () => {
-    navigate("/order");
+    navigate("/account/order");
+    handleClose();
+  };
+  const MyAccount = () => {
+    navigate("/account");
     handleClose();
   };
   const MENU_OPTIONS = [
     {
-      label: "Profile",
+      label: "My account",
       icon: "eva:person-fill",
-      action: handleClose,
+      action: MyAccount,
     },
     {
       label: "My Orders",
       icon: "eva:home-fill",
       action: MyOrders,
     },
-    {
-      label: "Settings",
-      icon: "eva:settings-2-fill",
-      action: handleClose,
-    },
-    {
-      label: "Change Password",
-      icon: "eva:settings-2-fill",
-      action: handleOpenDialog,
-    },
+    // {
+    //   label: "Settings",
+    //   icon: "eva:settings-2-fill",
+    //   action: handleClose,
+    // },
+    // {
+    //   label: "Change Password",
+    //   icon: "eva:settings-2-fill",
+    //   action: handleOpenDialog,
+    // },
   ];
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const idAccount = useSelector((state) => state.auth.idAccount);
 
   const getInfo = async (idAccount) => {
     return new Promise((resolve, reject) => {
-      customersService
+      customerService
         .getInfoForCustomer(idAccount)
         .then((response) => {
           setInfoCustomer({ name: response.name, phone: response.phoneNumber });

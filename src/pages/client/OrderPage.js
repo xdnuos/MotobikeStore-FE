@@ -1,43 +1,23 @@
-import { Helmet } from "react-helmet-async";
-import { Link as RouterLink } from "react-router-dom";
-import { filter } from "lodash";
-import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 // @mui
 import {
   Card,
-  Table,
-  Stack,
-  Paper,
-  Avatar,
-  Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  IconButton,
-  TableContainer,
-  TablePagination,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  TableHead,
-  TableSortLabel,
-  Tabs,
-  Tab,
   CardContent,
+  Container,
+  MenuItem,
+  Popover,
+  Tab,
+  Tabs,
+  Typography,
 } from "@mui/material";
 // components
 import Iconify from "../../components/iconify";
 
-import { orderService } from "../../services/orderService";
-import { useSelector } from "react-redux";
 import { TabContext, TabPanel } from "@mui/lab";
+import { useSelector } from "react-redux";
 import OrderDetail from "src/components/product/OrderTable";
+import { orderService } from "../../services/orderService";
 
 export default function OrderPage() {
   const [orders, setOrders] = useState([]);
@@ -102,15 +82,6 @@ export default function OrderPage() {
       </Helmet>
 
       <Container>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Typography variant="h4" gutterBottom>
-            My Orders
-          </Typography>
-        </Stack>
         <TabContext value={value}>
           <Tabs
             value={value}

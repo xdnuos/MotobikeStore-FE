@@ -1,21 +1,17 @@
 import {
-  Box,
   Button,
   Card,
   CardContent,
   CardHeader,
   Divider,
-  Grid,
-  IconButton,
   Stack,
   Typography,
 } from "@mui/material";
-import Iconify from "../iconify/Iconify";
-import { useState } from "react";
 import { Avatar } from "antd";
-import Label from "../label/Label";
-import { convertStringToDateTime } from "src/helper/table";
 import { formatCurrencyVND } from "src/helper/price";
+import { convertStringToDateTime } from "src/helper/table";
+import Iconify from "../iconify/Iconify";
+import Label from "../label/Label";
 
 export default function OrderDetail({ order }) {
   return (
@@ -46,7 +42,7 @@ export default function OrderDetail({ order }) {
         {order?.orderItems.map((orderItem) => {
           const { orderItemID, price, product, quantity } = orderItem;
           return (
-            <>
+            <div key={orderItemID}>
               <Stack
                 key={orderItemID}
                 mt={2}
@@ -68,7 +64,7 @@ export default function OrderDetail({ order }) {
                 <Typography variant="h7">{formatCurrencyVND(price)}</Typography>
               </Stack>
               <Divider />
-            </>
+            </div>
           );
         })}
         <Stack justifyContent={"space-between"} direction="row" mt={2}>

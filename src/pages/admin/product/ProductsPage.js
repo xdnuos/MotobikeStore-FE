@@ -1,44 +1,40 @@
-import { Helmet } from "react-helmet-async";
-import { useState } from "react";
 import { filter } from "lodash";
-import { Link as RouterLink, useOutletContext } from "react-router-dom";
+import { useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link as RouterLink } from "react-router-dom";
 // @mui
 import {
-  Card,
-  Link,
-  Table,
-  Stack,
-  Paper,
   Avatar,
   Button,
-  Popover,
+  Card,
   Checkbox,
-  TableRow,
+  Container,
+  IconButton,
+  Link,
   MenuItem,
+  Paper,
+  Popover,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  IconButton,
   TableContainer,
   TablePagination,
+  TableRow,
+  Typography,
 } from "@mui/material";
 // components
-import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
+import Label from "../../../components/label";
 import Scrollbar from "../../../components/scrollbar";
 // sections
-import {
-  ProductListToolbar,
-  ProductListHead,
-  DeleteDialog,
-} from "../../../sections/@dashboard/products";
 import { useDispatch, useSelector } from "react-redux";
+import { changeState, changeStateMulti } from "src/redux/products/productList";
 import {
-  changeState,
-  changeStateMulti,
-  getAllProduct,
-} from "src/redux/products/productList";
+  DeleteDialog,
+  ProductListHead,
+  ProductListToolbar,
+} from "../../../sections/@dashboard/products";
 // ----------------------------------------------------------------------
 // const imageServer = process.env.REACT_APP_IMAGE_SERVER;
 const TABLE_HEAD = [

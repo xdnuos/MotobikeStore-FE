@@ -1,15 +1,14 @@
+import { Grid, IconButton, TextField } from "@mui/material";
+import { message } from "antd";
+import { Form, Formik } from "formik";
+import PropTypes from "prop-types";
+import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "src/redux/order/OrderSlice";
+import { customerService } from "src/services/customerService";
 import * as yup from "yup";
-import { Formik, Form, useFormikContext } from "formik";
-import { Grid, TextField, IconButton } from "@mui/material";
 import { StyledButtonGreenText } from "../../../../components/custom/CustomButton";
 import Iconify from "../../../../components/iconify/Iconify";
-import { useState } from "react";
-import { setUser } from "src/redux/order/OrderSlice";
-import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import { customersService } from "src/services/customerService";
-import { message } from "antd";
-import { useRef } from "react";
 function UserForm({ handleBack, handleNext, activeStep }) {
   const dispatch = useDispatch();
   const orderInfo = useSelector((state) => state.order);
@@ -35,7 +34,7 @@ function UserForm({ handleBack, handleNext, activeStep }) {
   const handleGetCustomerInfo = async () => {
     try {
       const phone = phoneRef.current.value;
-      const response = await customersService.getBasicInfoByPhoneAdmin(phone);
+      const response = await customerService.getBasicInfoByPhoneAdmin(phone);
       console.log(response);
       if (response?.status === 200) {
         console.log("set info");

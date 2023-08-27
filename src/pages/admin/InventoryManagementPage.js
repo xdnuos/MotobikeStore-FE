@@ -1,47 +1,45 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { message } from "antd";
-import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
-import { useEffect, useState } from "react";
 import moment from "moment";
-
+import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 // @mui
 import {
-  Card,
-  Table,
-  Stack,
-  Paper,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Avatar,
   Button,
-  Popover,
-  TableRow,
-  MenuItem,
-  TableBody,
-  TableCell,
+  Card,
   Container,
-  Typography,
-  IconButton,
-  TableContainer,
-  TablePagination,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  TableHead,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  DialogActions,
+  DialogTitle,
+  IconButton,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
 } from "@mui/material";
 // components
-import Label from "../../components/label";
 import Iconify from "../../components/iconify";
+import Label from "../../components/label";
 import Scrollbar from "../../components/scrollbar";
 // sections
 import { UserListToolbar } from "../../sections/@dashboard/user";
 // mock
 import { useSelector } from "react-redux";
-import { stockService } from "src/services/stockService";
 import { Link } from "react-router-dom";
+import { stockService } from "src/services/stockService";
 
 message.config({
   top: 100,
@@ -240,6 +238,24 @@ export default function InventoryManagement() {
   );
 
   const isNotFound = !filteredUsers.length && !!filterName;
+
+  const accordionProps = {
+    sx: {
+      pointerEvents: "none",
+    },
+    expandIcon: (
+      <ExpandMoreIcon
+        sx={{
+          pointerEvents: "auto",
+        }}
+      />
+    ),
+  };
+  const buttonProps = {
+    sx: {
+      pointerEvents: "auto",
+    },
+  };
   return (
     <>
       <Helmet>
@@ -308,11 +324,7 @@ export default function InventoryManagement() {
 
                       return (
                         <Accordion key={stockID}>
-                          <AccordionSummary
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                            sx={{ width: "100%" }}
-                          >
+                          <AccordionSummary {...accordionProps}>
                             <TableRow
                               hover
                               key={stockID}
@@ -360,6 +372,7 @@ export default function InventoryManagement() {
                               </TableCell>
                               <TableCell align="right" sx={{ width: "23%" }}>
                                 <IconButton
+                                  {...buttonProps}
                                   size="large"
                                   color="inherit"
                                   onClick={() => handleOpenDialog(stockID)}

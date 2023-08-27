@@ -1,44 +1,39 @@
 import {
-  Card,
-  Table,
-  Stack,
-  Paper,
   Avatar,
+  Box,
   Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Grid,
+  IconButton,
+  Paper,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  IconButton,
   TableContainer,
-  TablePagination,
-  CardHeader,
-  CardContent,
-  Grid,
   TableHead,
+  TablePagination,
+  TableRow,
   TableSortLabel,
-  Box,
+  Typography,
 } from "@mui/material";
-import Iconify from "src/components/iconify/Iconify";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { message } from "antd";
-import Label from "../../../components/label";
+import { Link, useParams } from "react-router-dom";
+import Iconify from "src/components/iconify/Iconify";
+import Scrollbar from "src/components/scrollbar/Scrollbar";
+import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
 import {
   applySortFilterByPhone,
   convertStringToDateTime,
   getComparator,
   visuallyHidden,
 } from "src/helper/table";
-import Scrollbar from "src/components/scrollbar/Scrollbar";
+import { customerService } from "src/services/customerService";
 import { orderService } from "src/services/orderService";
-import { Link, useParams } from "react-router-dom";
-import { customersService } from "src/services/customerService";
-import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
+import Label from "../../../components/label";
 function UserDetail() {
   const { userID } = useParams();
   const TABLE_HEAD = [
@@ -84,7 +79,7 @@ function UserDetail() {
   };
   const geCustomerInfo = async () => {
     return new Promise((resolve, reject) => {
-      customersService
+      customerService
         .getCustomersByUserIDAdmin(userID)
         .then((response) => {
           setCustomerInfo(response);

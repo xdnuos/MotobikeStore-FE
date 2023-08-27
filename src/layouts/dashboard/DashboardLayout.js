@@ -66,8 +66,7 @@ function DashboardLayout() {
   );
   const loadingTags = useSelector((state) => state.categories.loading);
   const loadingManufacturer = useSelector((state) => state.categories.loading);
-  // const loadCart = useSelector((state) => state.cart.loading);
-  // console.log("loading cart", loadCart);
+
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getAllProductAdmin());

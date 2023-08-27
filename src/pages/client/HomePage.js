@@ -1,44 +1,28 @@
-import React, { useEffect } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
-import { getAllProduct } from "../../redux/products/productList";
 import { Helmet } from "react-helmet-async";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // @mui
 import {
-  Box,
-  Stack,
-  Button,
-  Divider,
-  ListItem,
   Container,
-  Typography,
   Grid,
-  Paper,
-  styled,
-  Skeleton,
+  LinearProgress,
+  Stack,
+  Typography,
   useMediaQuery,
   useTheme,
-  LinearProgress,
 } from "@mui/material";
 // sections
 import {
-  SearchForm,
-  FeaturedSlide,
-  SimpleSlider,
-  ProductsByTag,
   BlogReview,
   FeaturedCategory,
+  FeaturedSlide,
+  ProductsByTag,
+  SimpleSlider,
 } from "../../sections/@client/home";
 // components
-import { GlassCardComponent } from "../../components/glassmorphism-card";
-import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
 // _mock
 import POSTS from "../../_mock/blog";
-import {
-  StyledButtonGreen,
-  StyledButtonYellow,
-} from "../../components/custom/CustomButton";
+import { StyledButtonGreen } from "../../components/custom/CustomButton";
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -190,7 +174,7 @@ export default function HomePage() {
 
           {/* brand */}
           {/* ------------------------------------------------------------------------------- */}
-          <FeaturedCategory title="Pick Your Ride" />
+          {/* <FeaturedCategory title="Pick Your Ride" /> */}
 
           {/* Sản Phẩm Nổi Bật */}
           {/* ------------------------------------------------------------------------------- */}

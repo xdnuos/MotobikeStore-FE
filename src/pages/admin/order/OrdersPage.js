@@ -1,56 +1,40 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { message } from "antd";
-import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { useEffect, useState } from "react";
-import moment from "moment";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Helmet } from "react-helmet-async";
 // @mui
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Card,
-  Table,
-  Stack,
+  Container,
+  Grid,
   Paper,
-  Avatar,
-  Button,
-  Popover,
-  TableRow,
-  MenuItem,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  IconButton,
   TableContainer,
-  TablePagination,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   TableHead,
-  CardContent,
-  Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Snackbar,
-  Select,
+  TablePagination,
+  TableRow,
+  Typography,
 } from "@mui/material";
 // components
 import Label from "../../../components/label";
-import Iconify from "../../../components/iconify";
 import Scrollbar from "../../../components/scrollbar";
 // sections
 import { UserListToolbar } from "../../../sections/@dashboard/user";
 // mock
 import { useSelector } from "react-redux";
-import { orderService } from "src/services/orderService";
-import { localStorageService } from "src/services/localStorageService";
-import { convertStringToDateTime, getComparator } from "src/helper/table";
 import {
   OrderInfoCard,
   OrderItemsTable,
 } from "src/components/order/OrderInfoCard";
+import { convertStringToDateTime, getComparator } from "src/helper/table";
+import { orderService } from "src/services/orderService";
 
 message.config({
   top: 100,
@@ -101,10 +85,6 @@ export default function OrderStorePage() {
   useEffect(() => {
     getAllOrder();
   }, []);
-
-  const handleConfirmAction = async (orderID) => {
-    console.log(orderID);
-  };
   const confirmOrder = async (orderID) => {
     return new Promise((resolve, reject) => {
       orderService

@@ -1,43 +1,44 @@
 import { Navigate, useRoutes } from "react-router-dom";
 // layouts
+import ClientLayout from "./layouts/client/ClientLayout";
 import DashboardLayout from "./layouts/dashboard";
 import SimpleLayout from "./layouts/simple";
-import ClientLayout from "./layouts/client/ClientLayout";
 import BlogPage from "./pages/admin/BlogPage";
-import UserPage from "./pages/admin/user/UserPage";
-import LoginPage from "./pages/auth/LoginPage";
-import Page404 from "./pages/admin/Page404";
-import ProductsPage from "./pages/admin/product/ProductsPage";
 import DashboardAppPage from "./pages/admin/DashboardAppPage";
+import PersonalInfoForm from "./pages/admin/InfoPage";
+import InventoryManagement from "./pages/admin/InventoryManagementPage";
+import Page404 from "./pages/admin/Page404";
+import ProfileAdmin from "./pages/admin/ProfilePage";
+import AdminOrder from "./pages/admin/buy/AdminOrder";
+import AdminProductDetails from "./pages/admin/buy/AdminProductDetails";
+import AdminCheckout from "./pages/admin/buy/CheckoutPage";
+import Invoice from "./pages/admin/buy/InvoicePage";
+import OrderDetail from "./pages/admin/order/OrderDetail";
+import OrdersPage from "./pages/admin/order/OrdersPage";
 import CreateProduct from "./pages/admin/product/CreateProduct";
 import EditProduct from "./pages/admin/product/EditProduct";
-import HomePage from "./pages/client/HomePage";
-import ProductDetailsPage from "./pages/client/ProductDetailsPage";
-import AdminProductDetails from "./pages/admin/buy/AdminProductDetails";
-import ProductsListPage from "./pages/client/ProductsListPage";
-import Checkout from "./pages/client/CheckoutPage";
-import AdminCheckout from "./pages/admin/buy/CheckoutPage";
-import CreateStore from "./pages/admin/store/CreateStore";
-import StorePage from "./pages/admin/store/StorePage";
-import AdminOrder from "./pages/admin/buy/AdminOrder";
-import OrderPage from "./pages/client/OrderPage";
-import OrdersPage from "./pages/admin/order/OrdersPage";
-import InventoryManagement from "./pages/admin/InventoryManagementPage";
-import CreateReceipt from "./sections/@dashboard/products/CreateReceipt";
-import Staff from "./pages/admin/staff/StaffPage";
-import StaffDetail from "./pages/admin/staff/StaffDetail";
+import ProductsPage from "./pages/admin/product/ProductsPage";
+import ManageCategoriesPage from "./pages/admin/productPropeties/CategoryPage";
+import ManageManufacturerPage from "./pages/admin/productPropeties/ManufacturerPage";
+import ManageTagsPage from "./pages/admin/productPropeties/TagPage";
 import CreateStaff from "./pages/admin/staff/CreateStaff";
 import EditStaff from "./pages/admin/staff/EditStaff";
-import Invoice from "./pages/admin/buy/InvoicePage";
+import StaffDetail from "./pages/admin/staff/StaffDetail";
+import Staff from "./pages/admin/staff/StaffPage";
 import UserDetail from "./pages/admin/user/UserOrder";
-import OrderDetail from "./pages/admin/order/OrderDetail";
+import UserPage from "./pages/admin/user/UserPage";
 import ActiveAccountPage from "./pages/auth/ActiveAccountPage";
+import LoginPage from "./pages/auth/LoginPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
-import PersonalInfoForm from "./pages/admin/InfoPage";
-import ProfileAdmin from "./pages/admin/ProfilePage";
-import ManageCategoriesPage from "./pages/admin/productPropeties/CategoryPage";
-import ManageTagsPage from "./pages/admin/productPropeties/TagPage";
-import ManageManufacturerPage from "./pages/admin/productPropeties/ManufacturerPage";
+import AccountPage from "./pages/client/AccountPage";
+import Checkout from "./pages/client/CheckoutPage";
+import HomePage from "./pages/client/HomePage";
+import OrderPage from "./pages/client/OrderPage";
+import ProductDetailsPage from "./pages/client/ProductDetailsPage";
+import ProductsListPage from "./pages/client/ProductsListPage";
+import ChangePassword from "./sections/@client/account/ChangePassword";
+import ProfilePage from "./sections/@client/account/Profile";
+import CreateReceipt from "./sections/@dashboard/products/CreateReceipt";
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -79,7 +80,17 @@ export default function Router() {
         { path: "blog", element: <BlogPage /> },
         { path: "list-products/:id", element: <ProductsListPage /> },
         { path: "checkout", element: <Checkout /> },
-        { path: "order", element: <OrderPage /> },
+        {
+          path: "account",
+          element: <AccountPage />,
+          children: [
+            { element: <Navigate to="/account/profile" />, index: true },
+            { path: "profile", element: <ProfilePage /> },
+            { path: "changePassword", element: <ChangePassword /> },
+            { path: "order", element: <OrderPage /> },
+            // Thêm các route con khác tại đây
+          ],
+        },
       ],
     },
     {

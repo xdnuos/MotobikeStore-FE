@@ -2,26 +2,18 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // @mui
-import { styled, alpha } from "@mui/material/styles";
-import {
-  Box,
-  Link,
-  Button,
-  Drawer,
-  Typography,
-  Avatar,
-  Stack,
-} from "@mui/material";
+import { Avatar, Box, Drawer, Link, Typography } from "@mui/material";
+import { alpha, styled } from "@mui/material/styles";
 
 import useResponsive from "../../../hooks/useResponsive";
 // components
 import Logo from "../../../components/logo";
-import Scrollbar from "../../../components/scrollbar";
 import NavSection from "../../../components/nav-section";
+import Scrollbar from "../../../components/scrollbar";
 //
-import { navConfig, navConfigStore } from "./config";
 import { useSelector } from "react-redux";
 import { localStorageService } from "../../../services/localStorageService";
+import { navConfig, navConfigStore } from "./config";
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
