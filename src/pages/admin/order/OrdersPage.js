@@ -293,7 +293,7 @@ export default function OrderStorePage() {
                         orderItems,
                         orderStatus,
                         total,
-                        fullname,
+                        fullName,
                         phone,
                         note,
                         address,
@@ -359,7 +359,7 @@ export default function OrderStorePage() {
                             <Grid container spacing={3}>
                               <Grid item xs={6}>
                                 <OrderInfoCard
-                                  fullname={fullname}
+                                  fullName={fullName}
                                   phone={phone}
                                   note={note}
                                   address={address}

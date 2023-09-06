@@ -70,9 +70,13 @@ function Payment({ handleBack, handleNext, activeStep }) {
       const res = addresses.find(
         (address) => address.addressID === defaultAddressID
       );
-      console.log("addresses", addresses);
+      console.log("res", res);
       dispatch(
-        setAddress({ idAddress: res?.addressID, address: res?.address })
+        setAddress({
+          idAddress: res?.addressID,
+          address: res?.address,
+          selectedAddress: res?.addressID,
+        })
       );
       dispatch(
         setUser({

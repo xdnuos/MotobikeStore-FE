@@ -10,7 +10,7 @@ import { setAddress, setUser } from "../../../redux/order/OrderSlice";
 
 function CardAddress({ handleClose, address, isDefault }) {
   const dispatch = useDispatch();
-  // console.log(isDefault);
+  console.log(address);
   // const [open, setOpen] = useState(null);
   // const handleOpenMenu = (event) => {
   //   setOpen(event.currentTarget);
@@ -29,10 +29,11 @@ function CardAddress({ handleClose, address, isDefault }) {
   //   );
   //   setOpen(null);
   // };
-  const selectedAddress = useSelector((state) => state.address.selectedAddress);
+  const selectedAddress = useSelector((state) => state.order.selectedAddress);
+  console.log("selectedAddress", selectedAddress);
   const handleSelectedAddress = async (idAddress, address, fullName, phone) => {
     await Promise.all([
-      dispatch(setAddress({ idAddress, address })),
+      dispatch(setAddress({ idAddress, address, selectedAddress: idAddress })),
       dispatch(setUser({ fullName: fullName, phone })),
     ]);
     handleClose();
@@ -49,7 +50,7 @@ function CardAddress({ handleClose, address, isDefault }) {
               alignItems="center"
             >
               <Stack direction={"row"} spacing={1}>
-                <Typography variant="subtitle1">{address?.fullname}</Typography>
+                <Typography variant="subtitle1">{address?.fullName}</Typography>
                 {/* <Typography color={"text.secondary"}>(Home)</Typography> */}
                 {isDefault && <Label color={"info"}>Default</Label>}
               </Stack>
@@ -77,7 +78,7 @@ function CardAddress({ handleClose, address, isDefault }) {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                {!selectedAddress === address?.addressID ? (
+                {selectedAddress !== address?.addressID ? (
                   <StyledButtonGreenOutlined
                     sx={{ mt: { xs: 2, md: 1 }, padding: "3px 9px" }}
                     size="small"
@@ -85,7 +86,7 @@ function CardAddress({ handleClose, address, isDefault }) {
                       handleSelectedAddress(
                         address?.addressID,
                         address?.address,
-                        address?.fullname,
+                        address?.fullName,
                         address?.phone
                       )
                     }

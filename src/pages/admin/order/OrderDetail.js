@@ -1,43 +1,34 @@
 import {
+  Box,
   Card,
-  Table,
-  Stack,
+  CardContent,
+  Container,
+  Grid,
+  IconButton,
   Paper,
-  Avatar,
-  Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  IconButton,
   TableContainer,
-  TablePagination,
-  CardHeader,
-  CardContent,
-  Grid,
   TableHead,
+  TablePagination,
+  TableRow,
   TableSortLabel,
-  Box,
-  TableFooter,
+  Typography,
 } from "@mui/material";
-import Iconify from "src/components/iconify/Iconify";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { message } from "antd";
-import Label from "../../../components/label";
-import { convertStringToDateTime, visuallyHidden } from "src/helper/table";
+import { useParams } from "react-router-dom";
+import Iconify from "src/components/iconify/Iconify";
 import Scrollbar from "src/components/scrollbar/Scrollbar";
+import { convertStringToDateTime, visuallyHidden } from "src/helper/table";
 import { orderService } from "src/services/orderService";
-import { Link, useParams } from "react-router-dom";
+import Label from "../../../components/label";
 function OrderDetail() {
   const { orderID } = useParams();
   const TABLE_HEAD = [
     { id: "email", label: "Product Name", alignLeft: true },
-    { id: "fullname", label: "Price" },
+    { id: "fullName", label: "Price" },
     { id: "role", label: "Quantity" },
     { id: "status", label: "Amount" },
     { id: "" },
@@ -108,7 +99,7 @@ function OrderDetail() {
                   <Grid item xs={12} md={6} sm={6}>
                     <Stack direction={"row"} spacing={1}>
                       <Typography variant="h4">
-                        {orderDetail.fullname}
+                        {orderDetail.fullName}
                       </Typography>
                       <Iconify icon={icon}></Iconify>
                     </Stack>

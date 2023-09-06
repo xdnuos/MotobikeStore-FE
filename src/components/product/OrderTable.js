@@ -71,7 +71,7 @@ export default function OrderDetail({ order }) {
           <Stack>
             <Stack direction={"row"} spacing={1}>
               <Iconify icon="ph:user"></Iconify>
-              <Typography variant="h7">{order.fullname}</Typography>
+              <Typography variant="h7">{order.fullName}</Typography>
             </Stack>
             <Stack direction={"row"} spacing={1}>
               <Iconify icon="ph:phone"></Iconify>

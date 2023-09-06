@@ -116,7 +116,7 @@ function AddressForm({ open, onClose }) {
     try {
       const req = {
         address: `${street}, ${nameWard}, ${nameDistrict}, ${nameProvince}`,
-        fullname: name,
+        fullName: name,
         phone: phone,
       };
       await dispatch(CreateAddress({ userID: idAccount, req }));

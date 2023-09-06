@@ -22,7 +22,7 @@ const OrderSlice = createSlice({
       const { idAddress, address, selectedAddress } = action.payload;
       state.idAddress = idAddress;
       state.address = address;
-      state.address = selectedAddress;
+      state.selectedAddress = selectedAddress;
     },
     setUser: (state, action) => {
       const { fullName, phone, customerID } = action.payload;

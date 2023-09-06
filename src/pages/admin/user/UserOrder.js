@@ -38,7 +38,7 @@ function UserDetail() {
   const { userID } = useParams();
   const TABLE_HEAD = [
     { id: "email", label: "Purchase method", alignLeft: true },
-    { id: "fullname", label: "Order time", alignLeft: true },
+    { id: "fullName", label: "Order time", alignLeft: true },
     { id: "role", label: "Quantity product" },
     { id: "status", label: "Status" },
     { id: "phone", label: "Total Price" },

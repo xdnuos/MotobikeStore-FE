@@ -1,31 +1,29 @@
 import { message } from "antd";
-import { Helmet } from "react-helmet-async";
-import { filter } from "lodash";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 // @mui
 import {
-  Card,
-  Table,
-  Stack,
-  Paper,
-  Avatar,
   Button,
-  Popover,
-  TableRow,
+  Card,
+  Checkbox,
+  Container,
+  IconButton,
   MenuItem,
+  Paper,
+  Popover,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  IconButton,
   TableContainer,
   TablePagination,
-  Checkbox,
+  TableRow,
+  Typography,
 } from "@mui/material";
 // components
-import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
+import Label from "../../../components/label";
 import Scrollbar from "../../../components/scrollbar";
 // sections
 import {
@@ -35,14 +33,14 @@ import {
 // mock
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { staffService } from "src/services/staffService";
-import { DeleteDialog } from "src/sections/@dashboard/products";
-import ResetPassDialog from "src/sections/@dashboard/products/ResetPassDialog";
 import {
   applySortFilterByPhone,
   convertStringToDateTime,
   getComparator,
 } from "src/helper/table";
+import { DeleteDialog } from "src/sections/@dashboard/products";
+import ResetPassDialog from "src/sections/@dashboard/products/ResetPassDialog";
+import { staffService } from "src/services/staffService";
 
 message.config({
   top: 100,
@@ -56,7 +54,7 @@ message.config({
 export default function Staff() {
   const TABLE_HEAD = [
     { id: "email", label: "Email", alignLeft: true },
-    { id: "fullname", label: "Full name" },
+    { id: "fullName", label: "Full name" },
     { id: "role", label: "Role" },
     { id: "status", label: "Status" },
     { id: "phone", label: "Phone" },
