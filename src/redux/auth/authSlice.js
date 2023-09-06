@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { localStorageService } from "../../services/localStorageService";
 import { authService } from "../../services/authService";
+import { localStorageService } from "../../services/localStorageService";
 
 const initialState = {
-  accessToken: !!localStorageService.get("access_token")
+  accessToken: localStorageService.get("access_token")
     ? localStorageService.get("access_token")
     : null,
-  isLoggedIn: !!localStorageService.get("USER"),
-  idAccount: !!localStorageService.get("USER")
+  isLoggedIn: localStorageService.get("USER"),
+  idAccount: localStorageService.get("USER")
     ? localStorageService.get("USER")?.userID
     : null,
-  email: !!localStorageService.get("USER")
+  email: localStorageService.get("USER")
     ? localStorageService.get("USER")?.email
     : null,
 };

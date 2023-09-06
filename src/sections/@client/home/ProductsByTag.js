@@ -1,14 +1,12 @@
 // SECTIONS SẢN PHẨM THEO ĐỐI TƯỢNG
 // ---------------------------------------------------------------
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import { Button, Chip, Skeleton, Stack, Typography } from "@mui/material";
-import Iconify from "../../../components/iconify/Iconify";
-import { ProductList } from "../products";
-import { useState } from "react";
-import { tagService } from "../../../services/tagService";
-import { set } from "lodash";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Iconify from "../../../components/iconify/Iconify";
+import { tagService } from "../../../services/tagService";
+import { ProductList } from "../products";
 // ---------------------------------------------------------------
 
 const filterByChip = [

@@ -6,7 +6,7 @@ export const fetchAddressItems = createAsyncThunk(
   async (userID, { rejectWithValue }) => {
     try {
       const items = await addressService.getAddress(userID);
-      console.log(items);
+      console.log("addresses", items);
       return items;
     } catch (error) {
       return rejectWithValue(error);
@@ -43,24 +43,36 @@ export const deleteAddress = createAsyncThunk(
   }
 );
 
-// export const updateCart = createAsyncThunk(
-//   "cart/updateCart",
-//   async (updateCartRequest) => {
-//     try {
-//       const response = await cartService.updateToCart(updateCartRequest);
-//       return response.data;
-//     } catch (error) {
-//       throw new Error(error);
-//     }
-//   }
-// );
+export const UpdateAddress = createAsyncThunk(
+  "address/UpdateAddress",
+  async ({ userID, req }) => {
+    try {
+      const items = await addressService.addAddress({ userID, req });
+      console.log(items.address);
+      return items?.address;
+    } catch (err) {
+      return err.response.data.message;
+    }
+  }
+);
 
+export const getDefaultAddress = createAsyncThunk(
+  "address/getDefaultAddress",
+  async ({ userID }) => {
+    try {
+      const res = await addressService.getDefaultAddress({ userID });
+      return res.data;
+    } catch (err) {
+      return err.response.data.message;
+    }
+  }
+);
 const initialState = {
   address: [],
   loading: false,
   error: null,
   emptyAddress: true,
-  loadOk: false,
+  defaultAddress: null,
 };
 
 const addressSlice = createSlice({
@@ -77,10 +89,10 @@ const addressSlice = createSlice({
         state.emptyAddress = true;
       })
       .addCase(fetchAddressItems.fulfilled, (state, { payload }) => {
-        state.address = payload;
+        state.address = payload.address;
+        state.defaultAddress = payload.defaultAddress;
         state.loading = false;
         state.emptyAddress = state.address?.length === 0;
-        state.loadOk = true;
       })
       .addCase(fetchAddressItems.rejected, (state, { payload }) => {
         state.loading = false;
@@ -92,9 +104,8 @@ const addressSlice = createSlice({
         state.error = null;
       })
       .addCase(CreateAddress.fulfilled, (state, { payload }) => {
-        state.address = payload;
+        state.address = payload.address;
         state.loading = false;
-        state.loadOk = false;
       })
       .addCase(CreateAddress.rejected, (state, { error }) => {
         state.loading = false;
@@ -105,7 +116,7 @@ const addressSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteAddress.fulfilled, (state, { payload }) => {
-        state.address = payload;
+        state.address = payload.address;
         state.loading = false;
         state.emptyAddress = payload?.length === 0;
       })

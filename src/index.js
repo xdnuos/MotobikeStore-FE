@@ -1,13 +1,13 @@
 import ReactDOM from "react-dom/client";
 
 //
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./redux/store";
 import { compose } from "redux";
+import App from "./App";
 import "./assets/scss/style.scss";
+import store from "./redux/store";
+import reportWebVitals from "./reportWebVitals";
+import * as serviceWorker from "./serviceWorker";
 // ----------------------------------------------------------------------
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -16,7 +16,7 @@ const {
 const { default: Iconify } = require("../iconify/Iconify");
 const { ActionButtons } = require("./DialogConfirm");
 export function OrderInfoCard({
-  fullname,
+  fullName,
   phone,
   note,
   address,
@@ -35,7 +35,7 @@ export function OrderInfoCard({
           <Grid item xs={6}>
             <Stack direction={"row"} spacing={1}>
               <Iconify icon="wpf:name"></Iconify>
-              <Typography variant="h7">{fullname}</Typography>
+              <Typography variant="h7">{fullName}</Typography>
             </Stack>
             <Stack direction={"row"} spacing={1}>
               <Iconify icon="fluent:payment-32-regular"></Iconify>

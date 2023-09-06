@@ -1,5 +1,4 @@
-import React from "react";
-import { Text, View, StyleSheet } from "@react-pdf/renderer";
+import { StyleSheet, Text, View } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -17,7 +16,7 @@ const styles = StyleSheet.create({
 const BillTo = ({ invoice }) => (
   <View style={styles.headerContainer}>
     <Text style={styles.billTo}>Bill To:</Text>
-    <Text>Fullname: {invoice.fullname}</Text>
+    <Text>Fullname: {invoice.fullName}</Text>
     <Text>Phone: {invoice.phone}</Text>
     <Text>Address: {invoice.address}</Text>
     <Text>Note: {invoice.note}</Text>

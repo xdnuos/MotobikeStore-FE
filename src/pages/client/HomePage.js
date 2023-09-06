@@ -1,37 +1,25 @@
-import React, { useEffect } from "react";
-
-import { useDispatch, useSelector } from "react-redux";
-import { getAllProduct } from "../../redux/products/productList";
 import { Helmet } from "react-helmet-async";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // @mui
 import {
-  Stack,
   Container,
-  Typography,
   Grid,
+  LinearProgress,
+  Stack,
+  Typography,
   useMediaQuery,
   useTheme,
-  LinearProgress,
 } from "@mui/material";
 // sections
 import {
-  SearchForm,
   FeaturedSlide,
-  SimpleSlider,
   ProductsByTag,
-  BlogReview,
-  FeaturedCategory,
+  SimpleSlider,
 } from "../../sections/@client/home";
 // components
-import { GlassCardComponent } from "../../components/glassmorphism-card";
-import SkeletonLoading from "../../components/skeleton/SkeletonLoading";
 // _mock
-import POSTS from "../../_mock/blog";
-import {
-  StyledButtonGreen,
-  StyledButtonYellow,
-} from "../../components/custom/CustomButton";
+import { StyledButtonGreen } from "../../components/custom/CustomButton";
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -183,7 +171,7 @@ export default function HomePage() {
 
           {/* brand */}
           {/* ------------------------------------------------------------------------------- */}
-          <FeaturedCategory title="Pick Your Ride" />
+          {/* <FeaturedCategory title="Pick Your Ride" /> */}
 
           {/* Sản Phẩm Nổi Bật */}
           {/* ------------------------------------------------------------------------------- */}
@@ -199,7 +187,7 @@ export default function HomePage() {
           <ProductsByTag product={products} limit={limit} loading={loading} />
 
           {/* Blog Review */}
-          <BlogReview title="News for you" blog={POSTS} limit={7} />
+          {/* <BlogReview title="News for you" blog={POSTS} limit={7} /> */}
 
           {/* Tìm Kiếm Hàng Đầu */}
           {/* ------------------------------------------------------------------------------- */}

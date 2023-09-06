@@ -97,6 +97,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
     sku: "",
     stock: 0,
     price: 0,
+    cost: 0,
     shortDescription: "",
     fullDescription: "",
     arrival: "",
@@ -108,13 +109,14 @@ function ProductForm({ product, categories, tags, manufacturer }) {
 
   let isEdit = false;
 
-  if (product?.name != undefined) {
+  if (product?.name !== undefined) {
     isEdit = true;
     initialValues = {
       name: product.name,
       sku: product.sku,
       stock: product.stock,
       price: product.price,
+      cost: product.cost,
       shortDescription: product.shortDescription,
       fullDescription: product.fullDescription,
       arrival: product.arrival,
@@ -140,6 +142,10 @@ function ProductForm({ product, categories, tags, manufacturer }) {
       .required("Sku is required"),
     stock: yup.number().min(0, "Invalid number!").required("Stock is required"),
     price: yup.number().min(1, "Invalid number!").required("Price is required"),
+    cost: yup
+      .number()
+      .min(1, "Invalid number!")
+      .required("Entry price is required"),
     shortDescription: yup
       .string()
       .min(20, "Too Short!")
@@ -188,6 +194,7 @@ function ProductForm({ product, categories, tags, manufacturer }) {
         sku: values.sku,
         stock: values.stock,
         price: values.price,
+        cost: values.cost,
         shortDescription: values.shortDescription,
         fullDescription: values.fullDescription,
         arrival: convertValue(values.arrival),
@@ -399,6 +406,21 @@ function ProductForm({ product, categories, tags, manufacturer }) {
                 </Paper>
                 <Paper elevation={0} variant="outlined" sx={{ p: 3 }}>
                   <Stack spacing={2}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="outlined-adornment-amount">
+                        Cost Price
+                      </InputLabel>
+                      <OutlinedInput
+                        name="cost"
+                        value={values.cost}
+                        onChange={handleChange}
+                        error={touched.cost && Boolean(errors.cost)}
+                        startAdornment={
+                          <InputAdornment position="start">VNĐ</InputAdornment>
+                        }
+                        label="Sale Price"
+                      />
+                    </FormControl>
                     {/* giá bán */}
                     <FormControl fullWidth>
                       <InputLabel htmlFor="outlined-adornment-amount">

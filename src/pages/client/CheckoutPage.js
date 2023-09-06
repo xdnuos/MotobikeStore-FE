@@ -1,25 +1,22 @@
-import React from "react";
-import { useState } from "react";
 import {
   Box,
-  Stepper,
-  Step,
-  StepLabel,
   Button,
   Container,
+  Grid,
+  Step,
   StepConnector,
+  StepLabel,
+  Stepper,
   stepConnectorClasses,
   styled,
-  Grid,
 } from "@mui/material";
-import Iconify from "../../components/iconify/Iconify";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import BillingAndAddress from "../../sections/@client/checkout/BillingAndAddress";
+import OrderSuccess from "src/components/order/OrderSuccess";
+import Iconify from "../../components/iconify/Iconify";
 import Cart from "../../sections/@client/checkout/Cart";
 import Payment from "../../sections/@client/checkout/Payment";
-import OrderSuccessDialog from "../../sections/@client/checkout/OrderSuccessDialog";
-import { useNavigate } from "react-router-dom";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -100,27 +97,28 @@ QontoStepIcon.propTypes = {
 
 // const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
-const steps = ["Cart", "Billing and Address", "Payment"];
+const steps = ["Cart", "Payment", "Success Order"];
 
 const Checkout = () => {
-  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
 
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-    navigate('/order')
-  };
+  // const handleClose = () => {
+  //   setOpen(false);
+  //   navigate("/order");
+  // };
 
+  // const handleNext = () => {
+  //   if (activeStep === 2) {
+  //     setOpen(true);
+  //   } else {
+  //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //   }
+  // };
   const handleNext = () => {
-    if (activeStep === 2) {
-      setOpen(true);
-    } else {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -133,15 +131,8 @@ const Checkout = () => {
     switch (stepIndex) {
       case 0:
         return <Cart handleNext={handleNext} activeStep={activeStep} />;
+
       case 1:
-        return (
-          <BillingAndAddress
-            handleBack={handleBack}
-            handleNext={handleNext}
-            activeStep={activeStep}
-          />
-        );
-      case 2:
         return (
           <Payment
             handleBack={handleBack}
@@ -149,6 +140,8 @@ const Checkout = () => {
             activeStep={activeStep}
           />
         );
+      case 2:
+        return <OrderSuccess />;
       default:
         return "Unknown stepIndex";
     }
@@ -188,7 +181,7 @@ const Checkout = () => {
             )}
           </Grid>
         </Grid>
-        <OrderSuccessDialog open={open} handleClose={handleClose} />
+        {/* <OrderSuccessDialog open={open} handleClose={handleClose} /> */}
       </Container>
     </>
   );

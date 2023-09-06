@@ -1,8 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/baseURL";
-import { message } from "antd";
 
-export let customersService = {
+export let customerService = {
   getInfoForCustomer: async (userID) => {
     try {
       const response = await axios.get(
@@ -32,7 +31,7 @@ export let customersService = {
         }
       );
 
-      return response.data;
+      return response;
     } catch (error) {
       console.log(error);
       throw error;

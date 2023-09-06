@@ -1,31 +1,28 @@
-import { Helmet } from "react-helmet-async";
-import { Link, Link as RouterLink } from "react-router-dom";
-import { filter } from "lodash";
-import { sentenceCase } from "change-case";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { Link as RouterLink } from "react-router-dom";
 // @mui
 import {
-  Card,
-  Table,
-  Stack,
-  Paper,
   Avatar,
-  Button,
-  Popover,
+  Card,
   Checkbox,
-  TableRow,
+  Container,
+  IconButton,
   MenuItem,
+  Paper,
+  Popover,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
-  IconButton,
   TableContainer,
   TablePagination,
+  TableRow,
+  Typography,
 } from "@mui/material";
 // components
-import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
+import Label from "../../../components/label";
 import Scrollbar from "../../../components/scrollbar";
 // sections
 import {
@@ -33,12 +30,12 @@ import {
   UserListToolbar,
 } from "../../../sections/@dashboard/user";
 // mock
-import { customersService } from "../../../services/customerService";
-import ResetPassDialog from "src/sections/@dashboard/products/ResetPassDialog";
-import { DeleteDialog } from "src/sections/@dashboard/products";
-import { applySortFilterByPhone, getComparator } from "src/helper/table";
-import { useDispatch } from "react-redux";
 import { message } from "antd";
+import { useDispatch } from "react-redux";
+import { applySortFilterByPhone, getComparator } from "src/helper/table";
+import { DeleteDialog } from "src/sections/@dashboard/products";
+import ResetPassDialog from "src/sections/@dashboard/products/ResetPassDialog";
+import { customerService } from "../../../services/customerService";
 
 // ----------------------------------------------------------------------
 
@@ -61,7 +58,7 @@ export default function UserPage() {
 
   const getAllCustomer = async () => {
     return new Promise((resolve, reject) => {
-      customersService
+      customerService
         .getAllCustomersAdmin()
         .then((response) => {
           setUsers(response);
@@ -93,7 +90,7 @@ export default function UserPage() {
 
   const changeState = async (userID) => {
     return new Promise((resolve, reject) => {
-      customersService
+      customerService
         .changeState(userID)
         .then((response) => {
           console.log("response", response);
@@ -113,7 +110,7 @@ export default function UserPage() {
   };
   const resetPassword = async (userID) => {
     return new Promise((resolve, reject) => {
-      customersService
+      customerService
         .resetPass(userID)
         .then((response) => {
           console.log("response", response);

@@ -1,23 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { LoadingButton } from "@mui/lab";
 import {
   Autocomplete,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LoadingButton } from "@mui/lab";
 import { CreateAddress } from "../../../redux/address/AddressSlice";
-import Iconify from "../../../components/iconify/Iconify";
 
 const PROVINCES_API_URL = "https://provinces.open-api.vn/api";
 
@@ -122,7 +116,7 @@ function AddressForm({ open, onClose }) {
     try {
       const req = {
         address: `${street}, ${nameWard}, ${nameDistrict}, ${nameProvince}`,
-        fullname: name,
+        fullName: name,
         phone: phone,
       };
       await dispatch(CreateAddress({ userID: idAccount, req }));

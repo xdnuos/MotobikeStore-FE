@@ -1,14 +1,13 @@
-import { Helmet } from "react-helmet-async";
+import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 import Paginator from "react-hooks-paginator";
-import { Stack, Container, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCartItems } from "src/redux/cart/cartSlice";
 import ShopSidebar from "src/sections/@dashboard/products/ShopSidebar";
 import ShopTopbar from "src/sections/@dashboard/products/ShopTopbar";
-import ShopProducts from "./ShopProducts";
 import { getSortedProducts } from "../../../helper/product";
-import { useOutletContext } from "react-router-dom";
-import { fetchCartItems } from "src/redux/cart/cartSlice";
+import ShopProducts from "./ShopProducts";
 
 function AdminOrder() {
   // get
