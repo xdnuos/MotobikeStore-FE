@@ -13,15 +13,12 @@ import {
 } from "@mui/material";
 // sections
 import {
-  BlogReview,
-  FeaturedCategory,
   FeaturedSlide,
   ProductsByTag,
   SimpleSlider,
 } from "../../sections/@client/home";
 // components
 // _mock
-import POSTS from "../../_mock/blog";
 import { StyledButtonGreen } from "../../components/custom/CustomButton";
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -190,7 +187,7 @@ export default function HomePage() {
           <ProductsByTag product={products} limit={limit} loading={loading} />
 
           {/* Blog Review */}
-          <BlogReview title="News for you" blog={POSTS} limit={7} />
+          {/* <BlogReview title="News for you" blog={POSTS} limit={7} /> */}
 
           {/* Tìm Kiếm Hàng Đầu */}
           {/* ------------------------------------------------------------------------------- */}

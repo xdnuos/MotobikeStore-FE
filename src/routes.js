@@ -36,6 +36,7 @@ import HomePage from "./pages/client/HomePage";
 import OrderPage from "./pages/client/OrderPage";
 import ProductDetailsPage from "./pages/client/ProductDetailsPage";
 import ProductsListPage from "./pages/client/ProductsListPage";
+import Address from "./sections/@client/account/Address";
 import ChangePassword from "./sections/@client/account/ChangePassword";
 import ProfilePage from "./sections/@client/account/Profile";
 import CreateReceipt from "./sections/@dashboard/products/CreateReceipt";
@@ -86,6 +87,7 @@ export default function Router() {
           children: [
             { element: <Navigate to="/account/profile" />, index: true },
             { path: "profile", element: <ProfilePage /> },
+            { path: "address", element: <Address /> },
             { path: "changePassword", element: <ChangePassword /> },
             { path: "order", element: <OrderPage /> },
             // Thêm các route con khác tại đây

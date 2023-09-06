@@ -8,9 +8,9 @@ const OrderSlice = createSlice({
     idAddress: null,
     address: null,
     customerID: null,
-    firstName: "",
-    lastName: "",
+    fullName: "",
     phone: "",
+    selectedAddress: null,
   },
   reducers: {
     addToOrder: (state, action) => {
@@ -19,15 +19,15 @@ const OrderSlice = createSlice({
       state.totalPrice = price;
     },
     setAddress: (state, action) => {
-      const { idAddress, address } = action.payload;
+      const { idAddress, address, selectedAddress } = action.payload;
       state.idAddress = idAddress;
       state.address = address;
+      state.address = selectedAddress;
     },
     setUser: (state, action) => {
-      const { firstName, lastName, phone, customerID } = action.payload;
+      const { fullName, phone, customerID } = action.payload;
       state.customerID = customerID;
-      state.firstName = firstName;
-      state.lastName = lastName;
+      state.fullName = fullName;
       state.phone = phone;
     },
   },

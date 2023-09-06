@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Autocomplete,
   Button,
@@ -6,22 +5,19 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
-} from '@mui/material';
+} from "@mui/material";
+import { useState } from "react";
 
 function AddressForm({ open, onClose }) {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [city, setCity] = useState('');
-  const [district, setDistrict] = useState('');
-const [ward, setWard] = useState('');
-  const [address, setAddress] = useState('');
-  const [note, setNote] = useState('');
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [ward, setWard] = useState("");
+  const [address, setAddress] = useState("");
+  const [note, setNote] = useState("");
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -45,7 +41,7 @@ const [ward, setWard] = useState('');
         <DialogContent>
           <form onSubmit={handleFormSubmit}>
             <Grid container spacing={2} mt={1}>
-              <Grid item md={6}  xs={12}>
+              <Grid item md={6} xs={12}>
                 <TextField
                   required
                   label="Họ và tên người nhận"
@@ -57,7 +53,7 @@ const [ward, setWard] = useState('');
               <Grid item md={6} xs={12}>
                 <TextField
                   required
-                  type='number'
+                  type="number"
                   label="Số điện thoại"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -66,18 +62,17 @@ const [ward, setWard] = useState('');
               </Grid>
 
               <Grid item md={6} xs={12}>
-              <Autocomplete
+                <Autocomplete
                   fullWidth
                   value={city}
                   onChange={(event, newValue) => {
                     setCity(newValue);
                   }}
-                  options={['city 1', 'City 2']}
+                  options={["city 1", "City 2"]}
                   renderInput={(params) => (
                     <TextField {...params} label="Chọn Tỉnh" required />
                   )}
                 />
-               
               </Grid>
               <Grid item md={6} xs={12}>
                 <Autocomplete
@@ -86,20 +81,20 @@ const [ward, setWard] = useState('');
                   onChange={(event, newValue) => {
                     setDistrict(newValue);
                   }}
-                  options={['district1', 'district2']}
+                  options={["district1", "district2"]}
                   renderInput={(params) => (
                     <TextField {...params} label="Chọn Quận/Huyện" required />
                   )}
                 />
               </Grid>
               <Grid item xs={12}>
-              <Autocomplete
+                <Autocomplete
                   fullWidth
                   value={ward}
                   onChange={(event, newValue) => {
                     setWard(newValue);
                   }}
-                  options={['phường', 'xã ']}
+                  options={["phường", "xã "]}
                   renderInput={(params) => (
                     <TextField {...params} label="Chọn Phường/Xã" required />
                   )}
@@ -127,9 +122,10 @@ const [ward, setWard] = useState('');
             </Grid>
             <DialogActions>
               <Button onClick={onClose}>Cancel</Button>
-              <Button type="submit" color="primary">Submit</Button>
+              <Button type="submit" color="primary">
+                Submit
+              </Button>
             </DialogActions>
-
           </form>
         </DialogContent>
       </Dialog>
@@ -137,4 +133,4 @@ const [ward, setWard] = useState('');
   );
 }
 
-export default AddressForm
+export default AddressForm;

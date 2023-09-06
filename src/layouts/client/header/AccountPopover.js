@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 // @mui
 import {
   Avatar,
-  Box,
   Divider,
   IconButton,
   MenuItem,
   Popover,
   Stack,
-  Typography,
 } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 // mocks_
@@ -18,7 +16,6 @@ import account from "../../../_mock/account";
 import { logoutUser } from "../../../redux/auth/authSlice";
 
 import ChangePasswordDialog from "src/components/user/ChangePassDialog";
-import { customerService } from "src/services/customerService";
 import { reset } from "../../../redux/cart/cartSlice";
 // ----------------------------------------------------------------------
 
@@ -28,10 +25,6 @@ export default function AccountPopover() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(null);
-  const [infoCustomer, setInfoCustomer] = useState({
-    name: "",
-    phone: "",
-  });
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -75,40 +68,8 @@ export default function AccountPopover() {
       icon: "eva:home-fill",
       action: MyOrders,
     },
-    // {
-    //   label: "Settings",
-    //   icon: "eva:settings-2-fill",
-    //   action: handleClose,
-    // },
-    // {
-    //   label: "Change Password",
-    //   icon: "eva:settings-2-fill",
-    //   action: handleOpenDialog,
-    // },
   ];
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const idAccount = useSelector((state) => state.auth.idAccount);
-
-  const getInfo = async (idAccount) => {
-    return new Promise((resolve, reject) => {
-      customerService
-        .getInfoForCustomer(idAccount)
-        .then((response) => {
-          setInfoCustomer({ name: response.name, phone: response.phoneNumber });
-          console.log("response", response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      getInfo(idAccount);
-    }
-  }, [isLoggedIn, idAccount]);
 
   return (
     <>
@@ -151,15 +112,6 @@ export default function AccountPopover() {
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {infoCustomer.name}
-          </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {infoCustomer.phone}
-          </Typography>
-        </Box>
-
         <Divider sx={{ borderStyle: "dashed" }} />
         {isLoggedIn && (
           <Stack sx={{ p: 1 }}>

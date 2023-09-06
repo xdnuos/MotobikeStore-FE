@@ -1,28 +1,25 @@
-import React from "react";
-import { useState } from "react";
 import {
   Box,
-  Stepper,
-  Step,
-  StepLabel,
   Button,
   Container,
+  Grid,
+  Step,
   StepConnector,
+  StepLabel,
+  Stepper,
   stepConnectorClasses,
   styled,
-  Grid,
 } from "@mui/material";
-import Iconify from "../../../components/iconify/Iconify";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import BillingAndAddress from "../../../sections/@dashboard/products/checkout/BillingAndAddress";
-import Cart from "../../../sections/@dashboard/products/checkout/AdminCart";
-import Summary from "../../../sections/@dashboard/products/checkout/Summary";
-import OrderSuccessDialog from "src/sections/@dashboard/products/checkout/OrderSuccessDialog";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getAllProduct } from "src/redux/products/productList";
-import { setUser } from "src/redux/order/OrderSlice";
-import { fetchCartItems } from "src/redux/cart/cartSlice";
+import OrderSuccessDialog from "src/sections/@dashboard/products/checkout/OrderSuccessDialog";
+import Iconify from "../../../components/iconify/Iconify";
+import Cart from "../../../sections/@dashboard/products/checkout/AdminCart";
+import BillingAndAddress from "../../../sections/@dashboard/products/checkout/BillingAndAddress";
+import Summary from "../../../sections/@dashboard/products/checkout/Summary";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -100,8 +97,6 @@ QontoStepIcon.propTypes = {
    */
   completed: PropTypes.bool,
 };
-
-// const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
 const steps = ["Cart", "Billing and Address", "Summary"];
 
