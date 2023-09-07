@@ -1,7 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import {
   Autocomplete,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -11,11 +10,11 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateAddress } from "../../../redux/address/AddressSlice";
+import { createAddress } from "../../../redux/address/AddressSlice";
 
 const PROVINCES_API_URL = "https://provinces.open-api.vn/api";
 
-function AddressForm({ open, onClose }) {
+function AddressForm({ onClose }) {
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
@@ -119,7 +118,7 @@ function AddressForm({ open, onClose }) {
         fullName: name,
         phone: phone,
       };
-      await dispatch(CreateAddress({ userID: idAccount, req }));
+      await dispatch(createAddress({ userID: idAccount, req }));
       setName("");
       setPhone("");
       setNameDistrict("");
@@ -133,121 +132,120 @@ function AddressForm({ open, onClose }) {
   };
 
   return (
-    <div>
-      <Dialog open={open} onClose={onClose} fullWidth>
-        <DialogTitle>Thêm địa chỉ nhận hàng</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleFormSubmit}>
-            <Grid container spacing={2} mt={1}>
-              <Grid item md={6} xs={12}>
-                <TextField
-                  required
-                  type="phone"
-                  label="Họ và tên người nhận"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <TextField
-                  required
-                  type="number"
-                  label="Số điện thoại"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  fullWidth
-                />
-              </Grid>
-
-              <Grid item md={6} xs={12}>
-                <Autocomplete
-                  options={province.map((province) => ({
-                    value: province.code,
-                    label: province.name,
-                  }))}
-                  getOptionLabel={(option) => option.label}
-                  onChange={handleProvinceChange}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Tỉnh..."
-                      placeholder="Tỉnh..."
-                      required
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Autocomplete
-                  options={districts.map((district) => ({
-                    value: district.code,
-                    label: district.name,
-                  }))}
-                  getOptionLabel={(option) => option.label}
-                  onChange={handleDistrictChange}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Huyện..."
-                      placeholder="Huyện..."
-                      required
-                    />
-                  )}
-                  disabled={!selectedProvince}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Autocomplete
-                  options={wards.map((ward) => ({
-                    value: ward.code,
-                    label: ward.name,
-                  }))}
-                  getOptionLabel={(option) => option.label}
-                  onChange={handleWardChange}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Xã..."
-                      placeholder="Xã..."
-                      rules={[{ required: true }]}
-                    />
-                  )}
-                  disabled={!selectedDistrict}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  label="Nhập địa chỉ cụ thể"
-                  value={street}
-                  onChange={(e) => setStreet(e.target.value)}
-                  multiline
-                  fullWidth
-                />
-              </Grid>
+    <>
+      <DialogTitle>Add new address</DialogTitle>
+      <DialogContent>
+        <form onSubmit={handleFormSubmit}>
+          <Grid container spacing={2} mt={1}>
+            <Grid item md={6} xs={12}>
+              <TextField
+                required
+                type="phone"
+                label="Full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                fullWidth
+              />
             </Grid>
-            <DialogActions>
-              <LoadingButton
-                disabled={loading}
-                variant="outlined"
-                onClick={onClose}
-              >
-                Cancel
-              </LoadingButton>
-              <LoadingButton
-                loading={loading}
-                variant="outlined"
-                type="submit"
-                color="primary"
-              >
-                Submit
-              </LoadingButton>
-            </DialogActions>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </div>
+            <Grid item md={6} xs={12}>
+              <TextField
+                required
+                type="number"
+                label="Phone number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid item md={6} xs={12}>
+              <Autocomplete
+                options={province.map((province) => ({
+                  value: province.code,
+                  label: province.name,
+                }))}
+                getOptionLabel={(option) => option.label}
+                onChange={handleProvinceChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="City/Province"
+                    placeholder="City/Province"
+                    required
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <Autocomplete
+                options={districts.map((district) => ({
+                  value: district.code,
+                  label: district.name,
+                }))}
+                getOptionLabel={(option) => option.label}
+                onChange={handleDistrictChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="District"
+                    placeholder="District"
+                    required
+                  />
+                )}
+                disabled={!selectedProvince}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Autocomplete
+                options={wards.map((ward) => ({
+                  value: ward.code,
+                  label: ward.name,
+                }))}
+                getOptionLabel={(option) => option.label}
+                onChange={handleWardChange}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Ward"
+                    placeholder="Ward"
+                    rules={[{ required: true }]}
+                  />
+                )}
+                disabled={!selectedDistrict}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                label="Address"
+                value={street}
+                onChange={(e) => setStreet(e.target.value)}
+                multiline
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+          <DialogActions>
+            <LoadingButton
+              disabled={loading}
+              variant="outlined"
+              onClick={onClose}
+              color="error"
+            >
+              Cancel
+            </LoadingButton>
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              type="submit"
+              color="primary"
+            >
+              Save
+            </LoadingButton>
+          </DialogActions>
+        </form>
+      </DialogContent>
+    </>
   );
 }
 

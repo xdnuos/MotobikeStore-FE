@@ -14,13 +14,12 @@ export const fetchAddressItems = createAsyncThunk(
   }
 );
 
-export const CreateAddress = createAsyncThunk(
-  "address/CreateAddress",
+export const createAddress = createAsyncThunk(
+  "address/createAddress",
   async ({ userID, req }) => {
     try {
       const items = await addressService.addAddress({ userID, req });
-      console.log(items.address);
-      return items?.address;
+      return items;
     } catch (err) {
       return err.response.data.message;
     }
@@ -43,8 +42,8 @@ export const deleteAddress = createAsyncThunk(
   }
 );
 
-export const UpdateAddress = createAsyncThunk(
-  "address/UpdateAddress",
+export const updateAddress = createAsyncThunk(
+  "address/updateAddress",
   async ({ userID, req }) => {
     try {
       const items = await addressService.addAddress({ userID, req });
@@ -99,15 +98,15 @@ const addressSlice = createSlice({
         state.error = payload;
         state.emptyAddress = true;
       })
-      .addCase(CreateAddress.pending, (state) => {
+      .addCase(createAddress.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(CreateAddress.fulfilled, (state, { payload }) => {
+      .addCase(createAddress.fulfilled, (state, { payload }) => {
         state.address = payload.address;
         state.loading = false;
       })
-      .addCase(CreateAddress.rejected, (state, { error }) => {
+      .addCase(createAddress.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message;
       })
