@@ -20,11 +20,11 @@ import BillingAddressDialog from "src/components/order/BillingAddressDialog";
 import SkeletonLoading from "src/components/skeleton/SkeletonLoading";
 import { fetchAddressItems } from "src/redux/address/AddressSlice";
 import { setAddress, setUser } from "src/redux/order/OrderSlice";
+import { orderService } from "src/services/orderService";
 import { StyledButtonGreen } from "../../../components/custom/CustomButton";
 import { CustomRadio } from "../../../components/custom/CustomRadio";
 import Iconify from "../../../components/iconify/Iconify";
 import BillingAddress from "../../../components/order/BillingAddress";
-import { orderService } from "../../../services/orderService";
 import OrderSummary from "./OrderSummary";
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ selected }) => ({
@@ -116,7 +116,9 @@ function Payment({ handleBack, handleNext, activeStep }) {
       cartProductIDs: listIdCart,
       addressID: idAddress,
       payment: paymentOption,
+      address: address,
     };
+    // console.log(req);
     await orderService
       .createOrderForCustomer({
         userID: idAccount,

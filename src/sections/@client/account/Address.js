@@ -1,26 +1,45 @@
-import { Button, Container, Stack, Typography } from "@mui/material";
+import { Button, Container, Dialog, Stack, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useDispatch, useSelector } from "react-redux";
 import AddressDetail from "src/components/address/AddressDetail";
 import Iconify from "src/components/iconify/Iconify";
+import {
+  deleteAddress,
+  fetchAddressItems,
+  setDefaultAddress,
+} from "src/redux/address/AddressSlice";
+import AddressForm from "../checkout/AddressForm";
 
 export default function Address() {
-  const userAddress = [
-    {
-      addressID: 552,
-      address:
-        "65 Kon Tách Đăng, Thị trấn Đinh Văn, Huyện Lâm Hà, Tỉnh Lâm Đồng",
-      phone: "0565790288",
-      fullName: "Phạm Thị Hảo",
-    },
-    {
-      addressID: 752,
-      address:
-        "65 Kon Tách Đăng, Thị trấn Đinh Văn, Huyện Lâm Hà, Tỉnh Lâm Đồng",
-      phone: "0865307743",
-      fullName: "Hoàng Huyền",
-    },
-  ];
+  const address = useSelector((state) => state.address.address);
+  const userID = useSelector((state) => state.auth.idAccount);
+  const defaultAddress = useSelector((state) => state.address.defaultAddress);
+  const dispatch = useDispatch();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState(undefined);
+  useEffect(() => {
+    dispatch(fetchAddressItems(userID));
+  }, []);
 
+  const handleSetDefaultAddress = (addressID) => {
+    dispatch(setDefaultAddress({ userID, addressID }));
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedAddress(undefined);
+  };
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleSetSelectedAddress = (addressID) => {
+    handleOpenDialog();
+    setSelectedAddress(addressID);
+  };
+  const handleDelete = (addressID) => {
+    dispatch(deleteAddress({ userID, addressID }));
+    console.log(addressID);
+  };
   return (
     <>
       <Helmet>
@@ -29,20 +48,39 @@ export default function Address() {
       <Container>
         <Stack pt={2} direction={"row"} justifyContent={"space-between"}>
           <Typography variant="h5">My address</Typography>
-          <Button variant="contained">
+          <Button variant="contained" onClick={handleOpenDialog}>
             <Iconify icon={"ic:baseline-plus"}></Iconify>&nbsp; Create new
             address
           </Button>
         </Stack>
-        {userAddress.map((address) => {
+        {address?.map((address) => {
           return (
             <AddressDetail
               address={address}
-              isDefault={true}
+              isDefault={defaultAddress === address.addressID}
               key={address.addressID}
+              setDefault={handleSetDefaultAddress}
+              onUpdate={handleSetSelectedAddress}
+              onDelete={handleDelete}
             ></AddressDetail>
           );
         })}
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          fullWidth
+          PaperProps={{
+            sx: {
+              width: "50%",
+              maxHeight: "75vh",
+            },
+          }}
+        >
+          <AddressForm
+            onClose={handleCloseDialog}
+            addressID={selectedAddress}
+          />
+        </Dialog>
       </Container>
     </>
   );

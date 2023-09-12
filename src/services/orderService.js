@@ -1,6 +1,6 @@
+import { message } from "antd";
 import axios from "axios";
 import { BASE_URL } from "../utils/baseURL";
-import { message } from "antd";
 
 export let orderService = {
   createOrderAdmin: async ({ userID, req }) => {
@@ -171,6 +171,24 @@ export let orderService = {
         }
       );
       return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  cancelForCustomer: async ({ userID, orderID }) => {
+    try {
+      const response = await axios.delete(
+        BASE_URL + `/api/v1/user/${userID}/orders/${orderID}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log("Response: ", response);
+      message.success(response.data);
+      return response;
     } catch (error) {
       console.log(error);
       throw error;
