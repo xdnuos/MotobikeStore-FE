@@ -18,11 +18,24 @@ import { TabContext, TabPanel } from "@mui/lab";
 import { useSelector } from "react-redux";
 import OrderDetail from "src/components/product/OrderTable";
 import { orderService } from "../../services/orderService";
-
+async function fetchData(idAccount, isLoggedIn, setOrders) {
+  if (isLoggedIn) {
+    try {
+      const response = await orderService.getOrdersForCustomer(idAccount);
+      setOrders(
+        response?.sort((a, b) => b.orderTime.localeCompare(a.orderTime))
+      );
+      // console.log(response);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      throw error;
+    }
+  }
+}
 export default function OrderPage() {
   const [orders, setOrders] = useState([]);
   const [value, setValue] = useState("1");
-
+  const [reload, changeReload] = useState(true);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -30,28 +43,26 @@ export default function OrderPage() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (isLoggedIn) {
-        try {
-          const response = await orderService.getOrdersForCustomer(idAccount);
-          setOrders(
-            response?.sort((a, b) => b.orderTime.localeCompare(a.orderTime))
-          );
-        } catch (error) {
-          console.error("Error fetching orders:", error);
-          throw error;
-        }
-      }
-    };
-
-    fetchData();
-  }, [idAccount, isLoggedIn]);
-  console.log("orders", orders);
+    fetchData(idAccount, isLoggedIn, setOrders);
+  }, [idAccount, isLoggedIn, reload]);
+  // console.log("orders", orders);
 
   const [open, setOpen] = useState(null);
 
   const handleCloseMenu = () => {
     setOpen(null);
+  };
+
+  const handleCancel = async (orderID) => {
+    const res = await orderService.cancelForCustomer({
+      userID: idAccount,
+      orderID,
+    });
+    if (res.status === 200) {
+      // fetchData(idAccount, isLoggedIn, setOrders);
+      changeReload(!reload);
+      console.log(reload);
+    }
   };
 
   const renderOrdersByStatus = (status) => {
@@ -72,7 +83,7 @@ export default function OrderPage() {
     }
 
     return filteredOrders.map((order) => (
-      <OrderDetail key={order?.orderID} order={order} />
+      <OrderDetail key={order?.orderID} order={order} onCancel={handleCancel} />
     ));
   };
   return (
@@ -100,7 +111,11 @@ export default function OrderPage() {
           <TabPanel value="1">
             {orders?.map((order) => {
               return (
-                <OrderDetail key={order.orderID} order={order}></OrderDetail>
+                <OrderDetail
+                  key={order.orderID}
+                  order={order}
+                  onCancel={handleCancel}
+                ></OrderDetail>
               );
             })}
             {orders.length === 0 && (

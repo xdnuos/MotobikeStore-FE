@@ -13,7 +13,7 @@ import { convertStringToDateTime } from "src/helper/table";
 import Iconify from "../iconify/Iconify";
 import Label from "../label/Label";
 
-export default function OrderDetail({ order }) {
+export default function OrderDetail({ order, onCancel }) {
   return (
     <Card sx={{ mb: 5 }}>
       <CardHeader
@@ -97,7 +97,20 @@ export default function OrderDetail({ order }) {
           </Stack>
         </Stack>
         <Stack justifyContent={"end"} direction="row" mt={2}>
-          <Button variant="outlined">Buy again</Button>
+          {(order.orderStatus === "PENDING" ||
+            order.orderStatus === "CONFIRMED") && (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => onCancel(order.orderID)}
+            >
+              Cancel
+            </Button>
+          )}
+
+          {order.orderStatus === "SUCCESS" && (
+            <Button variant="outlined">Buy again</Button>
+          )}
         </Stack>
       </CardContent>
     </Card>

@@ -1,8 +1,13 @@
 import { Button, Divider, Stack, Typography } from "@mui/material";
 import Label from "../label/Label";
 
-const AddressDetail = ({ address, isDefault }) => {
-  console.log(address);
+const AddressDetail = ({
+  address,
+  isDefault,
+  setDefault,
+  onUpdate,
+  onDelete,
+}) => {
   return (
     <>
       <Divider sx={{ marginTop: "12px", marginBottom: "24px" }}></Divider>
@@ -26,12 +31,23 @@ const AddressDetail = ({ address, isDefault }) => {
         </Stack>
         <Stack>
           <Stack direction={"row"}>
-            <Button size="small">Update</Button>
-            <Button size="small" color="error">
+            <Button size="small" onClick={() => onUpdate(address.addressID)}>
+              Update
+            </Button>
+            <Button
+              size="small"
+              color="error"
+              onClick={() => onDelete(address.addressID)}
+            >
               Delete
             </Button>
           </Stack>
-          <Button variant="contained" color="inherit" disabled={isDefault}>
+          <Button
+            variant="contained"
+            color="inherit"
+            disabled={isDefault}
+            onClick={() => setDefault(address.addressID)}
+          >
             Set default
           </Button>
         </Stack>

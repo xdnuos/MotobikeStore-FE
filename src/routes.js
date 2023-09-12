@@ -40,12 +40,6 @@ import Address from "./sections/@client/account/Address";
 import ChangePassword from "./sections/@client/account/ChangePassword";
 import ProfilePage from "./sections/@client/account/Profile";
 import CreateReceipt from "./sections/@dashboard/products/CreateReceipt";
-import PersonalInfoForm from "./pages/admin/InfoPage";
-import ProfileAdmin from "./pages/admin/ProfilePage";
-import ManageCategoriesPage from "./pages/admin/productPropeties/CategoryPage";
-import ManageTagsPage from "./pages/admin/productPropeties/TagPage";
-import ManageManufacturerPage from "./pages/admin/productPropeties/ManufacturerPage";
-import ProfilePage from "./pages/client/ProfilePage";
 // ----------------------------------------------------------------------
 
 export default function Router() {

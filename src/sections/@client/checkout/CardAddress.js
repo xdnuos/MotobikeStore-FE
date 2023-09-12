@@ -1,6 +1,13 @@
-import { Card, CardContent, Grid, Stack, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
+import Iconify from "src/components/iconify/Iconify";
 import {
   StyledButtonGreen,
   StyledButtonGreenOutlined,
@@ -8,7 +15,7 @@ import {
 import Label from "../../../components/label/Label";
 import { setAddress, setUser } from "../../../redux/order/OrderSlice";
 
-function CardAddress({ handleClose, address, isDefault }) {
+function CardAddress({ handleClose, address, isDefault, handleEdit }) {
   const dispatch = useDispatch();
   console.log(address);
   // const [open, setOpen] = useState(null);
@@ -30,7 +37,7 @@ function CardAddress({ handleClose, address, isDefault }) {
   //   setOpen(null);
   // };
   const selectedAddress = useSelector((state) => state.order.selectedAddress);
-  console.log("selectedAddress", selectedAddress);
+  // console.log("selectedAddress", selectedAddress);
   const handleSelectedAddress = async (idAddress, address, fullName, phone) => {
     await Promise.all([
       dispatch(setAddress({ idAddress, address, selectedAddress: idAddress })),
@@ -38,7 +45,6 @@ function CardAddress({ handleClose, address, isDefault }) {
     ]);
     handleClose();
   };
-
   return (
     <>
       <Card sx={{ mb: 1 }}>
@@ -55,55 +61,48 @@ function CardAddress({ handleClose, address, isDefault }) {
                 {isDefault && <Label color={"info"}>Default</Label>}
               </Stack>
 
-              {/* <IconButton
+              <IconButton
                 size="small"
                 sx={{ height: 26, width: 26 }}
                 color="inherit"
-                onClick={handleOpenMenu}
+                onClick={() => handleEdit(address.addressID)}
               >
-                <Iconify icon={"eva:more-vertical-fill"} />
-              </IconButton> */}
+                <Iconify icon={"uil:edit"} />
+              </IconButton>
             </Stack>
-            <Typography variant="body2">{address?.address}</Typography>
-
-            <Grid container alignItems={"center"}>
-              <Grid item xs={12} md={9}>
-                <Typography
-                  variant="body2"
-                  alignItems={"center"}
-                  color={"text.secondary"}
-                  noWrap
-                >
-                  {address?.phone}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                {selectedAddress !== address?.addressID ? (
-                  <StyledButtonGreenOutlined
-                    sx={{ mt: { xs: 2, md: 1 }, padding: "3px 9px" }}
-                    size="small"
-                    onClick={() =>
-                      handleSelectedAddress(
-                        address?.addressID,
-                        address?.address,
-                        address?.fullName,
-                        address?.phone
-                      )
-                    }
-                  >
-                    Select this address
-                  </StyledButtonGreenOutlined>
-                ) : (
-                  <StyledButtonGreen
-                    sx={{ mt: { xs: 2, md: 1 }, padding: "3px 9px" }}
-                    size="small"
-                    disabled
-                  >
-                    Selected
-                  </StyledButtonGreen>
-                )}
-              </Grid>
-            </Grid>
+            <Typography variant="body2">{address.address}</Typography>
+            <Typography
+              variant="body2"
+              alignItems={"center"}
+              color={"text.secondary"}
+              noWrap
+            >
+              {address?.phone}
+            </Typography>
+            {selectedAddress !== address?.addressID ? (
+              <StyledButtonGreenOutlined
+                sx={{ mt: { xs: 2, md: 1 }, padding: "3px 9px" }}
+                size="small"
+                onClick={() =>
+                  handleSelectedAddress(
+                    address?.addressID,
+                    address?.address,
+                    address?.fullName,
+                    address?.phone
+                  )
+                }
+              >
+                Select this address
+              </StyledButtonGreenOutlined>
+            ) : (
+              <StyledButtonGreen
+                sx={{ mt: { xs: 2, md: 1 }, padding: "3px 9px" }}
+                size="small"
+                disabled
+              >
+                Selected
+              </StyledButtonGreen>
+            )}
           </Stack>
         </CardContent>
       </Card>

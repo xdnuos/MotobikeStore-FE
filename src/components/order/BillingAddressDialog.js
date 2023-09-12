@@ -18,6 +18,7 @@ const BillingAddressDialog = ({ open, onClose }) => {
   const address = useSelector((state) => state.address.address);
   const defaultAddress = useSelector((state) => state.address.defaultAddress);
   const [isAddNew, setAddNew] = useState(false);
+  const [editAddressID, setEditAddressID] = useState(undefined);
   const handleOpenDialog = () => {
     setAddNew(true);
   };
@@ -31,7 +32,10 @@ const BillingAddressDialog = ({ open, onClose }) => {
       console.log("error");
     }
   });
-
+  const handleEdit = (addressID) => {
+    setEditAddressID(addressID);
+    handleOpenDialog();
+  };
   return (
     <>
       <Dialog
@@ -46,7 +50,7 @@ const BillingAddressDialog = ({ open, onClose }) => {
         }}
       >
         {isAddNew ? (
-          <AddressForm onClose={handleCloseDialog} />
+          <AddressForm onClose={handleCloseDialog} addressID={editAddressID} />
         ) : (
           <>
             <DialogTitle>Select address</DialogTitle>
@@ -56,39 +60,35 @@ const BillingAddressDialog = ({ open, onClose }) => {
                   {address?.map((item) => {
                     return (
                       <CardAddress
-                        key={address.addressID}
+                        key={item.addressID}
                         handleClose={onClose}
                         address={item}
                         isDefault={defaultAddress === item.addressID}
+                        handleEdit={handleEdit}
                       />
                     );
                   })}
-                  {/* --------------------------------------- BUTTON --------------------------------------------------- */}
-                  <Stack
-                    direction={"row"}
-                    mt={3}
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Button sx={{ color: "#000" }} onClick={onClose}>
-                      <Iconify icon="ic:outline-keyboard-arrow-left" mr={1} />
-                      Back
-                    </Button>
-
-                    <StyledButtonGreenText
-                      size="small"
-                      onClick={handleOpenDialog}
-                    >
-                      <Iconify
-                        icon="ic:sharp-plus"
-                        sx={{ height: 16, width: 16 }}
-                      />
-                      &nbsp; Add new address &nbsp;
-                    </StyledButtonGreenText>
-                  </Stack>
                 </Grid>
               </Grid>
             </DialogContent>
+            {/* --------------------------------------- BUTTON --------------------------------------------------- */}
+            <Stack
+              direction={"row"}
+              margin={3}
+              mb={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Button sx={{ color: "#000" }} onClick={onClose}>
+                <Iconify icon="ic:outline-keyboard-arrow-left" mr={1} />
+                Back
+              </Button>
+
+              <StyledButtonGreenText size="small" onClick={handleOpenDialog}>
+                <Iconify icon="ic:sharp-plus" sx={{ height: 16, width: 16 }} />
+                &nbsp; Add new address &nbsp;
+              </StyledButtonGreenText>
+            </Stack>
           </>
         )}
       </Dialog>

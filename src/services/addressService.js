@@ -49,7 +49,7 @@ export let addressService = {
           },
         }
       );
-      message.success("Address added successfully");
+      message.success("Success");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -67,9 +67,10 @@ export let addressService = {
         }
       );
       console.log(response.data);
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
+      message.error(error.response.data);
       throw error;
     }
   },
@@ -101,7 +102,7 @@ export let addressService = {
           },
         }
       );
-      message.success("Address added successfully");
+      message.success(response.data.message);
       return response.data;
     } catch (error) {
       console.log(error);

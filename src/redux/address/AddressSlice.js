@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { message } from "antd";
 import { addressService } from "../../services/addressService";
 
 export const fetchAddressItems = createAsyncThunk(
@@ -20,8 +21,9 @@ export const createAddress = createAsyncThunk(
     try {
       const items = await addressService.addAddress({ userID, req });
       return items;
-    } catch (err) {
-      return err.response.data.message;
+    } catch (error) {
+      message.error("An error occurred. Please try again!");
+      throw error;
     }
   }
 );
@@ -34,8 +36,7 @@ export const deleteAddress = createAsyncThunk(
         userID,
         addressID,
       });
-      console.log("áaskdjlksjd kas   ", response.data?.address);
-      return response.data?.address;
+      return response;
     } catch (error) {
       throw error;
     }
@@ -46,11 +47,11 @@ export const updateAddress = createAsyncThunk(
   "address/updateAddress",
   async ({ userID, req }) => {
     try {
-      const items = await addressService.addAddress({ userID, req });
-      console.log(items.address);
-      return items?.address;
-    } catch (err) {
-      return err.response.data.message;
+      const response = await addressService.editAddress({ userID, req });
+      return response;
+    } catch (error) {
+      message.error("An error occurred. Please try again!");
+      throw error;
     }
   }
 );
@@ -61,8 +62,19 @@ export const getDefaultAddress = createAsyncThunk(
     try {
       const res = await addressService.getDefaultAddress({ userID });
       return res.data;
-    } catch (err) {
-      return err.response.data.message;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+export const setDefaultAddress = createAsyncThunk(
+  "address/setDefaultAddress",
+  async ({ userID, addressID }) => {
+    try {
+      const res = await addressService.setDefaultAddress({ userID, addressID });
+      return res;
+    } catch (error) {
+      throw error;
     }
   }
 );
@@ -122,20 +134,32 @@ const addressSlice = createSlice({
       .addCase(deleteAddress.rejected, (state, { error }) => {
         state.loading = false;
         state.error = error.message;
+      })
+      .addCase(updateAddress.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateAddress.fulfilled, (state, { payload }) => {
+        state.address = payload.address;
+        state.loading = false;
+      })
+      .addCase(updateAddress.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message;
+      })
+      .addCase(setDefaultAddress.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(setDefaultAddress.fulfilled, (state, { payload }) => {
+        state.address = payload.address;
+        state.defaultAddress = payload.defaultAddress;
+        state.loading = false;
+      })
+      .addCase(setDefaultAddress.rejected, (state, { error }) => {
+        state.loading = false;
+        state.error = error.message;
       });
-    // .addCase(updateCart.pending, (state) => {
-    //   state.loading = true;
-    //   state.error = null;
-    // })
-    // .addCase(updateCart.fulfilled, (state, { payload }) => {
-    //   state.cart = payload.cart;
-    //   state.loading = false;
-    //   state.loadOk = false;
-    // })
-    // .addCase(updateCart.rejected, (state, { error }) => {
-    //   state.loading = false;
-    //   state.error = error.message;
-    // });
   },
 });
 
