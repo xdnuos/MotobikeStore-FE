@@ -1,7 +1,7 @@
-import axios from "axios";
-import { https } from "./configAxios";
-import { BASE_URL } from "../utils/baseURL";
 import { message } from "antd";
+import axios from "axios";
+import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let productService = {
   getAllProduct: async () => {
@@ -131,4 +131,42 @@ export let productService = {
   //     throw error;
   //   }
   // },
+  addReview: async ({ productID, req }) => {
+    try {
+      return await https.post(
+        `/api/v1/admin/products/${productID}/review`,
+        { req },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+    } catch (error) {
+      if (error.response.status === 406) {
+        message.error(error.response.data);
+      } else {
+        message.error("An error has occurred. Please try again");
+      }
+      console.log(error);
+      throw error;
+    }
+  },
+  getReview: async (productID) => {
+    try {
+      return await https.post(`/api/v1/admin/products/${productID}/review`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+    } catch (error) {
+      if (error.response.status === 406) {
+        message.error(error.response.data);
+      } else {
+        message.error("An error has occurred. Please try again");
+      }
+      console.log(error);
+      throw error;
+    }
+  },
 };

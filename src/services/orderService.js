@@ -194,4 +194,23 @@ export let orderService = {
       throw error;
     }
   },
+  buyAgainForCustomer: async ({ userID, orderID }) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + `/api/v1/user/${userID}/orders/${orderID}/buyAgain`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log("Response: ", response);
+      message.success(response.data);
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
 };

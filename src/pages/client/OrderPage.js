@@ -15,8 +15,10 @@ import {
 import Iconify from "../../components/iconify";
 
 import { TabContext, TabPanel } from "@mui/lab";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import OrderDetail from "src/components/product/OrderTable";
+import { fetchCartItems } from "src/redux/cart/cartSlice";
 import { orderService } from "../../services/orderService";
 async function fetchData(idAccount, isLoggedIn, setOrders) {
   if (isLoggedIn) {
@@ -36,6 +38,8 @@ export default function OrderPage() {
   const [orders, setOrders] = useState([]);
   const [value, setValue] = useState("1");
   const [reload, changeReload] = useState(true);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -83,8 +87,24 @@ export default function OrderPage() {
     }
 
     return filteredOrders.map((order) => (
-      <OrderDetail key={order?.orderID} order={order} onCancel={handleCancel} />
+      <OrderDetail
+        key={order?.orderID}
+        order={order}
+        onCancel={handleCancel}
+        onBuyAgain={onBuyAgain}
+      />
     ));
+  };
+
+  const onBuyAgain = async (orderID) => {
+    try {
+      await orderService.buyAgainForCustomer({ userID: idAccount, orderID });
+      await dispatch(fetchCartItems(idAccount));
+      navigate("/checkout");
+    } catch (error) {
+      // Xử lý lỗi nếu cần
+      console.error("An error occurred:", error);
+    }
   };
   return (
     <>
@@ -115,6 +135,7 @@ export default function OrderPage() {
                   key={order.orderID}
                   order={order}
                   onCancel={handleCancel}
+                  onBuyAgain={onBuyAgain}
                 ></OrderDetail>
               );
             })}
@@ -133,6 +154,7 @@ export default function OrderPage() {
           <TabPanel value="4">{renderOrdersByStatus("SHIPPING")}</TabPanel>
           <TabPanel value="5">{renderOrdersByStatus("SUCCESS")}</TabPanel>
           <TabPanel value="6">{renderOrdersByStatus("CANCEL")}</TabPanel>
+          <TabPanel value="6">{renderOrdersByStatus("FAILED")}</TabPanel>
         </TabContext>
       </Container>
 
