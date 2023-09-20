@@ -1,35 +1,25 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/baseURL";
-
-
-// const getAuthConfig = () => ({
-//     headers: {
-//         Authorization: `Bearer ${localStorage.getItem("access_token")}`
-//     }
-// })
+import { localStorageService } from "./localStorageService";
 export const https = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`
+  baseURL: BASE_URL,
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  },
+});
+
+https.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response.status === 403) {
+      console.log("error token", error);
+      localStorageService.remove("USER");
+      localStorageService.remove("access_token");
+      window.location.href = "/login";
     }
-  });
-  
-  // Add a request interceptor
-  https.interceptors.request.use(
-    function (config) {
-      return config;
-    },
-    function (error) {
-      return Promise.reject(error);
-    }
-  );
-  
-  // Add a response interceptor
-  https.interceptors.response.use(
-    function (response) {
-      return response;
-    },
-    function (error) {
-      return Promise.reject(error);
-    }
-  );
+
+    return Promise.reject(error);
+  }
+);

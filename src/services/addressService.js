@@ -1,18 +1,10 @@
 import { message } from "antd";
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let addressService = {
   getAddress: async (userID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/user/${userID}/address`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/user/${userID}/address`);
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -22,15 +14,7 @@ export let addressService = {
   },
   addAddress: async ({ userID, req }) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/user/${userID}/address`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.post(`/api/v1/user/${userID}/address`, req);
       message.success("Address added successfully");
       return response.data;
     } catch (error) {
@@ -40,15 +24,7 @@ export let addressService = {
   },
   editAddress: async ({ userID, req }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/user/${userID}/address`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.put(`/api/v1/user/${userID}/address`, req);
       message.success("Success");
       return response.data;
     } catch (error) {
@@ -58,13 +34,8 @@ export let addressService = {
   },
   deleteAddress: async ({ userID, addressID }) => {
     try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/user/${userID}/address/${addressID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.delete(
+        `/api/v1/user/${userID}/address/${addressID}`
       );
       console.log(response.data);
       return response.data;
@@ -76,13 +47,8 @@ export let addressService = {
   },
   getDefaultAddress: async ({ userID }) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/user/${userID}/address/default`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.get(
+        `/api/v1/user/${userID}/address/default`
       );
       console.log(response);
       return response;
@@ -93,14 +59,9 @@ export let addressService = {
   },
   setDefaultAddress: async ({ userID, addressID }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/user/${userID}/address/default/${addressID}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/user/${userID}/address/default/${addressID}`,
+        {}
       );
       message.success(response.data.message);
       return response.data;
@@ -111,13 +72,8 @@ export let addressService = {
   },
   getAddressByID: async ({ userID, addressID }) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/user/${userID}/address/${addressID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.get(
+        `/api/v1/user/${userID}/address/${addressID}`
       );
       return response.data;
     } catch (error) {

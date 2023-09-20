@@ -1,12 +1,11 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
 import { message } from "antd";
+import { https } from "./configAxios";
 
 export let staffService = {
   create: async ({ userID, req }) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/admin/user/${userID}/staff`,
+      const response = await https.post(
+        `/api/v1/admin/user/${userID}/staff`,
         req,
         {
           headers: {
@@ -25,8 +24,8 @@ export let staffService = {
   },
   update: async ({ userID, staffUserID, req }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/user/${userID}/staff/${staffUserID}`,
+      const response = await https.put(
+        `/api/v1/admin/user/${userID}/staff/${staffUserID}`,
         req,
         {
           headers: {
@@ -45,14 +44,7 @@ export let staffService = {
   },
   getAll: async (userID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/admin/user/${userID}/staff`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/admin/user/${userID}/staff`);
       return response.data;
     } catch (error) {
       if (error.response.status === 406) {
@@ -66,13 +58,8 @@ export let staffService = {
   },
   getByUserID: async ({ userID, staffUserID }) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/admin/user/${userID}/staff/${staffUserID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.get(
+        `/api/v1/admin/user/${userID}/staff/${staffUserID}`
       );
       return response.data;
     } catch (error) {
@@ -87,14 +74,7 @@ export let staffService = {
   },
   getInfo: async (userID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/admin/user/${userID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/admin/user/${userID}`);
       return response.data;
     } catch (error) {
       if (error.response.status === 406) {
@@ -109,16 +89,12 @@ export let staffService = {
   updateInfo: async ({ userID, req }) => {
     console.log("req", req);
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/user/${userID}`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await https.put(`/api/v1/admin/user/${userID}`, req, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return {
         status: response.status,
         data: response.data,
@@ -129,15 +105,9 @@ export let staffService = {
   },
   changeState: async ({ userID, staffUserID }) => {
     try {
-      const response = await axios.put(
-        BASE_URL +
-          `/api/v1/admin/user/${userID}/staff/${staffUserID}/changeState`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/user/${userID}/staff/${staffUserID}/changeState`,
+        {}
       );
       return response;
     } catch (error) {
@@ -148,15 +118,9 @@ export let staffService = {
   },
   resetPass: async ({ userID, staffUserID }) => {
     try {
-      const response = await axios.put(
-        BASE_URL +
-          `/api/v1/admin/user/${userID}/staff/${staffUserID}/resetPassword`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/user/${userID}/staff/${staffUserID}/resetPassword`,
+        {}
       );
       return response;
     } catch (error) {

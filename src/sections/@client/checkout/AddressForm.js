@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createAddress, updateAddress } from "src/redux/address/AddressSlice";
 import { addressService } from "src/services/addressService";
-import { BASE_URL } from "src/utils/baseURL";
 import * as yup from "yup";
 
 function AddressForm({ onClose, addressID }) {
@@ -26,7 +25,7 @@ function AddressForm({ onClose, addressID }) {
   const [address, setAddress] = useState([]);
   useEffect(() => {
     axios
-      .get(BASE_URL + `/api/v1/address/p`)
+      .get(`/api/v1/address/p`)
       .then((response) => {
         console.log("Provinces", response);
         setProvince(response.data);
@@ -40,7 +39,7 @@ function AddressForm({ onClose, addressID }) {
   const getDistrict = (selectedProvince) => {
     if (selectedProvince !== null) {
       axios
-        .get(BASE_URL + `/api/v1/address/p/${selectedProvince}/d`)
+        .get(`/api/v1/address/p/${selectedProvince}/d`)
         .then((response) => {
           console.log("Districts", response);
           setDistricts(response.data);
@@ -55,7 +54,7 @@ function AddressForm({ onClose, addressID }) {
   const getWard = (selectedDistrict) => {
     if (selectedDistrict !== null) {
       axios
-        .get(BASE_URL + `/api/v1/address/d/${selectedDistrict}/w`)
+        .get(`/api/v1/address/d/${selectedDistrict}/w`)
         .then((response) => {
           console.log("Wards", response);
           setWards(response.data);

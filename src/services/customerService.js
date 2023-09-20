@@ -1,17 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let customerService = {
   getInfoForCustomer: async (userID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/customers/${userID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/customers/${userID}`);
 
       return response.data;
     } catch (error) {
@@ -21,15 +13,7 @@ export let customerService = {
   },
   editInfoForCustomer: async ({ userID, req }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/customers/${userID}`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.put(`/api/v1/customers/${userID}`, req);
 
       return response;
     } catch (error) {
@@ -39,13 +23,8 @@ export let customerService = {
   },
   getBasicInfoByPhoneAdmin: async (phone) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/admin/customers/phone/${phone}/basic`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.get(
+        `/api/v1/admin/customers/phone/${phone}/basic`
       );
       return response;
     } catch (error) {
@@ -55,7 +34,7 @@ export let customerService = {
   },
   getAllCustomersAdmin: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/admin/customers`, {
+      const response = await https.get(`/api/v1/admin/customers`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -68,14 +47,7 @@ export let customerService = {
   },
   getCustomersByUserIDAdmin: async (userID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/admin/customers/${userID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/admin/customers/${userID}`);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -84,8 +56,8 @@ export let customerService = {
   },
   // getAllOrder: async (idAccount) => {
   //   try {
-  //     const response = await axios.get(
-  //       BASE_URL + `/api/v1/customers/${idAccount}/orders`,
+  //     const response = await https.get(
+  //        `/api/v1/customers/${idAccount}/orders`,
   //       {
   //         headers: {
   //           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -101,8 +73,8 @@ export let customerService = {
 
   // createAddress: async (CustomerAddressRequest) => {
   //   try {
-  //     const response = await axios.post(
-  //       BASE_URL + `/api/v1/address`,
+  //     const response = await https.post(
+  //        `/api/v1/address`,
   //       CustomerAddressRequest,
   //       {
   //         headers: {
@@ -119,14 +91,9 @@ export let customerService = {
   changeState: async (userID) => {
     try {
       console.log("reset pass", userID);
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/customers/${userID}/changeState`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/customers/${userID}/changeState`,
+        {}
       );
       return response;
     } catch (error) {
@@ -137,14 +104,9 @@ export let customerService = {
   resetPass: async (userID) => {
     try {
       console.log("reset pass", userID);
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/customers/${userID}/resetPassword`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/customers/${userID}/resetPassword`,
+        {}
       );
       return response;
     } catch (error) {

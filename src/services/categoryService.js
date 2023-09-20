@@ -1,10 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let categoryService = {
   getAllCategories: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/categories`);
+      const response = await https.get(`/api/v1/categories`);
       return response;
     } catch (error) {
       console.log(error);
@@ -13,15 +12,7 @@ export let categoryService = {
   },
   create: async (req) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/admin/categories`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.post(`/api/v1/admin/categories`, req);
       return response;
     } catch (error) {
       console.log(error);
@@ -30,15 +21,7 @@ export let categoryService = {
   },
   update: async (req) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/categories`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.put(`/api/v1/admin/categories`, req);
       return response;
     } catch (error) {
       console.log(error);
@@ -47,14 +30,7 @@ export let categoryService = {
   },
   delete: async (id) => {
     try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/admin/categories/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.delete(`/api/v1/admin/categories/${id}`);
       return response;
     } catch (error) {
       console.log(error);
@@ -63,8 +39,8 @@ export let categoryService = {
   },
   // getSubcategories: async (id) => {
   //   try {
-  //     const response = await axios.get(
-  //       BASE_URL + `/api/v1/categories/${id}/subcategories`
+  //     const response = await https.get(
+  //        `/api/v1/categories/${id}/subcategories`
   //     );
   //     return response.data;
   //   } catch (error) {
@@ -74,8 +50,8 @@ export let categoryService = {
   // },
   // getProductByCategory: async (id) => {
   //   try {
-  //     const response = await axios.get(
-  //       BASE_URL + `/api/v1/categories/${id}/products`
+  //     const response = await https.get(
+  //        `/api/v1/categories/${id}/products`
   //     );
   //     return response.data;
   //   } catch (error) {
@@ -85,7 +61,7 @@ export let categoryService = {
   // },
   // login: async (values) => {
   //   try {
-  //       const response = await axios.post(BASE_URL + "/api/v1/auth/login", values);
+  //       const response = await https.post( "/api/v1/auth/login", values);
   //       message.success("Login Success")
   //       return response.data
   //   } catch (error) {

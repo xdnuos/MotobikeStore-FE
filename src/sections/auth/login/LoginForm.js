@@ -1,30 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // @mui
+import { LoadingButton } from "@mui/lab";
 import {
-  Link,
-  Stack,
+  Backdrop,
+  Box,
+  CircularProgress,
+  Dialog,
   IconButton,
   InputAdornment,
+  Link,
+  Stack,
   TextField,
-  useTheme,
-  Dialog,
-  Box,
   Typography,
-  useMediaQuery,
-  Backdrop,
-  CircularProgress,
 } from "@mui/material";
-import { LoadingButton } from "@mui/lab";
 // components
+import { message } from "antd";
 import { useEffect } from "react";
-import Iconify from "../../../components/iconify";
 import { useDispatch, useSelector } from "react-redux";
+import { authService } from "src/services/authService";
+import { StyledButtonGreen } from "../../../components/custom/CustomButton";
+import Iconify from "../../../components/iconify";
 import { loginUser } from "../../../redux/auth/authSlice";
 import { localStorageService } from "../../../services/localStorageService";
-import { StyledButtonGreen } from "../../../components/custom/CustomButton";
-import { authService } from "src/services/authService";
-import { message } from "antd";
 
 // ----------------------------------------------------------------------
 

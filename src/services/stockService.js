@@ -1,12 +1,10 @@
-import axios from "axios";
-import { https } from "./configAxios";
-import { BASE_URL } from "../utils/baseURL";
 import { message } from "antd";
+import { https } from "./configAxios";
 
 export let stockService = {
   get: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/admin/stocks`, {
+      const response = await https.get(`/api/v1/admin/stocks`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -24,14 +22,9 @@ export let stockService = {
   },
   create: async ({ userID, req }) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/admin/user/${userID}/stocks`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.post(
+        `/api/v1/admin/user/${userID}/stocks`,
+        req
       );
       return {
         status: response.status,
@@ -49,13 +42,8 @@ export let stockService = {
   },
   cancel: async ({ userID, stockID }) => {
     try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/admin/user/${userID}/stocks/${stockID}/cancel`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.delete(
+        `/api/v1/admin/user/${userID}/stocks/${stockID}/cancel`
       );
       return response;
     } catch (error) {
