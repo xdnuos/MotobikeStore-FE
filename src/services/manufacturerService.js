@@ -1,10 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let manufacturerService = {
   getAllManufacturer: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/manufactures`);
+      const response = await https.get(`/api/v1/manufactures`);
       return response;
     } catch (error) {
       console.log(error);
@@ -13,15 +12,7 @@ export let manufacturerService = {
   },
   create: async (req) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/admin/manufactures`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.post(`/api/v1/admin/manufactures`, req);
       return response;
     } catch (error) {
       console.log(error);
@@ -30,15 +21,7 @@ export let manufacturerService = {
   },
   update: async (req) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/manufactures`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.put(`/api/v1/admin/manufactures`, req);
       return response;
     } catch (error) {
       console.log(error);
@@ -47,14 +30,7 @@ export let manufacturerService = {
   },
   delete: async (id) => {
     try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/admin/manufactures/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.delete(`/api/v1/admin/manufactures/${id}`);
       return response;
     } catch (error) {
       console.log(error);

@@ -1,18 +1,12 @@
 import { message } from "antd";
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let orderService = {
   createOrderAdmin: async ({ userID, req }) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/admin/user/${userID}/orders`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.post(
+        `/api/v1/admin/user/${userID}/orders`,
+        req
       );
       console.log("Response: ", response);
       return response;
@@ -23,7 +17,7 @@ export let orderService = {
   },
   getAllOrdersAdmin: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/admin/orders`, {
+      const response = await https.get(`/api/v1/admin/orders`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -37,14 +31,7 @@ export let orderService = {
   },
   getOrderByStaffUserIDAdmin: async (userID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/admin/user/${userID}/orders`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/admin/user/${userID}/orders`);
       console.log("Response: ", response);
       return response.data;
     } catch (error) {
@@ -54,14 +41,7 @@ export let orderService = {
   },
   getOrderDetailAdmin: async (orderID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/admin/orders/${orderID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/admin/orders/${orderID}`);
       console.log("Response: ", response);
       return response.data;
     } catch (error) {
@@ -71,14 +51,9 @@ export let orderService = {
   },
   confirmOrder: async ({ userID, orderID }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/confirm`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/user/${userID}/orders/${orderID}/confirm`,
+        {}
       );
       console.log("Response: ", response);
       return response;
@@ -89,14 +64,9 @@ export let orderService = {
   },
   shipping: async ({ userID, orderID }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/shipping`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/user/${userID}/orders/${orderID}/shipping`,
+        {}
       );
       console.log("Response: ", response);
       return response;
@@ -107,14 +77,9 @@ export let orderService = {
   },
   success: async ({ userID, orderID }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/success`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/user/${userID}/orders/${orderID}/success`,
+        {}
       );
       console.log("Response: ", response);
       return response;
@@ -125,14 +90,9 @@ export let orderService = {
   },
   cancel: async ({ userID, orderID }) => {
     try {
-      const response = await axios.put(
-        BASE_URL + `/api/v1/admin/user/${userID}/orders/${orderID}/cancel`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.put(
+        `/api/v1/admin/user/${userID}/orders/${orderID}/cancel`,
+        {}
       );
       console.log("Response: ", response);
       return response;
@@ -143,15 +103,7 @@ export let orderService = {
   },
   createOrderForCustomer: async ({ userID, req }) => {
     try {
-      const response = await axios.post(
-        BASE_URL + `/api/v1/user/${userID}/orders`,
-        req,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.post(`/api/v1/user/${userID}/orders`, req);
       console.log("Response: ", response);
       message.success("Đặt hàng thành công");
       return response.data;
@@ -162,14 +114,7 @@ export let orderService = {
   },
   getOrdersForCustomer: async (userID) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/user/${userID}/orders`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.get(`/api/v1/user/${userID}/orders`);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -178,13 +123,22 @@ export let orderService = {
   },
   cancelForCustomer: async ({ userID, orderID }) => {
     try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/user/${userID}/orders/${orderID}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+      const response = await https.delete(
+        `/api/v1/user/${userID}/orders/${orderID}`
+      );
+      console.log("Response: ", response);
+      message.success(response.data);
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
+  buyAgainForCustomer: async ({ userID, orderID }) => {
+    try {
+      const response = await https.post(
+        `/api/v1/user/${userID}/orders/${orderID}/buyAgain`,
+        {}
       );
       console.log("Response: ", response);
       message.success(response.data);

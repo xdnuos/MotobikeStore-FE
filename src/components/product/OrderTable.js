@@ -13,7 +13,7 @@ import { convertStringToDateTime } from "src/helper/table";
 import Iconify from "../iconify/Iconify";
 import Label from "../label/Label";
 
-export default function OrderDetail({ order, onCancel }) {
+export default function OrderDetail({ order, onCancel, onBuyAgain, onReview }) {
   return (
     <Card sx={{ mb: 5 }}>
       <CardHeader
@@ -41,6 +41,9 @@ export default function OrderDetail({ order, onCancel }) {
         <Divider />
         {order?.orderItems.map((orderItem) => {
           const { orderItemID, price, product, quantity } = orderItem;
+          {
+            /* console.log(order); */
+          }
           return (
             <div key={orderItemID}>
               <Stack
@@ -109,7 +112,12 @@ export default function OrderDetail({ order, onCancel }) {
           )}
 
           {order.orderStatus === "SUCCESS" && (
-            <Button variant="outlined">Buy again</Button>
+            <Button
+              variant="outlined"
+              onClick={() => onBuyAgain(order.orderID)}
+            >
+              Buy again
+            </Button>
           )}
         </Stack>
       </CardContent>

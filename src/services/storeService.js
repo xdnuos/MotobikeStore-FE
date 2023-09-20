@@ -1,10 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let storeService = {
   getAllStore: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/store`);
+      const response = await https.get(`/api/v1/store`);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -13,7 +12,7 @@ export let storeService = {
   },
   getStoresNearest: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/store`);
+      const response = await https.get(`/api/v1/store`);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -22,9 +21,7 @@ export let storeService = {
   },
   getAllOrder: async (idAccount) => {
     try {
-      const response = await axios.get(
-        BASE_URL + `/api/v1/store/${idAccount}/orders`
-      );
+      const response = await https.get(`/api/v1/store/${idAccount}/orders`);
       return response.data;
     } catch (error) {
       console.log(error);

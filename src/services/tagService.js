@@ -1,10 +1,9 @@
-import axios from "axios";
-import { BASE_URL } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let tagService = {
   getAllTags: async () => {
     try {
-      const response = await axios.get(BASE_URL + `/api/v1/tags`);
+      const response = await https.get(`/api/v1/tags`);
       return response;
     } catch (error) {
       console.log(error);
@@ -13,7 +12,7 @@ export let tagService = {
   },
   create: async (req) => {
     try {
-      const response = await axios.post(BASE_URL + `/api/v1/admin/tags`, req, {
+      const response = await https.post(`/api/v1/admin/tags`, req, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -26,7 +25,7 @@ export let tagService = {
   },
   update: async (req) => {
     try {
-      const response = await axios.put(BASE_URL + `/api/v1/admin/tags`, req, {
+      const response = await https.put(`/api/v1/admin/tags`, req, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
@@ -39,14 +38,7 @@ export let tagService = {
   },
   delete: async (id) => {
     try {
-      const response = await axios.delete(
-        BASE_URL + `/api/v1/admin/tags/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+      const response = await https.delete(`/api/v1/admin/tags/${id}`);
       return response;
     } catch (error) {
       console.log(error);

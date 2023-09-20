@@ -1,9 +1,8 @@
-import axios from "axios";
-import { BASE_URL, getAuthConfig } from "../utils/baseURL";
+import { https } from "./configAxios";
 
 export let cartService = {
   getAllCart: async (userID) => {
-    return await axios.get(BASE_URL + `/api/v1/user/${userID}/cart`, {
+    return await https.get(`/api/v1/user/${userID}/cart`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
@@ -11,32 +10,29 @@ export let cartService = {
   },
 
   addToCart: ({ userID, req }) => {
-    return axios.post(BASE_URL + `/api/v1/user/${userID}/cart`, req, {
+    return https.post(`/api/v1/user/${userID}/cart`, req, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     });
   },
   updateToCart: async ({ userID, req }) => {
-    return await axios.put(BASE_URL + `/api/v1/user/${userID}/cart`, req, {
+    return await https.put(`/api/v1/user/${userID}/cart`, req, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
     });
   },
   deleteToCart: async ({ userID, itemID }) => {
-    return await axios.delete(
-      BASE_URL + `/api/v1/user/${userID}/cart/${itemID}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      }
-    );
+    return await https.delete(`/api/v1/user/${userID}/cart/${itemID}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
   },
   // deleteAll: async (idAccount) => {
   //   try {
-  //     const response = await axios.delete(BASE_URL + `/api/v1/api/carts/item/${idAccount}`,{
+  //     const response = await https.delete( `/api/v1/api/carts/item/${idAccount}`,{
   //       ...getAuthConfig(),
   //       'Content-Type': 'multipart/form-data'
   //     })
